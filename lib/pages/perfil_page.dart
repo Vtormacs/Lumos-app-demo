@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:loumar/paginas/ajustes_page.dart'; // <--- Importe o arquivo que criamos no Passo 1
+import 'package:loumar/pages/ajustes_page.dart'; // <--- Importe o arquivo que criamos no Passo 1
 
 class PerfilPage extends StatelessWidget {
   const PerfilPage({super.key});

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:loumar/paginas/home_page.dart';
-import 'package:loumar/paginas/perfil_page.dart';
+import 'package:loumar/pages/home_page.dart';
+import 'package:loumar/pages/perfil_page.dart';
 
 // Tela principal com BottomNavigationBar customizado
 
