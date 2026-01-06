@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:loumar/home_page.dart';
-import 'package:loumar/perfil_page.dart';
+import 'package:loumar/paginas/home_page.dart';
+import 'package:loumar/paginas/perfil_page.dart';
+
+// Tela principal com BottomNavigationBar customizado
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
