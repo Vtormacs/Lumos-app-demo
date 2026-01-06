@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:loumar/home/home_page.dart';
+import 'package:loumar/main_screen.dart'; // Importe o arquivo novo
 
 class MeuApp extends StatelessWidget {
   final String titulo = 'App Flutter';
 
+  const MeuApp({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(theme: ThemeData.dark(), home: HomePage());
+    // Note que troquei HomePage por MainScreen aqui
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData.light(),
+      home: const MainScreen(),
+    );
   }
 }
