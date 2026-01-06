@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:loumar/controllers/app_controller.dart';
 import 'package:loumar/main_screen.dart'; 
 
 class MeuApp extends StatelessWidget {
@@ -8,10 +9,19 @@ class MeuApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData.dark(),
-      home: const MainScreen(),
+    return AnimatedBuilder(
+      animation: AppController.instance, 
+      builder: (context, child) {
+        return MaterialApp(
+          debugShowCheckedModeBanner: false,
+          
+          theme: AppController.instance.isDarkTheme 
+              ? ThemeData.dark() 
+              : ThemeData.light(),
+              
+          home: const MainScreen(),
+        );
+      },
     );
   }
 }
