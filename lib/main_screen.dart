@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:loumar/home_page.dart';
+import 'package:loumar/perfil_page.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -17,7 +18,7 @@ class _MainScreenState extends State<MainScreen> {
     const Center(child: Text("Tela de Ingressos")), // Índice 1: Placeholder
     const Center(child: Text("Tela de Roteiros")),  // Índice 2: Placeholder
     const Center(child: Text("Tela de Mapa")),      // Índice 3: Placeholder
-    const Center(child: Text("Tela de Perfil")),    // Índice 4: Placeholder
+    const PerfilPage(),    // Índice 4: Placeholder
   ];
 
   void _onItemTapped(int index) {
