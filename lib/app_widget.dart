@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:loumar/controllers/app_controller.dart';
 import 'package:loumar/main_screen.dart'; 
 
-class MeuApp extends StatelessWidget {
+class MyApp extends StatelessWidget {
   final String titulo = 'App Flutter';
 
-  const MeuApp({super.key});
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {

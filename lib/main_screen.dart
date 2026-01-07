@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:loumar/controllers/app_controller.dart';
+import 'package:loumar/pages/login_page.dart';
+import 'package:loumar/pages/onboarding_page.dart';
 import 'package:loumar/theme/app_colors.dart'; 
 import 'package:loumar/pages/home_page.dart';
 import 'package:loumar/pages/perfil_page.dart';
@@ -19,7 +21,7 @@ class _MainScreenState extends State<MainScreen> {
   // Lista das páginas que vão aparecer no meio
   final List<Widget> _pages = [
     const HomePage(),             // Índice 0: Sua Home atual
-    const Center(child: Text("Tela de Ingressos")), // Índice 1: Placeholder
+    const OnboardingPage(),            // Índice 1: LoginPage
     const Center(child: Text("Tela de Roteiros")),  // Índice 2: Placeholder
     const Center(child: Text("Tela de Mapa")),      // Índice 3: Placeholder
     const PerfilPage(),    // Índice 4: Placeholder
@@ -103,7 +105,7 @@ class _MainScreenState extends State<MainScreen> {
   Widget _buildCustomIcon(IconData icon, int index, bool isDark) {
     bool isSelected = _selectedIndex == index;
     return Column(
-      mainAxisSize: MainAxisSize.min, // Ocupa o mínimo de espaço
+      mainAxisSize: MainAxisSize.min,
       children: [
         // A linha superior azul que aparece no Figma quando selecionado
         if (isSelected)
@@ -119,9 +121,9 @@ class _MainScreenState extends State<MainScreen> {
             ),
           )
         else
-          const SizedBox(height: 4), // Espaço vazio para alinhar
+          const SizedBox(height: 4), 
 
-        const SizedBox(height: 8), // Espaçamento entre a linha e o ícone
+        const SizedBox(height: 8), 
         Icon(icon),
       ],
     );
