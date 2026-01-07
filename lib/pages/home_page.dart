@@ -1,21 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:loumar/controllers/app_controller.dart';
+import 'package:loumar/theme/app_colors.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    // Verifica o tema atual
+    bool isDarkTheme = AppController.instance.isDarkTheme;
+
     return Scaffold(
-      // 1. O Background gradiente (CSS: linear-gradient)
+      // 1. O Background gradiente
       body: Container(
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [
-              Color(0xFF1D3B79), // Do seu Figma
-              Color(0xFF202F4D), // Do seu Figma
-            ],
+            colors: isDarkTheme
+                ? [AppColors.darkTop, AppColors.darkBottom]
+                : [AppColors.blueTop, AppColors.blueBottom],
           ),
         ),
         child: Column(
@@ -37,7 +41,9 @@ class HomePage extends StatelessWidget {
                             // Avatar
                             const CircleAvatar(
                               radius: 22, // 44px / 2
-                              backgroundImage: NetworkImage('https://i.pravatar.cc/150?img=5'), // Imagem temporária
+                              backgroundImage: NetworkImage(
+                                'https://i.pravatar.cc/150?img=5',
+                              ), // Imagem temporária
                             ),
                             const SizedBox(width: 10),
                             // Textos de boas vindas
@@ -46,14 +52,17 @@ class HomePage extends StatelessWidget {
                               children: const [
                                 Text(
                                   "Boas vindas,",
-                                  style: TextStyle(color: Colors.white, fontSize: 12),
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 12,
+                                  ),
                                 ),
                                 Text(
                                   "Michelle Duarte! 👋",
                                   style: TextStyle(
-                                    color: Colors.white, 
-                                    fontSize: 16, 
-                                    fontWeight: FontWeight.w600
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600,
                                   ),
                                 ),
                               ],
@@ -65,11 +74,19 @@ class HomePage extends StatelessWidget {
                           width: 44,
                           height: 44,
                           decoration: BoxDecoration(
-                            color: const Color.fromRGBO(107, 122, 164, 0.47), // CSS: rgba(107, 122, 164, 0.47)
+                            color: const Color.fromRGBO(
+                              107,
+                              122,
+                              164,
+                              0.47,
+                            ), // CSS: rgba(107, 122, 164, 0.47)
                             borderRadius: BorderRadius.circular(12),
                           ),
-                          child: const Icon(Icons.notifications_outlined, color: Colors.white),
-                        )
+                          child: const Icon(
+                            Icons.notifications_outlined,
+                            color: Colors.white,
+                          ),
+                        ),
                       ],
                     ),
 
@@ -78,10 +95,14 @@ class HomePage extends StatelessWidget {
                     // --- AÇÕES RÁPIDAS (Grid de botões) ---
                     const Text(
                       "Ações Rápidas",
-                      style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w500),
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                     const SizedBox(height: 12),
-                    
+
                     // Linha com os 4 botões
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -103,10 +124,12 @@ class HomePage extends StatelessWidget {
             Expanded(
               child: Container(
                 width: double.infinity,
-                decoration: const BoxDecoration(
-                  color: Colors.white,
+                decoration: BoxDecoration(
+                  color: isDarkTheme
+                      ? AppColors.darkBackground
+                      : AppColors.lightBackground,
                   borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(24), // CSS: border-radius: 24px 24px 0px 0px
+                    topLeft: Radius.circular(24),
                     topRight: Radius.circular(24),
                   ),
                 ),
@@ -116,7 +139,14 @@ class HomePage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       // Aqui virão as abas e o resto do conteúdo
-                      Text("Conteúdo da Home...", style: TextStyle(color: Colors.grey[800])),
+                      Text(
+                        "Conteúdo da Home...",
+                        style: TextStyle(
+                          color: isDarkTheme
+                              ? AppColors.darkText
+                              : AppColors.lightText,
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -137,18 +167,25 @@ class HomePage extends StatelessWidget {
           height: 65,
           margin: const EdgeInsets.only(bottom: 6),
           decoration: BoxDecoration(
-            color: const Color(0xFFF5F0EF), // Cor do fundo do botão
+            color: const Color(0xFFF5F0EF),
             borderRadius: BorderRadius.circular(12),
           ),
           child: Center(
-            child: Text(icon, style: const TextStyle(fontSize: 24)), // Emoji temporário, depois trocamos por imagem
+            child: Text(
+              icon,
+              style: const TextStyle(fontSize: 24),
+            ), // Emoji temporário, depois trocamos por imagem
           ),
         ),
         Text(
           label,
           textAlign: TextAlign.center,
-          style: const TextStyle(color: Colors.white, fontSize: 12, height: 1.2),
-        )
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 12,
+            height: 1.2,
+          ),
+        ),
       ],
     );
   }

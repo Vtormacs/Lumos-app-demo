@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:loumar/controllers/app_controller.dart';
+import 'package:loumar/theme/app_colors.dart'; 
 import 'package:loumar/pages/home_page.dart';
 import 'package:loumar/pages/perfil_page.dart';
 
@@ -31,29 +33,31 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+
+    bool isDark = AppController.instance.isDarkTheme;
+
     return Scaffold(
       // O body muda conforme o índice selecionado
       body: _pages[_selectedIndex],
       
       // Aqui está o segredo para a borda superior do CSS
       bottomNavigationBar: Container(
-        decoration: const BoxDecoration(
-          color: Colors.white,
+        decoration: BoxDecoration(
+          color: isDark ? const Color(0xFF1E1E1E) : Colors.white,
           border: Border(
             top: BorderSide(
-              color: Color(0xFFE9EAEB), // Cor da borda do Figma
+              color: isDark ? const Color(0xFF333333) : const Color(0xFFE9EAEB),
               width: 1.0,
             ),
           ),
         ),
         child: BottomNavigationBar(
-          type: BottomNavigationBarType.fixed, // Necessário para mais de 3 itens
-          backgroundColor: Colors.white, // Fundo branco do Figma
-          elevation: 0, // Remove a sombra padrão do Material para ficar flat
+          type: BottomNavigationBarType.fixed, 
+          backgroundColor: isDark ? const Color(0xFF1E1E1E) : Colors.white,
+          elevation: 0, 
           
-          // Cores baseadas no seu CSS
-          selectedItemColor: const Color(0xFF1E3460), // Azul escuro
-          unselectedItemColor: const Color(0xFF414651), // Cinza escuro
+          selectedItemColor: isDark ? Colors.white : const Color(0xFF1E3460),
+          unselectedItemColor: isDark ? Colors.grey : const Color(0xFF414651),
           selectedLabelStyle: const TextStyle(
             fontFamily: 'Inter', 
             fontSize: 12, 
@@ -70,23 +74,23 @@ class _MainScreenState extends State<MainScreen> {
           
           items: [
             BottomNavigationBarItem(
-              icon: _buildCustomIcon(Icons.home_outlined, 0),
+              icon: _buildCustomIcon(Icons.home_outlined, 0, isDark), // Passamos o isDark
               label: 'Início',
             ),
             BottomNavigationBarItem(
-              icon: _buildCustomIcon(Icons.confirmation_number_outlined, 1),
+              icon: _buildCustomIcon(Icons.confirmation_number_outlined, 1, isDark),
               label: 'Ingressos',
             ),
             BottomNavigationBarItem(
-              icon: _buildCustomIcon(Icons.route_outlined, 2),
+              icon: _buildCustomIcon(Icons.route_outlined, 2, isDark),
               label: 'Roteiros',
             ),
             BottomNavigationBarItem(
-              icon: _buildCustomIcon(Icons.map_outlined, 3),
+              icon: _buildCustomIcon(Icons.map_outlined, 3, isDark),
               label: 'Mapa',
             ),
             BottomNavigationBarItem(
-              icon: _buildCustomIcon(Icons.person_outline, 4),
+              icon: _buildCustomIcon(Icons.person_outline, 4, isDark),
               label: 'Perfil',
             ),
           ],
@@ -96,7 +100,7 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   // Função auxiliar para desenhar a "linha" em cima do ícone ativo (conforme Figma)
-  Widget _buildCustomIcon(IconData icon, int index) {
+  Widget _buildCustomIcon(IconData icon, int index, bool isDark) {
     bool isSelected = _selectedIndex == index;
     return Column(
       mainAxisSize: MainAxisSize.min, // Ocupa o mínimo de espaço
@@ -106,9 +110,9 @@ class _MainScreenState extends State<MainScreen> {
           Container(
             width: 40,
             height: 4,
-            decoration: const BoxDecoration(
-              color: Color(0xFF1E3460),
-              borderRadius: BorderRadius.only(
+            decoration: BoxDecoration(
+              color: isDark ? Colors.white : const Color(0xFF1E3460),
+              borderRadius: const BorderRadius.only(
                 bottomLeft: Radius.circular(4), 
                 bottomRight: Radius.circular(4)
               )
