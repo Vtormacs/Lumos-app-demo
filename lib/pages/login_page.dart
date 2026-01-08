@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:loumar/main_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -11,7 +13,10 @@ class LoginPage extends StatefulWidget {
 
 class CpfInputFormatter extends TextInputFormatter {
   @override
-  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
     final text = newValue.text.replaceAll(RegExp(r'[^0-9]'), '');
     if (text.length > 11) return oldValue;
     String formatted = '';
@@ -20,20 +25,60 @@ class CpfInputFormatter extends TextInputFormatter {
       if (i == 9) formatted += '-';
       formatted += text[i];
     }
-    return newValue.copyWith(text: formatted, selection: TextSelection.collapsed(offset: formatted.length));
+    return newValue.copyWith(
+      text: formatted,
+      selection: TextSelection.collapsed(offset: formatted.length),
+    );
   }
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final TextEditingController _cpfController = TextEditingController();
+  final TextEditingController _keyController = TextEditingController();
+
+  // Função para validar e entrar
+  Future<void> _fazerLogin() async {
+    String cpfLimpo = _cpfController.text.replaceAll(RegExp(r'[^0-9]'), '');
+    String senha = _keyController.text;
+
+    if (cpfLimpo == '11111111111' && senha == '123456') {
+      
+      //SALVAR NA MEMÓRIA DO CELULAR
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('isLogged', true);
+      await prefs.setString('userCpf', cpfLimpo); 
+
+      if (!mounted) return;
+
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const MainScreen()),
+      );
+      
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("CPF ou Chave inválidos! Tente novamente."),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
+
+  @override
+  void dispose() {
+    _cpfController.dispose();
+    _keyController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
-      // extendBodyBehindAppBar permite que a imagem vá até o topo
       extendBodyBehindAppBar: true,
 
-      // AppBar transparente apenas para o botão de voltar funcionar
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -83,10 +128,10 @@ class _LoginPageState extends State<LoginPage> {
                     Text(
                       "LOUMAR",
                       style: TextStyle(
-                        fontFamily: 'Manrope', 
-                        fontWeight: FontWeight.w800, 
-                        fontStyle: FontStyle.italic, 
-                        fontSize: 40, 
+                        fontFamily: 'Manrope',
+                        fontWeight: FontWeight.w800,
+                        fontStyle: FontStyle.italic,
+                        fontSize: 40,
                         color: const Color(0xFF1E3460),
                       ),
                     ),
@@ -97,8 +142,8 @@ class _LoginPageState extends State<LoginPage> {
                       "Que bom ter você por aqui",
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontFamily: 'Manrope', 
-                        fontWeight: FontWeight.w600, 
+                        fontFamily: 'Manrope',
+                        fontWeight: FontWeight.w600,
                         fontSize: 23,
                         color: const Color(0xFF252b37),
                       ),
@@ -118,9 +163,9 @@ class _LoginPageState extends State<LoginPage> {
                     const SizedBox(height: 32),
 
                     // Inputs
-                    _buildCustomTextField(label: "CPF"),
+                    _buildCustomTextField(label: "CPF", controller: _cpfController),
                     const SizedBox(height: 16),
-                    _buildCustomTextField(label: "Chave Loumar"),
+                    _buildCustomTextField(label: "Chave Loumar", controller: _keyController),
 
                     Align(
                       alignment: Alignment.centerRight,
@@ -152,7 +197,7 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                           elevation: 0,
                         ),
-                        onPressed: () {},
+                        onPressed: _fazerLogin,
                         child: Text(
                           "Entrar",
                           style: TextStyle(
@@ -227,28 +272,36 @@ class _LoginPageState extends State<LoginPage> {
 
   // --- COMPONENTES AUXILIARES ---
 
-  // 1. Campo de Texto Padrão 
-  Widget _buildCustomTextField({required String label}) {
+  // 1. Campo de Texto Padrão
+  Widget _buildCustomTextField({required String label, required TextEditingController controller}) {
     List<TextInputFormatter>? inputFormatters;
     TextInputType keyboardType = TextInputType.text;
 
     if (label == "CPF") {
-
       keyboardType = TextInputType.number;
 
       inputFormatters = [
         FilteringTextInputFormatter.digitsOnly,
-        CpfInputFormatter(),                   
+        CpfInputFormatter(),
       ];
     }
 
     return TextFormField(
+      controller: controller,
       keyboardType: keyboardType,
       inputFormatters: inputFormatters,
-      style: TextStyle(fontFamily: 'Inter', fontSize: 16, color: const Color(0xFF181D27)),
+      obscureText: false,
+      style: const TextStyle(
+        fontFamily: 'Inter',
+        fontSize: 16,
+        color: const Color(0xFF181D27),
+      ),
       decoration: InputDecoration(
         labelText: label,
-        labelStyle: TextStyle(fontFamily: 'Inter', color: const Color(0xFF717680)),
+        labelStyle: TextStyle(
+          fontFamily: 'Inter',
+          color: const Color(0xFF717680),
+        ),
         contentPadding: const EdgeInsets.symmetric(
           horizontal: 16,
           vertical: 16,
@@ -289,19 +342,14 @@ class _LoginPageState extends State<LoginPage> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-
             if (svgAsset != null)
-              SvgPicture.asset(
-                svgAsset,
-                width: 18,
-                height: 18,
-              )
+              SvgPicture.asset(svgAsset, width: 18, height: 18)
             else if (icon != null)
-            Icon(
-              icon,
-              size: 18,
-              color: isWhatsApp ? Colors.green : const Color(0xFF1E3460),
-            ),
+              Icon(
+                icon,
+                size: 18,
+                color: isWhatsApp ? Colors.green : const Color(0xFF1E3460),
+              ),
             const SizedBox(width: 8),
             Text(
               text,

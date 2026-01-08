@@ -1,28 +1,39 @@
 import 'package:flutter/material.dart';
-import 'package:loumar/pages/ajustes_page.dart'; // <--- Importe o arquivo que criamos no Passo 1
+import 'package:loumar/pages/ajustes_page.dart';
+import 'package:loumar/pages/onboarding_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class PerfilPage extends StatelessWidget {
   const PerfilPage({super.key});
 
+  void logout(BuildContext context) async {
+    // Lógica de logout
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.clear();
+
+    Navigator.pushAndRemoveUntil(
+    context,
+    MaterialPageRoute(builder: (context) => const OnboardingPage()),
+    (route) => false,
+  );
+  }
+
   @override
   Widget build(BuildContext context) {
-    // Cores extraídas do seu CSS/Figma
     final Color blueTop = const Color(0xFF1D3B79);
     final Color blueBottom = const Color(0xFF202F4D);
     final Color bgColor = const Color(
       0xFFFAFAFA,
-    ); // Fundo cinza claro da parte de baixo
-
+    );
     return Scaffold(
       backgroundColor:
-          blueTop, // Garante que o topo da tela (status bar) fique azul
-      body: Column(
+          blueTop, 
+      body: Column( 
         children: [
-          // ---------------------------------------------
+
           // 1. O CABEÇALHO AZUL (Fixo no topo)
-          // ---------------------------------------------
           Container(
-            height: 120, // Altura fixa para o cabeçalho
+            height: 120, 
             width: double.infinity,
             decoration: BoxDecoration(
               gradient: LinearGradient(
@@ -47,21 +58,17 @@ class PerfilPage extends StatelessWidget {
             ),
           ),
 
-          // ---------------------------------------------
           // 2. O CORPO BRANCO ARREDONDADO
-          // ---------------------------------------------
           Expanded(
             child: Container(
               width: double.infinity,
               decoration: BoxDecoration(
                 color: bgColor,
-                // Aqui fazemos a curva apenas no topo (border-radius: 24px 24px 0px 0px)
                 borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(24),
                   topRight: Radius.circular(24),
                 ),
               ),
-              // SingleChildScrollView permite rolar se a tela for pequena
               child: SingleChildScrollView(
                 padding: const EdgeInsets.all(20),
                 child: Column(
@@ -128,7 +135,7 @@ class PerfilPage extends StatelessWidget {
                         _buildMenuItem(
                           icon: Icons.lock_outline,
                           text: "Alterar senha",
-                        ), // Repetido no seu Figma, mantive igual
+                        ), 
                       ],
                     ),
 
@@ -161,10 +168,7 @@ class PerfilPage extends StatelessWidget {
                     // --- BOTÃO DE SAIR ---
                     Center(
                       child: TextButton.icon(
-                        onPressed: () {
-                          // Lógica de sair
-                          print("Sair da conta");
-                        },
+                        onPressed: () => logout(context),
                         icon: const Icon(
                           Icons.logout,
                           color: Color(0xFFD92D20),
@@ -191,9 +195,7 @@ class PerfilPage extends StatelessWidget {
     );
   }
 
-  // ==========================================================
-  // WIDGETS AUXILIARES (Para limpar o código principal)
-  // ==========================================================
+  // WIDGETS AUXILIARES 
 
   // 1. O Cartão do Usuário (Foto + Nome + Email)
   Widget _buildUserCard() {
@@ -202,7 +204,7 @@ class PerfilPage extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: const Color(0xFFE9EAEB)), // Borda sutil
+        border: Border.all(color: const Color(0xFFE9EAEB)), 
       ),
       child: Row(
         children: [
@@ -210,7 +212,7 @@ class PerfilPage extends StatelessWidget {
           Stack(
             children: [
               const CircleAvatar(
-                radius: 32, // Tamanho da foto (64px)
+                radius: 32, 
                 backgroundImage: NetworkImage(
                   'https://i.pravatar.cc/150?img=5',
                 ),
@@ -252,7 +254,7 @@ class PerfilPage extends StatelessWidget {
                 Text(
                   "michelle.duarte123@gmail.com",
                   style: TextStyle(color: Color(0xFF414651), fontSize: 13),
-                  overflow: TextOverflow.ellipsis, // Corta se for muito longo
+                  overflow: TextOverflow.ellipsis, 
                 ),
               ],
             ),

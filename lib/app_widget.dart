@@ -6,7 +6,9 @@ import 'package:loumar/pages/onboarding_page.dart';
 class MyApp extends StatelessWidget {
   final String titulo = 'App Flutter';
 
-  const MyApp({super.key});
+  final bool isLogged;
+
+  const MyApp({super.key, required this.isLogged});
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +22,7 @@ class MyApp extends StatelessWidget {
               ? ThemeData.dark() 
               : ThemeData.light(),
               
-          home: const OnboardingPage(),
+          home: isLogged ? const MainScreen() : const OnboardingPage(),
         );
       },
     );

@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:loumar/controllers/app_controller.dart';
-import 'package:loumar/pages/login_page.dart';
-import 'package:loumar/pages/onboarding_page.dart';
-import 'package:loumar/theme/app_colors.dart'; 
 import 'package:loumar/pages/home_page.dart';
 import 'package:loumar/pages/perfil_page.dart';
 
@@ -21,7 +18,7 @@ class _MainScreenState extends State<MainScreen> {
   // Lista das páginas que vão aparecer no meio
   final List<Widget> _pages = [
     const HomePage(),             // Índice 0: Sua Home atual
-    const OnboardingPage(),            // Índice 1: LoginPage
+    const Center(child: Text("Tela de Ingressos")),           // Índice 1: LoginPage
     const Center(child: Text("Tela de Roteiros")),  // Índice 2: Placeholder
     const Center(child: Text("Tela de Mapa")),      // Índice 3: Placeholder
     const PerfilPage(),    // Índice 4: Placeholder
@@ -39,10 +36,8 @@ class _MainScreenState extends State<MainScreen> {
     bool isDark = AppController.instance.isDarkTheme;
 
     return Scaffold(
-      // O body muda conforme o índice selecionado
       body: _pages[_selectedIndex],
       
-      // Aqui está o segredo para a borda superior do CSS
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
           color: isDark ? const Color(0xFF1E1E1E) : Colors.white,
@@ -101,13 +96,11 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
 
-  // Função auxiliar para desenhar a "linha" em cima do ícone ativo (conforme Figma)
   Widget _buildCustomIcon(IconData icon, int index, bool isDark) {
     bool isSelected = _selectedIndex == index;
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        // A linha superior azul que aparece no Figma quando selecionado
         if (isSelected)
           Container(
             width: 40,
