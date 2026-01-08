@@ -1,20 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'dart:math' as math; // Necessário para a matemática da rotação
-import 'package:loumar/pages/login_page.dart'; // Importe sua página de login
+import 'dart:math' as math;
+import 'package:loumar/pages/login_page.dart';
 
 class OnboardingPage extends StatelessWidget {
   const OnboardingPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // Pegar o tamanho da tela para ajudar no posicionamento
     final size = MediaQuery.of(context).size;
+    
+    const double figmaDesignWidth = 375.0;
+    
+    final double centerX = (size.width - figmaDesignWidth) / 2;
 
     return Scaffold(
       body: Stack(
+        clipBehavior: Clip.none, 
         children: [
-          // 1. FUNDO GRADIENTE (CSS: linear-gradient)
+          // 1. FUNDO GRADIENTE
           Container(
             decoration: const BoxDecoration(
               gradient: LinearGradient(
@@ -25,31 +28,24 @@ class OnboardingPage extends StatelessWidget {
             ),
           ),
 
-          // 2. IMAGENS ROTACIONADAS (Vazando da tela)
-          // Nota: Usei cores para ilustrar, troque 'color' por 'image: DecorationImage(...)'
-          _buildRotatedCard(
-            top: size.height * 0.3, left: -130, width: 165, height: 198, 
-            imageUrl: 'https://picsum.photos/200/300' // Exemplo
-          ),
-          _buildRotatedCard(
-            top: size.height * 0.25, left: 46, width: 213, height: 198, 
-            imageUrl: 'https://picsum.photos/201/300'
-          ),
-          _buildRotatedCard(
-            top: size.height * 0.18, left: 269, width: 213, height: 198, 
-            imageUrl: 'https://picsum.photos/202/300'
-          ),
-          _buildRotatedCard(
-            top: size.height * 0.47, left: -72, width: 494, height: 198, 
-            imageUrl: 'https://picsum.photos/203/300'
-          ),
+          // 2. MOSAICO DE FOTOS
+          _buildFigmaCard(offsetX: centerX, left: 109, top: -57.53, width: 299.17, height: 198.68, imagePath: 'assets/images/login/foto2.png'),
+          _buildFigmaCard(offsetX: centerX, left: -84.03, top: 17, width: 182.77, height: 198.68, imagePath: 'assets/images/login/foto1.png'),
+          _buildFigmaCard(offsetX: centerX, left: 269, top: 144, width: 213.75, height: 198.68, imagePath: 'assets/images/login/foto5.png'),
+          _buildFigmaCard(offsetX: centerX, left: 46, top: 198.11, width: 213.75, height: 198.68, imagePath: 'assets/images/login/foto4.png'),
+          _buildFigmaCard(offsetX: centerX, left: -130, top: 252.53, width: 165.25, height: 198.68, imagePath: 'assets/images/login/foto3.png'),
+          _buildFigmaCard(offsetX: centerX, left: -70.61, top: 413.06, width: 494.26, height: 198.68, imagePath: 'assets/images/login/foto6.png'),
 
-          // 3. BASE BRANCA (Bottom Sheet Fixa)
+          // 3. BASE BRANCA RESPONSIVA
           Align(
             alignment: Alignment.bottomCenter,
             child: Container(
-              height: 306, // Altura exata do Figma
               width: double.infinity,
+              
+              constraints: BoxConstraints(
+                maxHeight: size.height * 0.5,
+              ),
+              
               decoration: const BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.only(
@@ -57,79 +53,90 @@ class OnboardingPage extends StatelessWidget {
                   topRight: Radius.circular(24),
                 ),
               ),
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(24, 32, 24, 24),
-                child: Column(
-                  children: [
-                    // Indicadores (As bolinhas)
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+              
+              child: SingleChildScrollView(
+                physics: const ClampingScrollPhysics(), 
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(24, 32, 24, 24),
+                  child: SafeArea( 
+                    top: false,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min, 
                       children: [
-                        _buildDot(isActive: true),
-                        const SizedBox(width: 4),
-                        _buildDot(isActive: false),
-                        const SizedBox(width: 4),
-                        _buildDot(isActive: false),
+                        // Indicadores
+                        // Row(
+                        //   mainAxisAlignment: MainAxisAlignment.center,
+                        //   children: [
+                        //     _buildDot(isActive: true),
+                        //     const SizedBox(width: 4),
+                        //     _buildDot(isActive: false),
+                        //     const SizedBox(width: 4),
+                        //     _buildDot(isActive: false),
+                        //   ],
+                        // ),
+                        // const SizedBox(height: 24),
+
+                        // Título
+                        Text(
+                          "Sua viagem em Foz começa com a Loumar",
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            fontFamily: 'Montserrat',
+                            fontSize: 24,
+                            fontWeight: FontWeight.w600,
+                            color: Color(0xFF252B37),
+                            height: 1.3,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+
+                        // Subtítulo
+                        Text(
+                          "Seu app oficial para organizar passeios, compras e vantagens exclusivas para viver Foz com leveza e tranquilidade.",
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            fontFamily: 'Manrope',
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                            color: Color(0xFF535862),
+                          ),
+                        ),
+
+                        const SizedBox(height: 32),
+
+                        // Botão Entrar
+                        SizedBox(
+                          width: double.infinity,
+                          height: 56,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color(0xFF00A2AE),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(14),
+                              ),
+                              elevation: 0,
+                            ),
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const LoginPage()),
+                              );
+                            },
+                            child: const Text(
+                              "Entrar",
+                              style: TextStyle(
+                                fontFamily: 'Manrope',
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
                       ],
                     ),
-                    const SizedBox(height: 24),
-                    
-                    // Título (Montserrat)
-                    Text(
-                      "Sua viagem em Foz começa com a Loumar",
-                      textAlign: TextAlign.center,
-                      style: GoogleFonts.montserrat(
-                        fontSize: 24,
-                        fontWeight: FontWeight.w600,
-                        color: const Color(0xFF252B37),
-                        height: 1.3,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-
-                    // Subtítulo (Manrope)
-                    Text(
-                      "Seu app oficial para organizar passeios, compras e vantagens exclusivas.",
-                      textAlign: TextAlign.center,
-                      style: GoogleFonts.manrope(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        color: const Color(0xFF535862),
-                      ),
-                    ),
-                    
-                    const Spacer(), // Empurra o botão para baixo
-
-                    // BOTÃO "ENTRAR"
-                    SizedBox(
-                      width: double.infinity,
-                      height: 56,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF00A2AE), // Ciano
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(14),
-                          ),
-                          elevation: 0,
-                        ),
-                        onPressed: () {
-                          // Navegação para o Login
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => const LoginPage()),
-                          );
-                        },
-                        child: Text(
-                          "Entrar",
-                          style: GoogleFonts.manrope(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
               ),
             ),
@@ -139,27 +146,27 @@ class OnboardingPage extends StatelessWidget {
     );
   }
 
-  // --- COMPONENTES AUXILIARES ---
-
-  // 1. Card Torto
-  Widget _buildRotatedCard({
-    required double top, 
-    required double left, 
-    required double width, 
-    required double height, 
-    required String imageUrl
+  // --- WIDGETS AUXILIARES
+  Widget _buildFigmaCard({
+    required double offsetX,
+    required double left,
+    required double top,
+    required double width,
+    required double height,
+    required String imagePath,
   }) {
     return Positioned(
+      left: left + offsetX, 
       top: top,
-      left: left,
       child: Transform.rotate(
-        angle: -13.62 * (math.pi / 180), // Converte graus (-13.62) para radianos
+        angle: -13.62 * (math.pi / 180), 
         child: Container(
           width: width,
           height: height,
+          padding: const EdgeInsets.all(4), 
           decoration: BoxDecoration(
-            color: Colors.white, // Borda branca da foto (Polaroid style)
-            borderRadius: BorderRadius.circular(16),
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16), 
             boxShadow: [
               BoxShadow(
                 color: Colors.black.withOpacity(0.1),
@@ -168,24 +175,25 @@ class OnboardingPage extends StatelessWidget {
               )
             ],
           ),
-          padding: const EdgeInsets.all(4), // Espessura da borda branca
           child: ClipRRect(
-            borderRadius: BorderRadius.circular(12),
-            child: Image.network(imageUrl, fit: BoxFit.cover),
+            borderRadius: BorderRadius.circular(12), 
+            child: imagePath.isEmpty
+                ? Container(color: Colors.grey[300], child: const Icon(Icons.image))
+                : Image.asset(imagePath, fit: BoxFit.cover),
           ),
         ),
       ),
     );
   }
 
-  // 2. Bolinhas de Paginação
   Widget _buildDot({required bool isActive}) {
     return Container(
       width: isActive ? 24 : 8,
       height: 4,
       decoration: BoxDecoration(
-        // Se ativo: cor sólida. Se inativo: 50% opacidade.
-        color: isActive ? const Color(0xFF00A2AE) : const Color(0xFF00A2AE).withOpacity(0.5),
+        color: isActive
+            ? const Color(0xFF00A2AE)
+            : const Color(0xFF00A2AE).withOpacity(0.5),
         borderRadius: BorderRadius.circular(100),
       ),
     );

@@ -1,11 +1,27 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
+}
+
+class CpfInputFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
+    final text = newValue.text.replaceAll(RegExp(r'[^0-9]'), '');
+    if (text.length > 11) return oldValue;
+    String formatted = '';
+    for (int i = 0; i < text.length; i++) {
+      if (i == 3 || i == 6) formatted += '.';
+      if (i == 9) formatted += '-';
+      formatted += text[i];
+    }
+    return newValue.copyWith(text: formatted, selection: TextSelection.collapsed(offset: formatted.length));
+  }
 }
 
 class _LoginPageState extends State<LoginPage> {
@@ -26,7 +42,7 @@ class _LoginPageState extends State<LoginPage> {
 
       body: Stack(
         children: [
-          // 1. IMAGEM DE FUNDO 
+          // 1. IMAGEM DE FUNDO
           Positioned(
             top: 0,
             left: 0,
@@ -35,18 +51,18 @@ class _LoginPageState extends State<LoginPage> {
             child: Container(
               decoration: const BoxDecoration(
                 image: DecorationImage(
-                  image: AssetImage('assets/images/fundo_login.png'),
+                  image: AssetImage('assets/images/login/fundo_login.png'),
                   fit: BoxFit.cover,
-                  alignment: Alignment.topCenter, 
+                  alignment: Alignment.topCenter,
                 ),
               ),
             ),
           ),
 
-          // 2. CARTÃO DE LOGIN 
+          // 2. CARTÃO DE LOGIN
           Positioned(
             top: size.height * 0.30,
-            bottom: 0, 
+            bottom: 0,
             left: 0,
             right: 0,
             child: Container(
@@ -63,24 +79,14 @@ class _LoginPageState extends State<LoginPage> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    // Puxador cinza
-                    Container(
-                      width: 40,
-                      height: 4,
-                      margin: const EdgeInsets.only(bottom: 24),
-                      decoration: BoxDecoration(
-                        color: Colors.grey[300],
-                        borderRadius: BorderRadius.circular(2),
-                      ),
-                    ),
-
                     // LOGO LOUMAR
                     Text(
                       "LOUMAR",
-                      style: GoogleFonts.manrope(
-                        fontSize: 28,
-                        fontWeight: FontWeight.w800,
-                        fontStyle: FontStyle.italic,
+                      style: TextStyle(
+                        fontFamily: 'Manrope', 
+                        fontWeight: FontWeight.w800, 
+                        fontStyle: FontStyle.italic, 
+                        fontSize: 40, 
                         color: const Color(0xFF1E3460),
                       ),
                     ),
@@ -90,17 +96,20 @@ class _LoginPageState extends State<LoginPage> {
                     Text(
                       "Que bom ter você por aqui",
                       textAlign: TextAlign.center,
-                      style: GoogleFonts.manrope(
-                        fontSize: 24,
-                        fontWeight: FontWeight.w600,
-                        color: const Color(0xFF252B37),
+                      style: TextStyle(
+                        fontFamily: 'Manrope', 
+                        fontWeight: FontWeight.w600, 
+                        fontSize: 23,
+                        color: const Color(0xFF252b37),
                       ),
                     ),
                     const SizedBox(height: 8),
                     Text(
                       "Faça seu acesso para continuar sua jornada em Foz com a gente.",
                       textAlign: TextAlign.center,
-                      style: GoogleFonts.manrope(
+                      style: TextStyle(
+                        fontFamily: 'Manrope',
+                        fontWeight: FontWeight.w500,
                         fontSize: 14,
                         color: const Color(0xFF414651),
                       ),
@@ -119,7 +128,8 @@ class _LoginPageState extends State<LoginPage> {
                         onPressed: () {},
                         child: Text(
                           "Descobrir chave Loumar",
-                          style: GoogleFonts.manrope(
+                          style: TextStyle(
+                            fontFamily: 'Manrope',
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
                             color: const Color(0xFF414651),
@@ -128,7 +138,7 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
 
-                    const SizedBox(height: 24),
+                    const SizedBox(height: 14),
 
                     // Botão Entrar
                     SizedBox(
@@ -145,7 +155,8 @@ class _LoginPageState extends State<LoginPage> {
                         onPressed: () {},
                         child: Text(
                           "Entrar",
-                          style: GoogleFonts.manrope(
+                          style: TextStyle(
+                            fontFamily: 'Manrope',
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
                             color: Colors.white,
@@ -154,28 +165,38 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
 
-                    const SizedBox(height: 24),
+                    const SizedBox(height: 10),
 
                     // Divisor OU
                     Row(
                       children: [
-                        const Expanded(child: Divider(color: Color(0xFFE9EAEB))),
+                        const Expanded(
+                          child: Divider(color: Color(0xFFE9EAEB)),
+                        ),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 16),
-                          child: Text("OU", style: TextStyle(color: Colors.grey[500])),
+                          child: Text(
+                            "OU",
+                            style: TextStyle(
+                              color: const Color.fromARGB(255, 114, 114, 114),
+                              fontSize: 16,
+                            ),
+                          ),
                         ),
-                        const Expanded(child: Divider(color: Color(0xFFE9EAEB))),
+                        const Expanded(
+                          child: Divider(color: Color(0xFFE9EAEB)),
+                        ),
                       ],
                     ),
 
-                    const SizedBox(height: 24),
+                    const SizedBox(height: 10),
 
                     // Botões do Rodapé
                     Row(
                       children: [
                         Expanded(
                           child: _buildOutlineButton(
-                            icon: Icons.location_on_outlined,
+                            svgAsset: 'assets/images/login/point.svg',
                             text: "Onde estamos",
                             onTap: () {},
                           ),
@@ -183,7 +204,7 @@ class _LoginPageState extends State<LoginPage> {
                         const SizedBox(width: 12),
                         Expanded(
                           child: _buildOutlineButton(
-                            icon: Icons.chat_bubble_outline,
+                            svgAsset: 'assets/images/login/whatsapp.svg',
                             text: "Suporte",
                             onTap: () {},
                             isWhatsApp: true,
@@ -191,7 +212,7 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ],
                     ),
-                    
+
                     // Um espacinho extra no final para garantir que o scroll vai até o fim
                     const SizedBox(height: 20),
                   ],
@@ -206,23 +227,36 @@ class _LoginPageState extends State<LoginPage> {
 
   // --- COMPONENTES AUXILIARES ---
 
-  // 1. Campo de Texto Padrão (Figma)
+  // 1. Campo de Texto Padrão 
   Widget _buildCustomTextField({required String label}) {
+    List<TextInputFormatter>? inputFormatters;
+    TextInputType keyboardType = TextInputType.text;
+
+    if (label == "CPF") {
+
+      keyboardType = TextInputType.number;
+
+      inputFormatters = [
+        FilteringTextInputFormatter.digitsOnly,
+        CpfInputFormatter(),                   
+      ];
+    }
+
     return TextFormField(
-      style: GoogleFonts.inter(fontSize: 16, color: const Color(0xFF181D27)),
+      keyboardType: keyboardType,
+      inputFormatters: inputFormatters,
+      style: TextStyle(fontFamily: 'Inter', fontSize: 16, color: const Color(0xFF181D27)),
       decoration: InputDecoration(
         labelText: label,
-        labelStyle: GoogleFonts.inter(color: const Color(0xFF717680)),
+        labelStyle: TextStyle(fontFamily: 'Inter', color: const Color(0xFF717680)),
         contentPadding: const EdgeInsets.symmetric(
           horizontal: 16,
           vertical: 16,
         ),
-        // Borda quando não clicado
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
           borderSide: const BorderSide(color: Color(0xFFE9EAEB)),
         ),
-        // Borda quando clicado (Foco)
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
           borderSide: const BorderSide(color: Color(0xFF00A2AE), width: 1.5),
@@ -235,7 +269,8 @@ class _LoginPageState extends State<LoginPage> {
 
   // 2. Botão com Borda (Outline)
   Widget _buildOutlineButton({
-    required IconData icon,
+    IconData? icon,
+    String? svgAsset,
     required String text,
     required VoidCallback onTap,
     bool isWhatsApp = false,
@@ -254,6 +289,14 @@ class _LoginPageState extends State<LoginPage> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+
+            if (svgAsset != null)
+              SvgPicture.asset(
+                svgAsset,
+                width: 18,
+                height: 18,
+              )
+            else if (icon != null)
             Icon(
               icon,
               size: 18,
@@ -262,9 +305,10 @@ class _LoginPageState extends State<LoginPage> {
             const SizedBox(width: 8),
             Text(
               text,
-              style: GoogleFonts.manrope(
+              style: const TextStyle(
+                fontFamily: 'Manrope',
                 fontSize: 14,
-                fontWeight: FontWeight.w600, // SemiBold
+                fontWeight: FontWeight.w800,
                 color: const Color(0xFF414651),
               ),
             ),

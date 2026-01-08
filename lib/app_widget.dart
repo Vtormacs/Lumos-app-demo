@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:loumar/controllers/app_controller.dart';
-import 'package:loumar/main_screen.dart'; 
+import 'package:loumar/main_screen.dart';
+import 'package:loumar/pages/onboarding_page.dart'; 
 
 class MyApp extends StatelessWidget {
   final String titulo = 'App Flutter';
@@ -19,7 +20,7 @@ class MyApp extends StatelessWidget {
               ? ThemeData.dark() 
               : ThemeData.light(),
               
-          home: const MainScreen(),
+          home: const OnboardingPage(),
         );
       },
     );
