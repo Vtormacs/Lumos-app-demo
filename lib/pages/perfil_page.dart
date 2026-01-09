@@ -1,13 +1,27 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:loumar/models/user_model.dart';
 import 'package:loumar/pages/ajustes_page.dart';
 import 'package:loumar/pages/login/onboarding_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:loumar/models/user_model.dart';
 
 class PerfilPage extends StatelessWidget {
   const PerfilPage({super.key});
 
+  Future<UserModel?> _loadUser() async {
+    final prefs = await SharedPreferences.getInstance();
+    final userJson = prefs.getString('userData');
+    if (userJson != null) {
+      final userMap = jsonDecode(userJson);
+      return UserModel.fromJson(userMap);
+    }
+    return null;
+  }
+
+
   void logout(BuildContext context) async {
-    // Lógica de logout
     final prefs = await SharedPreferences.getInstance();
     await prefs.clear();
 
@@ -31,7 +45,7 @@ class PerfilPage extends StatelessWidget {
       body: Column( 
         children: [
 
-          // 1. O CABEÇALHO AZUL (Fixo no topo)
+          // 1. O CABEÇALHO AZUL
           Container(
             height: 120, 
             width: double.infinity,
@@ -75,8 +89,20 @@ class PerfilPage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // --- CARTÃO DO USUÁRIO ---
-                    _buildUserCard(),
 
+                    FutureBuilder<UserModel?>(
+                      future: _loadUser(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.waiting) {
+                          return const Center(child: CircularProgressIndicator());
+                        }
+                        final user = snapshot.data;
+                        return _buildUserCard(
+                          name: user?.name ?? 'Usuário',
+                          email: user?.email ?? 'email@exemplo.com',
+                        );
+                      },
+                    ),
                     const SizedBox(height: 24),
 
                     // --- SEÇÃO: INFORMAÇÕES PESSOAIS ---
@@ -198,7 +224,7 @@ class PerfilPage extends StatelessWidget {
   // WIDGETS AUXILIARES 
 
   // 1. O Cartão do Usuário (Foto + Nome + Email)
-  Widget _buildUserCard() {
+  Widget _buildUserCard({required String name, required String email}) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -241,18 +267,17 @@ class PerfilPage extends StatelessWidget {
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
+              children: [
                 Text(
-                  "Michelle Duarte",
-                  style: TextStyle(
+                  name,
+                  style: const TextStyle(
                     fontWeight: FontWeight.w600,
                     fontSize: 16,
                     color: Color(0xFF181D27),
                   ),
                 ),
-                SizedBox(height: 4),
-                Text(
-                  "michelle.duarte123@gmail.com",
+                 Text(
+                  email,
                   style: TextStyle(color: Color(0xFF414651), fontSize: 13),
                   overflow: TextOverflow.ellipsis, 
                 ),

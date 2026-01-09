@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:loumar/main_screen.dart';
+import 'package:loumar/models/user_model.dart';
 import 'package:loumar/pages/login/LoumarKeyBottomSheet.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -44,10 +47,12 @@ class _LoginPageState extends State<LoginPage> {
 
     if (cpfLimpo == '11111111111' && senha == '123456') {
       
+      UserModel user = UserModel.getUserTeste();
+
       //SALVAR NA MEMÓRIA DO CELULAR
       final prefs = await SharedPreferences.getInstance();
       await prefs.setBool('isLogged', true);
-      await prefs.setString('userCpf', cpfLimpo); 
+      await prefs.setString('userData', jsonEncode(user.toJson()));
 
       if (!mounted) return;
 
@@ -55,7 +60,6 @@ class _LoginPageState extends State<LoginPage> {
         context,
         MaterialPageRoute(builder: (context) => const MainScreen()),
       );
-      
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -73,12 +77,12 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
   }
 
-// Função para mostrar o bottom sheet
+  // Função para mostrar o bottom sheet
   void _showLoumarKeyBottomSheet() {
     showModalBottomSheet(
       context: context,
-      isDismissible: true, 
-      isScrollControlled: true, 
+      isDismissible: true,
+      isScrollControlled: true,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
@@ -180,9 +184,15 @@ class _LoginPageState extends State<LoginPage> {
                     const SizedBox(height: 32),
 
                     // Inputs
-                    _buildCustomTextField(label: "CPF", controller: _cpfController),
+                    _buildCustomTextField(
+                      label: "CPF",
+                      controller: _cpfController,
+                    ),
                     const SizedBox(height: 16),
-                    _buildCustomTextField(label: "Chave Loumar", controller: _keyController),
+                    _buildCustomTextField(
+                      label: "Chave Loumar",
+                      controller: _keyController,
+                    ),
 
                     Align(
                       alignment: Alignment.centerRight,
@@ -290,7 +300,10 @@ class _LoginPageState extends State<LoginPage> {
   // --- COMPONENTES AUXILIARES ---
 
   // 1. Campo de Texto Padrão
-  Widget _buildCustomTextField({required String label, required TextEditingController controller}) {
+  Widget _buildCustomTextField({
+    required String label,
+    required TextEditingController controller,
+  }) {
     List<TextInputFormatter>? inputFormatters;
     TextInputType keyboardType = TextInputType.text;
 
