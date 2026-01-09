@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:loumar/controllers/app_controller.dart';
 import 'package:loumar/main_screen.dart';
-import 'package:loumar/pages/onboarding_page.dart'; 
+import 'package:loumar/pages/login/onboarding_page.dart'; 
 
 class MyApp extends StatelessWidget {
   final String titulo = 'App Flutter';

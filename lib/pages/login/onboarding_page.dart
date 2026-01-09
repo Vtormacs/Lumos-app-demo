@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
-import 'package:loumar/pages/login_page.dart';
+import 'package:loumar/pages/login/login_page.dart';
 
 class OnboardingPage extends StatelessWidget {
   const OnboardingPage({super.key});

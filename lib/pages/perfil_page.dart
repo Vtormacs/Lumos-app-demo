@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:loumar/pages/ajustes_page.dart';
-import 'package:loumar/pages/onboarding_page.dart';
+import 'package:loumar/pages/login/onboarding_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class PerfilPage extends StatelessWidget {
@@ -291,7 +291,6 @@ class PerfilPage extends StatelessWidget {
     VoidCallback? onTap,
   }) {
     return InkWell(
-      // InkWell dá o efeito de clique
       onTap: onTap,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),

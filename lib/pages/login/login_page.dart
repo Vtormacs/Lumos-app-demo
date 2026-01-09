@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:loumar/main_screen.dart';
+import 'package:loumar/pages/login/LoumarKeyBottomSheet.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
@@ -70,6 +71,22 @@ class _LoginPageState extends State<LoginPage> {
     _cpfController.dispose();
     _keyController.dispose();
     super.dispose();
+  }
+
+// Função para mostrar o bottom sheet
+  void _showLoumarKeyBottomSheet() {
+    showModalBottomSheet(
+      context: context,
+      isDismissible: true, 
+      isScrollControlled: true, 
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      backgroundColor: Colors.white,
+      builder: (BuildContext context) {
+        return const LoumarKeyBottomSheet();
+      },
+    );
   }
 
   @override
@@ -170,7 +187,7 @@ class _LoginPageState extends State<LoginPage> {
                     Align(
                       alignment: Alignment.centerRight,
                       child: TextButton(
-                        onPressed: () {},
+                        onPressed: _showLoumarKeyBottomSheet,
                         child: Text(
                           "Descobrir chave Loumar",
                           style: TextStyle(
