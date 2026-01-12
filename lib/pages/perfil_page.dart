@@ -5,11 +5,15 @@ import 'package:loumar/models/user_model.dart';
 import 'package:loumar/pages/ajustes_page.dart';
 import 'package:loumar/pages/login/onboarding_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:loumar/models/user_model.dart';
 
-class PerfilPage extends StatelessWidget {
+class PerfilPage extends StatefulWidget {
   const PerfilPage({super.key});
 
+  @override
+  _PerfilPageState createState() => _PerfilPageState();
+}
+
+class _PerfilPageState extends State<PerfilPage> {
   Future<UserModel?> _loadUser() async {
     final prefs = await SharedPreferences.getInstance();
     final userJson = prefs.getString('userData');
