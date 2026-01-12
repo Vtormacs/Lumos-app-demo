@@ -2,8 +2,9 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:loumar/models/user_model.dart';
-import 'package:loumar/pages/ajustes_page.dart';
+import 'package:loumar/pages/perfil_subpaginas/ajustes_page.dart';
 import 'package:loumar/pages/login/onboarding_page.dart';
+import 'package:loumar/pages/perfil_subpaginas/sobre_app.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class PerfilPage extends StatefulWidget {
@@ -159,13 +160,6 @@ class _PerfilPageState extends State<PerfilPage> {
                             );
                           },
                         ),
-
-                        _buildDivider(),
-
-                        _buildMenuItem(
-                          icon: Icons.lock_outline,
-                          text: "Alterar senha",
-                        ), 
                       ],
                     ),
 
@@ -189,6 +183,14 @@ class _PerfilPageState extends State<PerfilPage> {
                         _buildMenuItem(
                           icon: Icons.info_outline,
                           text: "Sobre o app",
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const SobreApp(),
+                              ),
+                            );
+                          },
                         ),
                       ],
                     ),

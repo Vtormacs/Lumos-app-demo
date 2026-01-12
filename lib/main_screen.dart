@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart'; // <--- Importante
+import 'package:flutter_svg/flutter_svg.dart'; 
 import 'package:loumar/controllers/app_controller.dart';
 import 'package:loumar/pages/home_page.dart';
+import 'package:loumar/pages/ingresso_page.dart';
+import 'package:loumar/pages/map_page.dart';
 import 'package:loumar/pages/perfil_page.dart';
+import 'package:loumar/pages/roteiro_page.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -16,9 +19,9 @@ class _MainScreenState extends State<MainScreen> {
 
   final List<Widget> _pages = [
     const HomePage(),
-    const Center(child: Text("Tela de Ingressos")),
-    const Center(child: Text("Tela de Roteiros")),
-    const Center(child: Text("Tela de Mapa")),
+    const IngressoPage(),
+    const RoteiroPage(),
+    const MapPage(),
     const PerfilPage(),
   ];
 

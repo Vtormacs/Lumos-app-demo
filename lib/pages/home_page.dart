@@ -7,9 +7,14 @@ import 'package:loumar/models/user_model.dart';
 import 'dart:convert';
 import 'package:url_launcher/url_launcher.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   Future<UserModel?> _loadUser() async {
     final prefs = await SharedPreferences.getInstance();
     final userJson = prefs.getString('userData');
@@ -45,9 +50,7 @@ class HomePage extends StatelessWidget {
               child: Container(
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                    image: AssetImage(
-                      'assets/images/home/fundohome.jpg',
-                    ), 
+                    image: AssetImage('assets/images/home/fundohome.jpg'),
                     fit: BoxFit.cover,
                     opacity: 0.2,
                   ),
@@ -62,14 +65,12 @@ class HomePage extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-
-                          
-
                           FutureBuilder<UserModel?>(
                             future: _loadUser(),
                             builder: (context, asyncSnapshot) {
                               String nome = "Usuário";
-                              if (asyncSnapshot.hasData && asyncSnapshot.data != null) {
+                              if (asyncSnapshot.hasData &&
+                                  asyncSnapshot.data != null) {
                                 nome = asyncSnapshot.data!.name;
                               }
                               return Row(
@@ -78,13 +79,14 @@ class HomePage extends StatelessWidget {
                                   const CircleAvatar(
                                     radius: 25,
                                     backgroundImage: NetworkImage(
-                                      'https://i.pravatar.cc/150?img=5',// Imagem temporária
-                                    ), 
+                                      'https://i.pravatar.cc/150?img=5', // Imagem temporária
+                                    ),
                                   ),
                                   const SizedBox(width: 10),
                                   // Textos de boas vindas
                                   Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       const Text(
                                         "Boas vindas,",
@@ -108,9 +110,9 @@ class HomePage extends StatelessWidget {
                                   ),
                                 ],
                               );
-                            }
+                            },
                           ),
-                          // Botão de Notificação 
+                          // Botão de Notificação
                           Container(
                             width: 44,
                             height: 44,
@@ -146,7 +148,12 @@ class HomePage extends StatelessWidget {
                         children: [
                           _botaoRapido(icon: "🗺️", label: "Guia do\nViajante"),
                           _botaoRapido(icon: "🌎", label: "Lorem\nIpsum"),
-                          _botaoRapidoBusca(context: context, icon: "🇵🇾", label: "Busca\nParaguai", link: "https://www.buscaparaguai.com.br/"),
+                          _botaoRapidoBusca(
+                            context: context,
+                            icon: "🇵🇾",
+                            label: "Busca\nParaguai",
+                            link: "https://www.buscaparaguai.com.br/",
+                          ),
                           _botaoRapido(icon: "🛍️", label: "Minhas\nCompras"),
                         ],
                       ),
@@ -226,54 +233,57 @@ class HomePage extends StatelessWidget {
     );
   }
 
-Widget _botaoRapidoBusca({
-  required BuildContext context,
-  required String icon,
-  required String label,
-  String? link,  
-}) {
-  return GestureDetector(
-    onTap: () async {
-      if (link != null && link.isNotEmpty) {
-        final Uri url = Uri.parse(link);
-        if (await canLaunchUrl(url)) {
-          await launchUrl(url, mode: LaunchMode.externalApplication);  // Abre no browser externo
-        } else {
-          if (context.mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Não foi possível abrir o link: $link')),
-            );
+  Widget _botaoRapidoBusca({
+    required BuildContext context,
+    required String icon,
+    required String label,
+    String? link,
+  }) {
+    return GestureDetector(
+      onTap: () async {
+        if (link != null && link.isNotEmpty) {
+          final Uri url = Uri.parse(link);
+          if (await canLaunchUrl(url)) {
+            await launchUrl(
+              url,
+              mode: LaunchMode.externalApplication,
+            ); // Abre no browser externo
+          } else {
+            if (context.mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('Não foi possível abrir o link: $link')),
+              );
+            }
           }
         }
-      }
-    },
-    child: Column(
-      children: [
-        Container(
-          width: 69,
-          height: 63,
-          margin: const EdgeInsets.only(bottom: 6),
-          decoration: BoxDecoration(
-            color: const Color(0xFFF5F0EF),
-            borderRadius: BorderRadius.circular(12),
+      },
+      child: Column(
+        children: [
+          Container(
+            width: 69,
+            height: 63,
+            margin: const EdgeInsets.only(bottom: 6),
+            decoration: BoxDecoration(
+              color: const Color(0xFFF5F0EF),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Center(
+              child: Text(icon, style: const TextStyle(fontSize: 24)),
+            ),
           ),
-          child: Center(
-            child: Text(icon, style: const TextStyle(fontSize: 24)),
+          Text(
+            label,
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 12,
+              height: 1.2,
+              fontFamily: 'Montserrat',
+              fontWeight: FontWeight.w500,
+            ),
           ),
-        ),
-        Text(
-          label,
-          textAlign: TextAlign.center,
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 12,
-            height: 1.2,
-            fontFamily: 'Montserrat',
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-      ],
-    ),
-  );
-}
+        ],
+      ),
+    );
+  }
 }
