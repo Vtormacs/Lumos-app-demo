@@ -46,10 +46,10 @@ class HomePage extends StatelessWidget {
                 decoration: BoxDecoration(
                   image: DecorationImage(
                     image: AssetImage(
-                      'assets/images/background_home.jpg',
+                      'assets/images/home/fundohome.jpg',
                     ), 
                     fit: BoxFit.cover,
-                    //opacity: 0.8,
+                    opacity: 0.2,
                   ),
                 ),
 
@@ -146,7 +146,7 @@ class HomePage extends StatelessWidget {
                         children: [
                           _botaoRapido(icon: "🗺️", label: "Guia do\nViajante"),
                           _botaoRapido(icon: "🌎", label: "Lorem\nIpsum"),
-                          _botaoRapidoBusca(context: context, icon: "🇵🇾", label: "Busca\nParaguai", link: "https://www.google.com"),
+                          _botaoRapidoBusca(context: context, icon: "🇵🇾", label: "Busca\nParaguai", link: "https://www.buscaparaguai.com.br/"),
                           _botaoRapido(icon: "🛍️", label: "Minhas\nCompras"),
                         ],
                       ),
@@ -230,7 +230,7 @@ Widget _botaoRapidoBusca({
   required BuildContext context,
   required String icon,
   required String label,
-  String? link,  // Novo parâmetro opcional para o URL
+  String? link,  
 }) {
   return GestureDetector(
     onTap: () async {
@@ -239,7 +239,6 @@ Widget _botaoRapidoBusca({
         if (await canLaunchUrl(url)) {
           await launchUrl(url, mode: LaunchMode.externalApplication);  // Abre no browser externo
         } else {
-          // Opcional: Mostre um erro se não puder abrir
           if (context.mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text('Não foi possível abrir o link: $link')),
