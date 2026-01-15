@@ -16,16 +16,20 @@ class _HomeBannerState extends State<HomeBanner> {
   // LISTA DE BANNERS
   final List<Map<String, String>> bannerList = [
     {
-      "image": "https://loumarturismo.com.br/img/banners/home-destaque-compras-paraguai.jpg", 
-      "link": "https://www.loumarturismo.com.br/compras-paraguai"
+      "image": "https://img.freepik.com/vetores-gratis/fundo-abstrato-azul-de-meio-tom-com-espaco-de-texto_1017-41428.jpg?semt=ais_hybrid&w=740&q=80",
+      "link": "https://www.loumarturismo.com.br/compras-paraguai",
     },
     {
-      "image": "https://loumarturismo.com.br/img/banners/home-destaque-cataratas.jpg", 
-      "link": "https://www.loumarturismo.com.br/cataratas"
+      "image": "https://t3.ftcdn.net/jpg/03/91/44/92/360_F_391449299_xWOBVaVrXLyf0duErkPPLMWmJcCPTryH.jpg",
+      "link": "https://www.loumarturismo.com.br/cataratas",
     },
     {
-      "image": "https://via.placeholder.com/800x400.png?text=Promoção+Itaipu",
-      "link": "https://www.loumarturismo.com.br"
+      "image": "https://img.myloview.com/posters/simple-modern-red-orange-yellow-abstract-banner-background-with-line-stripes-700-237793842.jpg",
+      "link": "https://www.loumarturismo.com.br",
+    },
+    {
+      "image": "https://img.freepik.com/vetores-gratis/bandeira-de-linhas-vermelhas-digitais-elegantes-a-moda_1017-23964.jpg?semt=ais_hybrid&w=740&q=80",
+      "link": "https://www.loumarturismo.com.br",
     },
   ];
 
@@ -39,18 +43,24 @@ class _HomeBannerState extends State<HomeBanner> {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-
-        Text(
-          'Ofertas Especiais',
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            color: Theme.of(context).brightness == Brightness.dark
-                ? Colors.white
-                : const Color(0xFF1E3460),
+        Padding(
+          padding: EdgeInsets.zero,
+          child: Text(
+            'Confira as novidades!',
+            style: TextStyle(
+              fontFamily: 'Montserrat',
+              fontWeight: FontWeight.w600,
+              fontSize: 18,
+              color: Theme.of(context).brightness == Brightness.dark
+                  ? Colors.white
+                  : const Color(0xFF181D27),
+            ),
           ),
         ),
+
+        const SizedBox(height: 16),
 
         // --- O CARROSSEL ---
         CarouselSlider(
@@ -61,21 +71,19 @@ class _HomeBannerState extends State<HomeBanner> {
                   onTap: () => _abrirLink(item['link']!),
                   child: Container(
                     width: MediaQuery.of(context).size.width,
-                    margin: const EdgeInsets.symmetric(horizontal: 8.0),
+                    margin: const EdgeInsets.only(right: 16.0), 
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(12),
-                      // Sombra suave
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.2),
+                          color: Colors.black.withOpacity(0.1),
                           blurRadius: 4,
                           offset: const Offset(0, 2),
                         ),
                       ],
                     ),
-                    // ClipRRect para arredondar a imagem
                     child: ClipRRect(
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(8),
                       child: Image.network(
                         item['image']!,
                         fit: BoxFit.cover,
@@ -106,13 +114,16 @@ class _HomeBannerState extends State<HomeBanner> {
           }).toList(),
           carouselController: _controller,
           options: CarouselOptions(
-            height: 180, // Altura do banner
-            autoPlay: true, 
+            height: 100,
+            autoPlay: true,
             autoPlayInterval: const Duration(seconds: 5),
-            enlargeCenterPage: false,
+            
+            // --- CONFIGURAÇÕES IMPORTANTES PARA O LAYOUT ---
+            padEnds: false, 
+            enableInfiniteScroll: false, 
+            viewportFraction: 0.9, 
             clipBehavior: Clip.none,
-            viewportFraction: 0.8,
-            aspectRatio: 16 / 9,
+            
             onPageChanged: (index, reason) {
               setState(() {
                 _current = index;
@@ -121,24 +132,25 @@ class _HomeBannerState extends State<HomeBanner> {
           ),
         ),
 
-        const SizedBox(height: 10),
+        const SizedBox(height: 16),
 
-        // --- INDICADORES (BOLINHAS) ---
+        // --- INDICADORES  ---
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: bannerList.asMap().entries.map((entry) {
+            bool isActive = _current == entry.key;
             return GestureDetector(
               onTap: () => _controller.animateToPage(entry.key),
-              child: Container(
-                width: 8.0,
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 300),
+                width: isActive ? 32.0 : 8.0, 
                 height: 8.0,
-                margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
+                margin: const EdgeInsets.symmetric(horizontal: 2.0),
                 decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: (Theme.of(context).brightness == Brightness.dark
-                          ? Colors.white
-                          : const Color(0xFF1E3460)) 
-                      .withOpacity(_current == entry.key ? 0.9 : 0.2),
+                  borderRadius: BorderRadius.circular(29), 
+                  color: isActive 
+                      ? const Color(0xFF007A73) 
+                      : const Color(0xFFE9EAEB), 
                 ),
               ),
             );

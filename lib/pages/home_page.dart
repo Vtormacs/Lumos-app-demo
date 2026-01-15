@@ -36,7 +36,6 @@ class _HomePageState extends State<HomePage> {
  @override
   Widget build(BuildContext context) {
     bool isDarkTheme = AppController.instance.isDarkTheme;
-    // Não usamos mais height fixo do MediaQuery solto, usaremos Constraints
     
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(
@@ -56,7 +55,6 @@ class _HomePageState extends State<HomePage> {
                   : [AppColors.blueTop, AppColors.blueBottom],
             ),
           ),
-          // O LayoutBuilder nos dá as medidas exatas disponíveis
           child: LayoutBuilder(
             builder: (context, constraints) {
               return SingleChildScrollView(
@@ -274,7 +272,7 @@ class _HomePageState extends State<HomePage> {
                                   },
                                 ),
                                 
-                                const SizedBox(height: 40),
+                                const SizedBox(height: 24),
 
                                 const HomeBanner(),
 

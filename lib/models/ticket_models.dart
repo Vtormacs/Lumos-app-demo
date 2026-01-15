@@ -39,7 +39,6 @@ class IngressoModel {
 // --- DADOS MOCK (Simulando sua API) ---
 class MockData {
   static List<IngressoModel> getIngressos() {
-    // Evento 1: Madero Tango
     final event1 = EventoModel(
       title: "Madero Tango Iguazu - Jantar Show VIP",
       imageUrl: "https://www.novohamburgo.rs.gov.br/sites/pmnh/files/evento_destaque/2020-03/BN%201200x1600%20px%20-%20Em%20Breve.JPG", // URL de exemplo

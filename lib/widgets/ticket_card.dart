@@ -63,7 +63,6 @@ class TicketSection extends StatelessWidget {
           ),
         ),
 
-        // --- REMOVIDO: O bloco de data que estava aqui antes causava a duplicação ---
 
         // --- 2. LOOP PELAS DATAS (Cria os grupos de cards) ---
         ...datasOrdenadas.map((dataKey) {
@@ -78,7 +77,7 @@ class TicketSection extends StatelessWidget {
             children: [
               // --- Data e Hora (Cabeçalho da Seção) ---
               Padding(
-                padding: const EdgeInsets.only(bottom: 12.0, top: 8.0), // Ajustei o padding
+                padding: const EdgeInsets.only(bottom: 12.0, top: 8.0), 
                 child: Row(
                   children: [
                     Container(
