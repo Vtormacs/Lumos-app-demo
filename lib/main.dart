@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:loumar/app_widget.dart'; 
 import 'package:loumar/controllers/app_controller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 void main() async {
   
   //Garante que o motor do Flutter esteja pronto antes de carregar dados
   WidgetsFlutterBinding.ensureInitialized(); 
+
+  await initializeDateFormatting('pt_BR', null);
 
   // Carrega o tema salvo na memória
   await AppController.instance.loadTheme();

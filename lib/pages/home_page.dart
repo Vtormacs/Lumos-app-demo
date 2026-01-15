@@ -1,11 +1,17 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:loumar/controllers/app_controller.dart';
+import 'package:loumar/models/ticket_models.dart';
 import 'package:loumar/theme/app_colors.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:loumar/widgets/ticket_card.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:loumar/models/user_model.dart';
 import 'dart:convert';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter/services.dart';
+import 'package:loumar/widgets/home_banner.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -25,178 +31,266 @@ class _HomePageState extends State<HomePage> {
     return null;
   }
 
-  @override
+  final List<IngressoModel> _meusIngressos = MockData.getIngressos();
+
+ @override
   Widget build(BuildContext context) {
-    // Verifica o tema atual
     bool isDarkTheme = AppController.instance.isDarkTheme;
-
-    return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: isDarkTheme
-                ? [AppColors.darkTop, AppColors.darkBottom]
-                : [AppColors.blueTop, AppColors.blueBottom],
+    // Não usamos mais height fixo do MediaQuery solto, usaremos Constraints
+    
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: const SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.light,
+        statusBarBrightness: Brightness.dark,
+      ),
+      child: Scaffold(
+        extendBodyBehindAppBar: true,
+        body: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: isDarkTheme
+                  ? [AppColors.darkTop, AppColors.darkBottom]
+                  : [AppColors.blueTop, AppColors.blueBottom],
+            ),
           ),
-        ),
-        child: Column(
-          children: [
-            // SafeArea garante que não fique embaixo do relógio/bateria
-            SafeArea(
-              bottom: false,
-
-              child: Container(
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage('assets/images/home/fundohome.jpg'),
-                    fit: BoxFit.cover,
-                    opacity: 0.2,
-                  ),
-                ),
-
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // --- CABEÇALHO (Avatar + Nome + Sino) ---
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          FutureBuilder<UserModel?>(
-                            future: _loadUser(),
-                            builder: (context, asyncSnapshot) {
-                              String nome = "Usuário";
-                              if (asyncSnapshot.hasData &&
-                                  asyncSnapshot.data != null) {
-                                nome = asyncSnapshot.data!.name;
-                              }
-                              return Row(
+          // O LayoutBuilder nos dá as medidas exatas disponíveis
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              return SingleChildScrollView(
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                  child: IntrinsicHeight(
+                    child: Column(
+                      children: [
+                        // --- PARTE SUPERIOR ---
+                        Container(
+                          width: double.infinity,
+                          decoration: const BoxDecoration(
+                            image: DecorationImage(
+                              image: AssetImage('assets/images/home/fundohome.jpg'),
+                              fit: BoxFit.cover,
+                              opacity: 0.1,
+                            ),
+                          ),
+                          child: SafeArea(
+                            bottom: false,
+                            child: Padding(
+                              padding: const EdgeInsets.fromLTRB(20, 10, 20, 20),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  // Avatar
-                                  const CircleAvatar(
-                                    radius: 25,
-                                    backgroundImage: NetworkImage(
-                                      'https://i.pravatar.cc/150?img=5', // Imagem temporária
-                                    ),
-                                  ),
-                                  const SizedBox(width: 10),
-                                  // Textos de boas vindas
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                  // CABEÇALHO
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
-                                      const Text(
-                                        "Boas vindas,",
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 12,
-                                          fontFamily: 'Montserrat',
-                                          fontWeight: FontWeight.w500,
-                                        ),
+                                      FutureBuilder<UserModel?>(
+                                        future: _loadUser(),
+                                        builder: (context, asyncSnapshot) {
+                                          String nome = "Usuário";
+                                          if (asyncSnapshot.hasData && asyncSnapshot.data != null) {
+                                            nome = asyncSnapshot.data!.name;
+                                          }
+                                          return Row(
+                                            children: [
+                                              const CircleAvatar(
+                                                radius: 25,
+                                                backgroundImage: NetworkImage('https://i.pravatar.cc/150?img=5'),
+                                              ),
+                                              const SizedBox(width: 10),
+                                              Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  const Text(
+                                                    "Boas vindas,",
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 12,
+                                                      fontFamily: 'Montserrat',
+                                                      fontWeight: FontWeight.w500,
+                                                    ),
+                                                  ),
+                                                  Text(
+                                                    "$nome! 👋",
+                                                    style: const TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 16,
+                                                      fontFamily: 'Montserrat',
+                                                      fontWeight: FontWeight.w600,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          );
+                                        },
                                       ),
-                                      Text(
-                                        "$nome! 👋",
-                                        style: const TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 16,
-                                          fontFamily: 'Montserrat',
-                                          fontWeight: FontWeight.w600,
+                                      Container(
+                                        width: 44,
+                                        height: 44,
+                                        decoration: BoxDecoration(
+                                          color: const Color.fromRGBO(107, 122, 164, 0.47),
+                                          borderRadius: BorderRadius.circular(12),
+                                        ),
+                                        child: SvgPicture.asset(
+                                          'assets/images/home/notificacaoVazia.svg',
+                                          fit: BoxFit.contain,
                                         ),
                                       ),
                                     ],
                                   ),
+
+                                  SizedBox(height: constraints.maxHeight * 0.04), 
+
+                                  const Text(
+                                    "Ações Rápidas",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 14,
+                                      fontFamily: 'Montserrat',
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 12),
+
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      _botaoRapido(icon: "🗺️", label: "Guia do\nViajante"),
+                                      _botaoRapido(icon: "🌎", label: "Lorem\nIpsum"),
+                                      _botaoRapidoBusca(
+                                        context: context,
+                                        icon: "🇵🇾",
+                                        label: "Busca\nParaguai",
+                                        link: "https://www.buscaparaguai.com.br/",
+                                      ),
+                                      _botaoRapido(icon: "🛍️", label: "Minhas\nCompras"),
+                                    ],
+                                  ),
                                 ],
-                              );
-                            },
-                          ),
-                          // Botão de Notificação
-                          Container(
-                            width: 44,
-                            height: 44,
-                            decoration: BoxDecoration(
-                              color: const Color.fromRGBO(107, 122, 164, 0.47),
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: SvgPicture.asset(
-                              'assets/images/home/notificacaoVazia.svg',
-                              fit: BoxFit.contain,
+                              ),
                             ),
                           ),
-                        ],
-                      ),
-
-                      const SizedBox(height: 30),
-
-                      // --- AÇÕES RÁPIDAS (Grid de botões) ---
-                      const Text(
-                        "Ações Rápidas",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 14,
-                          fontFamily: 'Montserrat',
-                          fontWeight: FontWeight.w500,
                         ),
-                      ),
-                      const SizedBox(height: 12),
 
-                      // Linha com os 4 botões
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          _botaoRapido(icon: "🗺️", label: "Guia do\nViajante"),
-                          _botaoRapido(icon: "🌎", label: "Lorem\nIpsum"),
-                          _botaoRapidoBusca(
-                            context: context,
-                            icon: "🇵🇾",
-                            label: "Busca\nParaguai",
-                            link: "https://www.buscaparaguai.com.br/",
+                       // --- PARTE BRANCA INFERIOR ---
+                      Expanded(
+                        child: Container(
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            color: isDarkTheme
+                                ? AppColors.darkBackground
+                                : const Color(0xFFFFFFFF), 
+                            borderRadius: const BorderRadius.only(
+                              topLeft: Radius.circular(24),
+                              topRight: Radius.circular(24),
+                            ),
                           ),
-                          _botaoRapido(icon: "🛍️", label: "Minhas\nCompras"),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(20, 24, 0, 0), 
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                // --- ABAS (Meus Ingressos | Meus Roteiros) ---
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 20.0),
+                                  child: Container(
+                                    height: 44,
+                                    padding: const EdgeInsets.all(4),
+                                    decoration: BoxDecoration(
+                                      color: const Color(0xFFFAFAFA),
+                                      border: Border.all(color: const Color(0xFFE9EAEB)),
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        // Aba Ativa (Ingressos)
+                                        Expanded(
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              color: const Color(0xFFEFF8FF),
+                                              borderRadius: BorderRadius.circular(6),
+                                              boxShadow: const [
+                                                BoxShadow(
+                                                  color: Color.fromRGBO(10, 13, 18, 0.1),
+                                                  offset: Offset(0, 1),
+                                                  blurRadius: 2,
+                                                )
+                                              ],
+                                            ),
+                                            child: Center(
+                                              child: Text(
+                                                "Meus Ingressos (${_meusIngressos.length})",
+                                                style: const TextStyle(
+                                                  fontFamily: 'Inter',
+                                                  fontWeight: FontWeight.w500,
+                                                  fontSize: 14,
+                                                  color: Color(0xFF175CD3),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        // Aba Inativa (Roteiros)
+                                        Expanded(
+                                          child: Center(
+                                            child: Text(
+                                              "Meus Roteiros",
+                                              style: const TextStyle(
+                                                fontFamily: 'Inter',
+                                                fontWeight: FontWeight.w400,
+                                                fontSize: 14,
+                                                color: Color(0xFF717680),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                
+                                const SizedBox(height: 24),
 
-            const SizedBox(height: 32),
+                                // --- LISTA DE INGRESSOS ---
+                                Builder(
+                                  builder: (context) {
+                                    final eventosUnicos = _meusIngressos.map((e) => e.event).toSet().toList();
+                                    
+                                    return Column(
+                                      children: eventosUnicos.map((evento) {
+                                        final ingressosDoEvento = _meusIngressos
+                                            .where((i) => i.event == evento)
+                                            .toList();
+                                        
+                                        return TicketSection(
+                                          evento: evento,
+                                          ingressos: ingressosDoEvento,
+                                        );
+                                      }).toList(),
+                                    );
+                                  },
+                                ),
+                                
+                                const SizedBox(height: 40),
 
-            // --- PARTE BRANCA INFERIOR ---
-            Expanded(
-              child: Container(
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: isDarkTheme
-                      ? AppColors.darkBackground
-                      : AppColors.lightBackground,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(24),
-                    topRight: Radius.circular(24),
-                  ),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(24.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Conteúdo da Home...",
-                        style: TextStyle(
-                          color: isDarkTheme
-                              ? AppColors.darkText
-                              : AppColors.lightText,
+                                const HomeBanner(),
+
+                                const SizedBox(height: 20),
+                              ],
+                            ),
+                          ),
                         ),
                       ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ),
-          ],
+              );
+            },
+          ),
         ),
       ),
     );
@@ -244,10 +338,7 @@ class _HomePageState extends State<HomePage> {
         if (link != null && link.isNotEmpty) {
           final Uri url = Uri.parse(link);
           if (await canLaunchUrl(url)) {
-            await launchUrl(
-              url,
-              mode: LaunchMode.externalApplication,
-            ); // Abre no browser externo
+            await launchUrl(url, mode: LaunchMode.externalApplication);
           } else {
             if (context.mounted) {
               ScaffoldMessenger.of(context).showSnackBar(
