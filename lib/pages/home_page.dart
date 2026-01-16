@@ -22,8 +22,9 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  // 1. CRIAR O CONTROLLER DE SCROLL
   final ScrollController _scrollController = ScrollController();
+
+  int _selectedTab = 0;
 
   Future<UserModel?> _loadUser() async {
     final prefs = await SharedPreferences.getInstance();
@@ -78,7 +79,6 @@ class _HomePageState extends State<HomePage> {
           child: LayoutBuilder(
             builder: (context, constraints) {
               return SingleChildScrollView(
-                // 2. CONECTAR O CONTROLLER AQUI
                 controller: _scrollController, 
                 child: ConstrainedBox(
                   constraints: BoxConstraints(minHeight: constraints.maxHeight),
@@ -234,45 +234,81 @@ class _HomePageState extends State<HomePage> {
                                             color: const Color(0xFFE9EAEB)),
                                         borderRadius: BorderRadius.circular(8),
                                       ),
-                                      child: Row(
+                                     child: Row(
                                         children: [
+                                          // --- ABA 1: INGRESSOS ---
                                           Expanded(
-                                            child: Container(
-                                              decoration: BoxDecoration(
-                                                color: const Color(0xFFEFF8FF),
-                                                borderRadius:
-                                                    BorderRadius.circular(6),
-                                                boxShadow: const [
-                                                  BoxShadow(
-                                                    color: Color.fromRGBO(
-                                                        10, 13, 18, 0.1),
-                                                    offset: Offset(0, 1),
-                                                    blurRadius: 2,
-                                                  )
-                                                ],
-                                              ),
-                                              child: Center(
-                                                child: Text(
-                                                  "Meus Ingressos (${_meusIngressos.length})",
-                                                  style: const TextStyle(
-                                                    fontFamily: 'Inter',
-                                                    fontWeight: FontWeight.w500,
-                                                    fontSize: 14,
-                                                    color: Color(0xFF175CD3),
+                                            child: GestureDetector(
+                                              onTap: () {
+                                                setState(() {
+                                                  _selectedTab = 0;
+                                                });
+                                              },
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                  color: _selectedTab == 0 
+                                                      ? const Color(0xFFEFF8FF) 
+                                                      : Colors.transparent,
+                                                  borderRadius: BorderRadius.circular(6),
+                                                  boxShadow: _selectedTab == 0 
+                                                      ? const [
+                                                          BoxShadow(
+                                                            color: Color.fromRGBO(10, 13, 18, 0.1),
+                                                            offset: Offset(0, 1),
+                                                            blurRadius: 2,
+                                                          )
+                                                        ] 
+                                                      : null,
+                                                ),
+                                                child: Center(
+                                                  child: Text(
+                                                    "Meus Ingressos (${_meusIngressos.length})",
+                                                    style: TextStyle(
+                                                      fontFamily: 'Inter',
+                                                      fontWeight: _selectedTab == 0 ? FontWeight.w500 : FontWeight.w400,
+                                                      fontSize: 14,
+                                                      color: _selectedTab == 0 ? const Color(0xFF175CD3) : const Color(0xFF717680),
+                                                    ),
                                                   ),
                                                 ),
                                               ),
                                             ),
                                           ),
+                                          
+                                          // --- ABA 2: ROTEIROS ---
                                           Expanded(
-                                            child: Center(
-                                              child: Text(
-                                                "Meus Roteiros",
-                                                style: const TextStyle(
-                                                  fontFamily: 'Inter',
-                                                  fontWeight: FontWeight.w400,
-                                                  fontSize: 14,
-                                                  color: Color(0xFF717680),
+                                            child: GestureDetector(
+                                              onTap: () {
+                                                setState(() {
+                                                  _selectedTab = 1;
+                                                });
+                                              },
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                  color: _selectedTab == 1 
+                                                      ? const Color(0xFFEFF8FF) 
+                                                      : Colors.transparent,
+                                                  borderRadius: BorderRadius.circular(6),
+                                                  boxShadow: _selectedTab == 1 
+                                                      ? const [
+                                                          BoxShadow(
+                                                            color: Color.fromRGBO(10, 13, 18, 0.1),
+                                                            offset: Offset(0, 1),
+                                                            blurRadius: 2,
+                                                          )
+                                                        ] 
+                                                      : null,
+                                                ),
+                                                child: Center(
+                                                  child: Text(
+                                                    "Meus Roteiros",
+                                                    style: TextStyle(
+                                                      fontFamily: 'Inter',
+                                                      fontWeight: _selectedTab == 1 ? FontWeight.w500 : FontWeight.w400,
+                                                      fontSize: 14,
+                                                      color: _selectedTab == 1 ? const Color(0xFF175CD3) : const Color(0xFF717680),
+                                                    ),
+                                                  ),
                                                 ),
                                               ),
                                             ),
@@ -284,29 +320,12 @@ class _HomePageState extends State<HomePage> {
 
                                   const SizedBox(height: 24),
 
-                                  // LISTA DE INGRESSOS
-                                  Builder(
-                                    builder: (context) {
-                                      final eventosUnicos = _meusIngressos
-                                          .map((e) => e.event)
-                                          .toSet()
-                                          .toList();
-
-                                      return Column(
-                                        children: eventosUnicos.map((evento) {
-                                          final ingressosDoEvento =
-                                              _meusIngressos
-                                                  .where((i) => i.event == evento)
-                                                  .toList();
-
-                                          return TicketSection(
-                                            evento: evento,
-                                            ingressos: ingressosDoEvento,
-                                          );
-                                        }).toList(),
-                                      );
-                                    },
-                                  ),
+                                  // --- CONTEÚDO CONDICIONAL ---
+                                  // Se aba 0, mostra lista de ingressos. Se aba 1, mostra Widget de Roteiros.
+                                  if (_selectedTab == 0)
+                                    _buildTicketList() // Extrai para um método para ficar limpo
+                                  else
+                                    _buildRoteirosContent(), // Conteúdo da aba Roteiros
 
                                   const SizedBox(height: 24),
 
@@ -371,6 +390,68 @@ class _HomePageState extends State<HomePage> {
               );
             },
           ),
+        ),
+      ),
+    );
+  }
+
+  // --- WIDGET LISTA DE INGRESSOS (Extraído do build original) ---
+  Widget _buildTicketList() {
+    final eventosUnicos = _meusIngressos.map((e) => e.event).toSet().toList();
+
+    if (eventosUnicos.isEmpty) {
+      return const Center(child: Text("Nenhum ingresso encontrado."));
+    }
+
+    return Column(
+      children: eventosUnicos.map((evento) {
+        final ingressosDoEvento =
+            _meusIngressos.where((i) => i.event == evento).toList();
+
+        return TicketSection(
+          evento: evento,
+          ingressos: ingressosDoEvento,
+        );
+      }).toList(),
+    );
+  }
+
+  // --- WIDGET ROTEIROS (PLACEHOLDER) ---
+  Widget _buildRoteirosContent() {
+    return Padding(
+      padding: const EdgeInsets.only(right: 20.0),
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(24),
+        decoration: BoxDecoration(
+          color: const Color(0xFFF9FAFB),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: const Color(0xFFEAECF0)),
+        ),
+        child: Column(
+          children: const [
+            Icon(Icons.map_outlined, size: 48, color: Color(0xFF98A2B3)),
+            SizedBox(height: 12),
+            Text(
+              "Nenhum roteiro criado",
+              style: TextStyle(
+                fontFamily: 'Montserrat',
+                fontWeight: FontWeight.w600,
+                fontSize: 16,
+                color: Color(0xFF1D2939),
+              ),
+            ),
+            SizedBox(height: 4),
+            Text(
+              "Seus roteiros personalizados aparecerão aqui.",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontFamily: 'Inter',
+                fontSize: 14,
+                color: Color(0xFF667085),
+              ),
+            ),
+          ],
         ),
       ),
     );
