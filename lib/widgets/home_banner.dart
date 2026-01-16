@@ -45,9 +45,7 @@ class _HomeBannerState extends State<HomeBanner> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-          padding: EdgeInsets.zero,
-          child: Text(
+         Text(
             'Confira as novidades!',
             style: TextStyle(
               fontFamily: 'Montserrat',
@@ -58,7 +56,6 @@ class _HomeBannerState extends State<HomeBanner> {
                   : const Color(0xFF181D27),
             ),
           ),
-        ),
 
         const SizedBox(height: 16),
 
@@ -116,7 +113,7 @@ class _HomeBannerState extends State<HomeBanner> {
           options: CarouselOptions(
             height: 100,
             autoPlay: true,
-            autoPlayInterval: const Duration(seconds: 5),
+            autoPlayInterval: const Duration(seconds: 8),
             
             // --- CONFIGURAÇÕES IMPORTANTES PARA O LAYOUT ---
             padEnds: false, 
