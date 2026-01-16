@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart'; 
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:loumar/controllers/app_controller.dart';
 import 'package:loumar/pages/home_page.dart';
 import 'package:loumar/pages/ingresso_page.dart';
 import 'package:loumar/pages/map_page.dart';
 import 'package:loumar/pages/perfil_page.dart';
 import 'package:loumar/pages/roteiro_page.dart';
+import 'package:loumar/theme/app_colors.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -35,27 +36,30 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     bool isDark = AppController.instance.isDarkTheme;
 
-  
     final Color selectedColor = isDark ? Colors.white : const Color(0xFF1E3460);
-    final Color unselectedColor = isDark ? Colors.grey : const Color(0xFF414651);
+    final Color unselectedColor = isDark
+        ? Colors.grey
+        : const Color(0xFF414651);
 
     return Scaffold(
+      backgroundColor: isDark  ? AppColors.darkBackground
+                                  : const Color(0xFFFFFFFF),
       body: _pages[_selectedIndex],
-bottomNavigationBar: Container(
+      bottomNavigationBar: Container(
         decoration: BoxDecoration(
           color: isDark ? const Color(0xFF1E1E1E) : Colors.white,
-          
+
           borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(20),
             topRight: Radius.circular(20),
           ),
-          
+
           border: Border.all(
             color: isDark ? const Color(0xFF333333) : const Color(0xFFE9EAEB),
             width: 1.5,
           ),
         ),
-        
+
         child: ClipRRect(
           borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(20),
@@ -63,34 +67,46 @@ bottomNavigationBar: Container(
           ),
           child: BottomNavigationBar(
             type: BottomNavigationBarType.fixed,
-            
-            backgroundColor: Colors.transparent, 
+
+            backgroundColor: Colors.transparent,
             elevation: 0,
-            
+
             selectedItemColor: selectedColor,
             unselectedItemColor: unselectedColor,
-            
+
             selectedLabelStyle: const TextStyle(
-              fontFamily: 'Inter', fontSize: 12, fontWeight: FontWeight.w500
+              fontFamily: 'Inter',
+              fontSize: 12,
+              fontWeight: FontWeight.w500,
             ),
             unselectedLabelStyle: const TextStyle(
-              fontFamily: 'Inter', fontSize: 12, fontWeight: FontWeight.w400
+              fontFamily: 'Inter',
+              fontSize: 12,
+              fontWeight: FontWeight.w400,
             ),
-            
+
             currentIndex: _selectedIndex,
             onTap: _onItemTapped,
-            
+
             items: [
               BottomNavigationBarItem(
-                icon: _buildSvgIcon('assets/images/menu/home.svg', 0, isDark), 
+                icon: _buildSvgIcon('assets/images/menu/home.svg', 0, isDark),
                 label: 'Início',
               ),
               BottomNavigationBarItem(
-                icon: _buildSvgIcon('assets/images/menu/ingresso.svg', 1, isDark),
+                icon: _buildSvgIcon(
+                  'assets/images/menu/ingresso.svg',
+                  1,
+                  isDark,
+                ),
                 label: 'Ingressos',
               ),
               BottomNavigationBarItem(
-                icon: _buildSvgIcon('assets/images/menu/roteiro.svg', 2, isDark),
+                icon: _buildSvgIcon(
+                  'assets/images/menu/roteiro.svg',
+                  2,
+                  isDark,
+                ),
                 label: 'Roteiros',
               ),
               BottomNavigationBarItem(
@@ -110,9 +126,9 @@ bottomNavigationBar: Container(
 
   Widget _buildSvgIcon(String assetName, int index, bool isDark) {
     bool isSelected = _selectedIndex == index;
-    
-    final Color iconColor = isSelected 
-        ? (isDark ? Colors.white : const Color(0xFF1E3460)) 
+
+    final Color iconColor = isSelected
+        ? (isDark ? Colors.white : const Color(0xFF1E3460))
         : (isDark ? Colors.grey : const Color(0xFF414651));
 
     return Column(
@@ -127,18 +143,18 @@ bottomNavigationBar: Container(
               color: isDark ? Colors.white : const Color(0xFF1E3460),
               borderRadius: const BorderRadius.only(
                 bottomLeft: Radius.circular(3),
-                bottomRight: Radius.circular(3)
-              )
+                bottomRight: Radius.circular(3),
+              ),
             ),
           )
         else
           const SizedBox(height: 4),
 
         const SizedBox(height: 8),
-        
+
         SvgPicture.asset(
           assetName,
-          width: 24, 
+          width: 24,
           height: 24,
           colorFilter: ColorFilter.mode(iconColor, BlendMode.srcIn),
         ),

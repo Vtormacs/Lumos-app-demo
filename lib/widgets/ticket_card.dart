@@ -11,7 +11,6 @@ class TicketSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // 1. Agrupar ingressos por data
     Map<String, List<IngressoModel>> ingressosPorData = {};
     Map<String, DateTime> dataOriginalMap = {};
 
@@ -64,7 +63,6 @@ class TicketSection extends StatelessWidget {
         ),
 
 
-        // --- 2. LOOP PELAS DATAS (Cria os grupos de cards) ---
         ...datasOrdenadas.map((dataKey) {
           List<IngressoModel> ingressosDoDia = ingressosPorData[dataKey]!;
           DateTime dataReal = dataOriginalMap[dataKey]!;
@@ -109,7 +107,7 @@ class TicketSection extends StatelessWidget {
                 ),
               ),
 
-              // --- Lista Horizontal de Cards (Deste dia) ---
+              // --- Lista Horizontal de Cards ---
               SizedBox(
                 height: 210, 
                 child: ListView.builder(
@@ -124,7 +122,7 @@ class TicketSection extends StatelessWidget {
                 ),
               ),
               
-              const SizedBox(height: 16), // Espaço entre os grupos de dias
+              const SizedBox(height: 16),
             ],
           );
         }), 
@@ -133,7 +131,6 @@ class TicketSection extends StatelessWidget {
   }
 }
 
-// O restante (_TicketCardItem e TicketPainter) continua igual ao seu código anterior
 class _TicketCardItem extends StatelessWidget {
   final IngressoModel ingresso;
 

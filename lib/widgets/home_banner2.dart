@@ -155,6 +155,7 @@ class _HomeBanner2State extends State<HomeBanner2> with SingleTickerProviderStat
                         currentBanner['image']!,
                         key: ValueKey<String>(currentBanner['image']!),
                         fit: BoxFit.cover,
+                        filterQuality: FilterQuality.high,
                         width: double.infinity,
                         height: double.infinity,
                         loadingBuilder: (context, child, loadingProgress) {

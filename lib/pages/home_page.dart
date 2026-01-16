@@ -13,6 +13,8 @@ import 'dart:convert';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/services.dart';
 import 'package:loumar/widgets/home_banner.dart';
+import 'package:loumar/models/roteiro_model.dart';
+import 'package:loumar/widgets/roteiro_list.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -40,12 +42,10 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void dispose() {
-    // É importante descartar o controller quando sair da tela
     _scrollController.dispose();
     super.dispose();
   }
 
-  // Função para subir ao topo
   void _scrollToTop() {
     _scrollController.animateTo(
       0,
@@ -93,6 +93,7 @@ class _HomePageState extends State<HomePage> {
                               image: AssetImage('assets/images/home/fundohome.jpg'),
                               fit: BoxFit.cover,
                               opacity: 0.1,
+                              filterQuality: FilterQuality.high
                             ),
                           ),
                           child: SafeArea(
@@ -321,11 +322,10 @@ class _HomePageState extends State<HomePage> {
                                   const SizedBox(height: 24),
 
                                   // --- CONTEÚDO CONDICIONAL ---
-                                  // Se aba 0, mostra lista de ingressos. Se aba 1, mostra Widget de Roteiros.
                                   if (_selectedTab == 0)
-                                    _buildTicketList() // Extrai para um método para ficar limpo
+                                    _buildTicketList() 
                                   else
-                                    _buildRoteirosContent(), // Conteúdo da aba Roteiros
+                                    _buildRoteirosContent(),
 
                                   const SizedBox(height: 24),
 
@@ -395,7 +395,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  // --- WIDGET LISTA DE INGRESSOS (Extraído do build original) ---
+  // --- WIDGET LISTA DE INGRESSOS ---
   Widget _buildTicketList() {
     final eventosUnicos = _meusIngressos.map((e) => e.event).toSet().toList();
 
@@ -416,44 +416,13 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  // --- WIDGET ROTEIROS (PLACEHOLDER) ---
+ //  WIDGET ROTEIROS 
   Widget _buildRoteirosContent() {
+    final List<RoteiroItemModel> roteiroItens = MockRoteiroData.getRoteiro();
+
     return Padding(
-      padding: const EdgeInsets.only(right: 20.0),
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.all(24),
-        decoration: BoxDecoration(
-          color: const Color(0xFFF9FAFB),
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: const Color(0xFFEAECF0)),
-        ),
-        child: Column(
-          children: const [
-            Icon(Icons.map_outlined, size: 48, color: Color(0xFF98A2B3)),
-            SizedBox(height: 12),
-            Text(
-              "Nenhum roteiro criado",
-              style: TextStyle(
-                fontFamily: 'Montserrat',
-                fontWeight: FontWeight.w600,
-                fontSize: 16,
-                color: Color(0xFF1D2939),
-              ),
-            ),
-            SizedBox(height: 4),
-            Text(
-              "Seus roteiros personalizados aparecerão aqui.",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontFamily: 'Inter',
-                fontSize: 14,
-                color: Color(0xFF667085),
-              ),
-            ),
-          ],
-        ),
-      ),
+      padding: const EdgeInsets.only(right: 20.0), 
+      child: RoteiroListWidget(itens: roteiroItens),
     );
   }
 

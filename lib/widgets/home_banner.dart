@@ -84,6 +84,7 @@ class _HomeBannerState extends State<HomeBanner> {
                       child: Image.network(
                         item['image']!,
                         fit: BoxFit.cover,
+                        filterQuality: FilterQuality.high,
                         loadingBuilder: (context, child, loadingProgress) {
                           if (loadingProgress == null) return child;
                           return Center(
