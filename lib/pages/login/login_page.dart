@@ -7,6 +7,7 @@ import 'package:loumar/main_screen.dart';
 import 'package:loumar/models/user_model.dart';
 import 'package:loumar/pages/login/LoumarKeyBottomSheet.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -46,7 +47,6 @@ class _LoginPageState extends State<LoginPage> {
     String senha = _keyController.text;
 
     if (cpfLimpo == '11111111111' && senha == '123456') {
-      
       UserModel user = UserModel.getUserTeste();
 
       //SALVAR NA MEMÓRIA DO CELULAR
@@ -278,14 +278,32 @@ class _LoginPageState extends State<LoginPage> {
                           child: _buildOutlineButton(
                             svgAsset: 'assets/images/login/whatsapp.svg',
                             text: "Suporte",
-                            onTap: () {},
+                            onTap: () async {
+                              final Uri whatsappUrl = Uri.parse(
+                                'https://wa.me/554535214001?text=Olá,%20preciso%20de%20suporte%20no%20app%20da%20Loumar!',
+                              );
+
+                              if (await canLaunchUrl(whatsappUrl)) {
+                                await launchUrl(
+                                  whatsappUrl,
+                                  mode: LaunchMode.externalApplication,
+                                );
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text(
+                                      'Não foi possível abrir o WhatsApp. Verifique se está instalado.',
+                                    ),
+                                  ),
+                                );
+                              }
+                            },
                             isWhatsApp: true,
                           ),
                         ),
                       ],
                     ),
 
-                    // Um espacinho extra no final para garantir que o scroll vai até o fim
                     const SizedBox(height: 20),
                   ],
                 ),
