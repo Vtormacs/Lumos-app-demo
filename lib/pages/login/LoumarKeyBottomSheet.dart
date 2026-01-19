@@ -1,5 +1,5 @@
-// Widget customizado para o conteúdo do bottom sheet
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class LoumarKeyBottomSheet extends StatelessWidget {
   const LoumarKeyBottomSheet({super.key});
@@ -7,11 +7,8 @@ class LoumarKeyBottomSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.fromLTRB(16, 32, 16, 24), // Padding do CSS
-      constraints: BoxConstraints(
-         
-         
-      ),
+      padding: const EdgeInsets.fromLTRB(16, 32, 16, 24),
+      constraints: BoxConstraints(),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -58,7 +55,7 @@ class LoumarKeyBottomSheet extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 24), 
+          const SizedBox(height: 24),
 
           // Seção 2: Onde está a chave
           Column(
@@ -86,12 +83,29 @@ class LoumarKeyBottomSheet extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 24), 
+          const SizedBox(height: 24),
 
           // Botão "Falar com Especialista"
           TextButton(
-            onPressed: () {
-              print("Falar com especialista clicado");
+            onPressed: () async {
+              final Uri whatsappUrl = Uri.parse(
+                'https://wa.me/554535214001?text=Olá,%20preciso%20falar%20com%20um%20especialista%20sobre%20como%20conseguir%20a%20chave%20Loumar!',
+              );
+
+              if (await canLaunchUrl(whatsappUrl)) {
+                await launchUrl(
+                  whatsappUrl,
+                  mode: LaunchMode.externalApplication,
+                );
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text(
+                      'Não foi possível abrir o WhatsApp. Verifique se está instalado.',
+                    ),
+                  ),
+                );
+              }
             },
             style: TextButton.styleFrom(
               padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 0),
@@ -99,11 +113,7 @@ class LoumarKeyBottomSheet extends StatelessWidget {
             child: const Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(
-                  Icons.phone,
-                  size: 20,
-                  color: Color(0xFF1E3460),
-                ),
+                Icon(Icons.phone, size: 20, color: Color(0xFF1E3460)),
                 SizedBox(width: 8),
                 Text(
                   "Falar com Especialista",
