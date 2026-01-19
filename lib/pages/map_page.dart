@@ -38,13 +38,12 @@ class _MapPageState extends State<MapPage> {
   @override
   Widget build(BuildContext context) {
     final Color blueTop = const Color(0xFF1D3B79);
-    final Color blueBottom = const Color(0xFF202F4D);
     final Color bgColor = const Color(
       0xFFFAFAFA,
     );
     return Scaffold(
       backgroundColor:
-          blueBottom, 
+          blueTop, 
       body: Column( 
         children: [
 
@@ -53,10 +52,12 @@ class _MapPageState extends State<MapPage> {
             height: 120, 
             width: double.infinity,
             decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [blueTop, blueBottom],
+              color: blueTop,
+              image: const DecorationImage(
+                image: AssetImage('assets/images/home/fundohome.jpg'),
+                fit: BoxFit.cover,
+                opacity: 0.2, 
+                filterQuality: FilterQuality.high,
               ),
             ),
             child: SafeArea(
