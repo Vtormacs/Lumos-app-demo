@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:loumar/models/user_model.dart';
+import 'package:loumar/pages/notificacao_page.dart';
 import 'package:loumar/pages/perfil_subpaginas/ajustes_page.dart';
 import 'package:loumar/pages/login/onboarding_page.dart';
 import 'package:loumar/pages/perfil_subpaginas/sobre_app.dart';
@@ -143,8 +144,13 @@ class _PerfilPageState extends State<PerfilPage> {
                           icon: Icons.notifications_none,
                           text: "Notificações",
                           onTap: () {
-                            print("Clicou em Notificações");
-                          },
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    const NotificacaoPage()),
+                                          );
+                                        },
                         ),
                         _buildDivider(),
 
