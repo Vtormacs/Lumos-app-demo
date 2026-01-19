@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:loumar/app_widget.dart'; 
 import 'package:loumar/controllers/app_controller.dart';
+import 'package:loumar/service/notification_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
@@ -10,6 +11,8 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized(); 
 
   await initializeDateFormatting('pt_BR', null);
+
+  await NotificationService().init();
 
   // Carrega o tema salvo na memória
   await AppController.instance.loadTheme();

@@ -39,6 +39,7 @@ dependencies:
   url_launcher: ^6.3.0
   intl: ^0.20.2
   carousel_slider: ^5.1.1
+  flutter_local_notifications: ^19.5.0
 
 dev_dependencies:
   flutter_test:
@@ -67,6 +68,7 @@ flutter:
     - assets/images/login/
     - assets/images/menu/
     - assets/images/home/
+    - assets/images/notificacao/
 
   fonts:
     # --- Configuração da INTER ---

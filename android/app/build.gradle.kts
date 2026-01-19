@@ -1,7 +1,7 @@
 plugins {
     id("com.android.application")
     id("kotlin-android")
-    // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
+    // O plugin do Flutter deve vir depois do Android e Kotlin
     id("dev.flutter.flutter-gradle-plugin")
 }
 
@@ -11,29 +11,31 @@ android {
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
+        // CORREÇÃO 1: Adicionado o "is" no início (Obrigatório no Kotlin DSL)
+        isCoreLibraryDesugaringEnabled = true
+
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
 
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_17.toString()
+        // CORREÇÃO 2: Sintaxe simplificada para evitar o erro de Deprecated
+        jvmTarget = "17"
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId = "com.example.loumar"
-        // You can update the following values to match your application needs.
-        // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+        
+        // CORREÇÃO 3: Uso do sinal de igual "="
+        multiDexEnabled = true
     }
 
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
             signingConfig = signingConfigs.getByName("debug")
         }
     }
@@ -41,4 +43,9 @@ android {
 
 flutter {
     source = "../.."
+}
+
+dependencies {
+    // CORREÇÃO 4: Dependência obrigatória para o desugaring funcionar
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")
 }

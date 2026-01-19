@@ -29,6 +29,21 @@ class _HomePageState extends State<HomePage> {
 
   int _selectedTab = 0;
 
+  bool _temNotificacao = false; 
+
+  @override
+  void initState() {
+    super.initState();
+    _verificarNotificacoes(); 
+  }
+
+  Future<void> _verificarNotificacoes() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _temNotificacao = prefs.getBool('temNotificacao') ?? false;
+    });
+  }
+
   Future<UserModel?> _loadUser() async {
     final prefs = await SharedPreferences.getInstance();
     final userJson = prefs.getString('userData');
@@ -152,12 +167,17 @@ class _HomePageState extends State<HomePage> {
                                           );
                                         },
                                       ),
+                                     // --- BOTÃO DE NOTIFICAÇÃO ---
                                       GestureDetector(
                                         onTap: () {
                                           Navigator.push(
                                             context,
-                                            MaterialPageRoute(builder: (context) => const NotificacaoPage()),
-                                          );
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    const NotificacaoPage()),
+                                          ).then((_) {
+                                            _verificarNotificacoes();
+                                          });
                                         },
                                         child: Container(
                                           width: 44,
@@ -168,7 +188,9 @@ class _HomePageState extends State<HomePage> {
                                             borderRadius: BorderRadius.circular(12),
                                           ),
                                           child: SvgPicture.asset(
-                                            'assets/images/home/notificacaoVazia.svg',
+                                            _temNotificacao 
+                                                ? 'assets/images/home/notificacao.svg'      // Com bolinha
+                                                : 'assets/images/home/notificacaoVazia.svg', // Sem bolinha
                                             fit: BoxFit.contain,
                                           ),
                                         ),
