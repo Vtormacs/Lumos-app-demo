@@ -5,14 +5,14 @@ import 'package:loumar/models/user_model.dart';
 import 'package:loumar/pages/login/onboarding_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class IngressoPage extends StatefulWidget {
-  const IngressoPage({super.key});
+class NotificacaoPage extends StatefulWidget {
+  const NotificacaoPage({super.key});
 
   @override
-  _IngressoPageState createState() => _IngressoPageState();
+  _NotificacaoPageState createState() => _NotificacaoPageState();
 }
 
-class _IngressoPageState extends State<IngressoPage> {
+class _NotificacaoPageState extends State<NotificacaoPage> {
   Future<UserModel?> _loadUser() async {
     final prefs = await SharedPreferences.getInstance();
     final userJson = prefs.getString('userData');
@@ -23,34 +23,31 @@ class _IngressoPageState extends State<IngressoPage> {
     return null;
   }
 
-
   void logout(BuildContext context) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.clear();
 
+    if (!mounted) return;
     Navigator.pushAndRemoveUntil(
-    context,
-    MaterialPageRoute(builder: (context) => const OnboardingPage()),
-    (route) => false,
-  );
+      context,
+      MaterialPageRoute(builder: (context) => const OnboardingPage()),
+      (route) => false,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     final Color blueTop = const Color(0xFF1D3B79);
     final Color blueBottom = const Color(0xFF202F4D);
-    final Color bgColor = const Color(
-      0xFFFAFAFA,
-    );
-    return Scaffold(
-      backgroundColor:
-          blueBottom, 
-      body: Column( 
-        children: [
+    final Color bgColor = const Color(0xFFFAFAFA);
 
-          // 1. O CABEÇALHO AZUL
+    return Scaffold(
+      backgroundColor: blueBottom,
+      body: Column(
+        children: [
+          // 1. O CABEÇALHO AZUL PERSONALIZADO
           Container(
-            height: 120, 
+            height: 120,
             width: double.infinity,
             decoration: BoxDecoration(
               gradient: LinearGradient(
@@ -61,16 +58,35 @@ class _IngressoPageState extends State<IngressoPage> {
             ),
             child: SafeArea(
               bottom: false,
-              child: Center(
-                child: Text(
-                  "Ingressos",
-                  style: const TextStyle(
-                    fontFamily: 'Montserrat', 
-                    fontSize: 18,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.white,
+              child: Stack(
+                children: [
+                  Positioned(
+                    left: 8,
+                    top: 0,
+                    bottom: 0,
+                    child: Center(
+                      child: IconButton(
+                        icon: const Icon(Icons.arrow_back, color: Colors.white),
+                        onPressed: () {
+                          Navigator.pop(context); 
+                        },
+                      ),
+                    ),
                   ),
-                ),
+
+                  // --- TÍTULO (Centralizado) ---
+                  const Center(
+                    child: Text(
+                      "Notificações",
+                      style: TextStyle(
+                        fontFamily: 'Montserrat',
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
@@ -91,16 +107,13 @@ class _IngressoPageState extends State<IngressoPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-
-                  
                     const SizedBox(height: 10),
-
-                   
-
-                   
-
-
-                 
+                    const Center(
+                      child: Text(
+                        "Você não tem novas notificações.",
+                        style: TextStyle(color: Colors.grey),
+                      ),
+                    ),
                     const SizedBox(height: 20),
                   ],
                 ),
@@ -112,16 +125,6 @@ class _IngressoPageState extends State<IngressoPage> {
     );
   }
 
-  // WIDGETS AUXILIARES 
-
-  
-
-
- 
-
- 
-
-  // 5. Linha cinza divisória
   Widget _buildDivider() {
     return const Divider(height: 1, thickness: 1, color: Color(0xFFF5F5F5));
   }

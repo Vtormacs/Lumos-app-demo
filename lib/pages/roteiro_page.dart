@@ -44,7 +44,7 @@ class _RoteiroPageState extends State<RoteiroPage> {
     );
     return Scaffold(
       backgroundColor:
-          blueTop, 
+          blueBottom, 
       body: Column( 
         children: [
 

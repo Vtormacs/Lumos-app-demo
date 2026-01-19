@@ -46,7 +46,7 @@ class _PerfilPageState extends State<PerfilPage> {
     );
     return Scaffold(
       backgroundColor:
-          blueTop, 
+          blueBottom, 
       body: Column( 
         children: [
 

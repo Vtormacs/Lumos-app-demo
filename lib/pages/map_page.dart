@@ -44,7 +44,7 @@ class _MapPageState extends State<MapPage> {
     );
     return Scaffold(
       backgroundColor:
-          blueTop, 
+          blueBottom, 
       body: Column( 
         children: [
 
