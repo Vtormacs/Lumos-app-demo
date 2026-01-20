@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:loumar/controllers/app_controller.dart';
-import 'package:loumar/models/ticket_models.dart';
+import 'package:loumar/models/ingresso_models.dart';
 import 'package:loumar/pages/notificacao_page.dart';
 import 'package:loumar/theme/app_colors.dart';
 import 'package:flutter_svg/flutter_svg.dart';

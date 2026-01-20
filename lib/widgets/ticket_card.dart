@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:loumar/models/ticket_models.dart';
+import 'package:loumar/models/ingresso_models.dart';
 import 'package:intl/intl.dart'; 
 
 class TicketSection extends StatelessWidget {
