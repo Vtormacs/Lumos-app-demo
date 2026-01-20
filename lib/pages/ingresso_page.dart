@@ -35,94 +35,96 @@ class _IngressoPageState extends State<IngressoPage> {
   );
   }
 
-  @override
+   @override
   Widget build(BuildContext context) {
     final Color blueTop = const Color(0xFF1D3B79);
-    final Color bgColor = const Color(
-      0xFFFAFAFA,
-    );
-    return Scaffold(
-      backgroundColor:
-          blueTop, 
-      body: Column( 
-        children: [
+    final Color bgColor = const Color(0xFFFAFAFA);
 
-          // 1. O CABEÇALHO AZUL
-          Container(
-            height: 120, 
+    return Scaffold(
+      body: Stack(
+        children: [
+          // 1. FUNDO GERAL 
+         Container(
+            height:
+                MediaQuery.of(context).size.height *
+                0.4, 
             width: double.infinity,
-            decoration: BoxDecoration(
-              color: blueTop,
-              image: const DecorationImage(
-                image: AssetImage('assets/images/home/fundohome.jpg'),
-                fit: BoxFit.cover,
-                opacity: 0.2, 
-                filterQuality: FilterQuality.high,
-              ),
-            ),
-            child: SafeArea(
-              bottom: false,
-              child: Center(
-                child: Text(
-                  "Ingressos",
-                  style: const TextStyle(
-                    fontFamily: 'Montserrat', 
-                    fontSize: 18,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.white,
+            color: blueTop,
+            child: ClipRect(
+              child: Stack(
+                children: [
+                  Positioned.fill(
+                    child: Transform.translate(
+                      offset: const Offset(0, -60),
+                      child: Image.asset(
+                        'assets/images/home/fundohome.jpg',
+                        fit: BoxFit.cover,
+                        opacity: const AlwaysStoppedAnimation(0.16),
+                      ),
+                    ),
                   ),
-                ),
+                ],
               ),
             ),
           ),
 
-          // 2. O CORPO BRANCO ARREDONDADO
-          Expanded(
-            child: Container(
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: bgColor,
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(24),
-                  topRight: Radius.circular(24),
+          // 2. CONTEÚDO (Título + Corpo Branco)
+          Column(
+            children: [
+              SafeArea(
+                bottom: false,
+                child: SizedBox(
+                  height: 60,
+                  child: Center(
+                    child: Text(
+                      "Ingressos",
+                      style: const TextStyle(
+                        fontFamily: 'Montserrat',
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
                 ),
               ),
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.all(20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
 
-                  
-                    const SizedBox(height: 10),
+              const SizedBox(height: 20),
 
-                   
+              // 3. O CORPO BRANCO ARREDONDADO
+              Expanded(
+                child: Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: bgColor,
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(24),
+                      topRight: Radius.circular(24),
+                    ),
+                  ),
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.all(20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(height: 10),
+                        
+                        // SEU CONTEÚDO VAI AQUI
+                        const Text("Você não possui ingressos no momento.        "),
 
-                   
-
-
-                 
-                    const SizedBox(height: 20),
-                  ],
+                        const SizedBox(height: 20),
+                      ],
+                    ),
+                  ),
                 ),
               ),
-            ),
+            ],
           ),
         ],
       ),
     );
   }
 
-  // WIDGETS AUXILIARES 
-
-  
-
-
- 
-
- 
-
-  // 5. Linha cinza divisória
   Widget _buildDivider() {
     return const Divider(height: 1, thickness: 1, color: Color(0xFFF5F5F5));
   }

@@ -103,10 +103,9 @@ class _NotificacaoPageState extends State<NotificacaoPage> {
   @override
   Widget build(BuildContext context) {
     final Color blueTop = const Color(0xFF1D3B79);
-    final Color bgColor = const Color(0xFFF9FAFB); 
+    final Color bgColor = _notificacoes.isEmpty ? const Color(0xFFFAFAFA) : const Color(0xFFF9FAFB); 
 
     return Scaffold(
-      backgroundColor: blueTop,
       
       // --- BOTÃO DE DEBUG 
       floatingActionButton: FloatingActionButton(
@@ -118,46 +117,25 @@ class _NotificacaoPageState extends State<NotificacaoPage> {
         ),
       ),
 
-      body: Column(
+      body: Stack(
         children: [
-          // 1. CABEÇALHO AZUL
-          Container(
-            height: 120,
+          // 1. FUNDO GERAL (CABEÇALHO ESTICADO)
+        Container(
+            height:
+                MediaQuery.of(context).size.height *
+                0.4, 
             width: double.infinity,
-            decoration: BoxDecoration(
-              color: blueTop,
-              image: const DecorationImage(
-                image: AssetImage('assets/images/home/fundohome.jpg'),
-                fit: BoxFit.cover,
-                opacity: 0.2, 
-                filterQuality: FilterQuality.high,
-              ),
-            ),
-            child: SafeArea(
-              bottom: false,
+            color: blueTop,
+            child: ClipRect(
               child: Stack(
                 children: [
-                  Positioned(
-                    left: 8,
-                    top: 0,
-                    bottom: 0,
-                    child: Center(
-                      child: IconButton(
-                        icon: const Icon(Icons.arrow_back, color: Colors.white),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                      ),
-                    ),
-                  ),
-                  const Center(
-                    child: Text(
-                      "Notificações",
-                      style: TextStyle(
-                        fontFamily: 'Montserrat',
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.white,
+                  Positioned.fill(
+                    child: Transform.translate(
+                      offset: const Offset(0, -60),
+                      child: Image.asset(
+                        'assets/images/home/fundohome.jpg',
+                        fit: BoxFit.cover,
+                        opacity: const AlwaysStoppedAnimation(0.16),
                       ),
                     ),
                   ),
@@ -166,21 +144,68 @@ class _NotificacaoPageState extends State<NotificacaoPage> {
             ),
           ),
 
-          // 2. CORPO BRANCO / LISTA
-          Expanded(
-            child: Container(
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: _notificacoes.isEmpty ? const Color(0xFFFAFAFA) : bgColor, 
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(24),
-                  topRight: Radius.circular(24),
+          // 2. CONTEÚDO FLUTUANTE (Título + Botão Voltar + Corpo Branco)
+          Column(
+            children: [
+              // CABEÇALHO (Botão Voltar + Título)
+              SafeArea(
+                bottom: false,
+                child: SizedBox(
+                  height: 60,
+                  child: Stack(
+                    children: [
+                      // Botão Voltar na Esquerda
+                      Positioned(
+                        left: 8,
+                        top: 0,
+                        bottom: 0,
+                        child: Center(
+                          child: IconButton(
+                            icon: const Icon(Icons.arrow_back, color: Colors.white),
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                          ),
+                        ),
+                      ),
+                      
+                      // Título Centralizado
+                      const Center(
+                        child: Text(
+                          "Notificações",
+                          style: TextStyle(
+                            fontFamily: 'Montserrat',
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-              child: _notificacoes.isEmpty 
-                  ? _buildEmptyState() 
-                  : _buildNotificationList(),
-            ),
+
+              const SizedBox(height: 20), 
+
+              // 3. O CORPO BRANCO ARREDONDADO
+              Expanded(
+                child: Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: bgColor,
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(24),
+                      topRight: Radius.circular(24),
+                    ),
+                  ),
+                  // Exibe a lista ou o estado vazio conforme lógica
+                  child: _notificacoes.isEmpty 
+                      ? _buildEmptyState() 
+                      : _buildNotificationList(),
+                ),
+              ),
+            ],
           ),
         ],
       ),
@@ -230,7 +255,7 @@ class _NotificacaoPageState extends State<NotificacaoPage> {
     );
   }
 
-  // --- LISTA DE NOTIFICAÇÕES  ---
+  // --- LISTA DE NOTIFICAÇÕES  ---
   Widget _buildNotificationList() {
     return ListView.separated(
       padding: const EdgeInsets.fromLTRB(20, 24, 20, 24),

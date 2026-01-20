@@ -26,215 +26,233 @@ class _PerfilPageState extends State<PerfilPage> {
     return null;
   }
 
-
   void logout(BuildContext context) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.clear();
 
     Navigator.pushAndRemoveUntil(
-    context,
-    MaterialPageRoute(builder: (context) => const OnboardingPage()),
-    (route) => false,
-  );
+      context,
+      MaterialPageRoute(builder: (context) => const OnboardingPage()),
+      (route) => false,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-     final Color blueTop = const Color(0xFF1D3B79);
-    final Color bgColor = const Color(
-      0xFFFAFAFA,
-    );
+    final Color blueTop = const Color(0xFF1D3B79);
+    final Color bgColor = const Color(0xFFFAFAFA);
     return Scaffold(
-      backgroundColor:
-          blueTop, 
-      body: Column( 
+      body: Stack(
         children: [
-
-          // 1. O CABEÇALHO AZUL
+          // 1. FUNDO GERAL (CABEÇALHO ESTICADO)
           Container(
-            height: 120, 
+            height:
+                MediaQuery.of(context).size.height *
+                0.4, 
             width: double.infinity,
-            decoration: BoxDecoration(
-              color: blueTop,
-              image: const DecorationImage(
-                image: AssetImage('assets/images/home/fundohome.jpg'),
-                fit: BoxFit.cover,
-                opacity: 0.2, 
-                filterQuality: FilterQuality.high,
-              ),
-            ),
-            child: SafeArea(
-              bottom: false,
-              child: Center(
-                child: Text(
-                  "Perfil",
-                  style: const TextStyle(
-                    fontFamily: 'Montserrat', 
-                    fontSize: 18,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.white,
+            color: blueTop,
+            child: ClipRect(
+              child: Stack(
+                children: [
+                  Positioned.fill(
+                    child: Transform.translate(
+                      offset: const Offset(0, -60),
+                      child: Image.asset(
+                        'assets/images/home/fundohome.jpg',
+                        fit: BoxFit.cover,
+                        opacity: const AlwaysStoppedAnimation(0.16),
+                      ),
+                    ),
                   ),
-                ),
+                ],
               ),
             ),
           ),
 
-          // 2. O CORPO BRANCO ARREDONDADO
-          Expanded(
-            child: Container(
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: bgColor,
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(24),
-                  topRight: Radius.circular(24),
-                ),
-              ),
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.all(20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // --- CARTÃO DO USUÁRIO ---
-
-                    FutureBuilder<UserModel?>(
-                      future: _loadUser(),
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState == ConnectionState.waiting) {
-                          return const Center(child: CircularProgressIndicator());
-                        }
-                        final user = snapshot.data;
-                        return _buildUserCard(
-                          name: user?.name ?? 'Usuário',
-                          email: user?.email ?? 'email@exemplo.com',
-                        );
-                      },
-                    ),
-                    const SizedBox(height: 24),
-
-                    // --- SEÇÃO: INFORMAÇÕES PESSOAIS ---
-                    _buildSectionTitle("Informações pessoais"),
-                    const SizedBox(height: 8),
-                    _buildMenuContainer(
-                      children: [
-                        _buildMenuItem(
-                          icon: Icons.person_outline,
-                          text: "Editar perfil",
-                        ),
-                        _buildDivider(), // Linha divisória
-                        _buildMenuItem(
-                          icon: Icons.lock_outline,
-                          text: "Alterar senha",
-                        ),
-                        _buildDivider(),
-                        _buildMenuItem(
-                          icon: Icons.shopping_bag_outlined,
-                          text: "Histórico de compras",
-                        ),
-                      ],
-                    ),
-
-                    const SizedBox(height: 24),
-
-                    // --- SEÇÃO: CONFIGURAÇÕES ---
-                    _buildSectionTitle("Configurações"),
-                    const SizedBox(height: 8),
-                    _buildMenuContainer(
-                      children: [
-                        _buildMenuItem(
-                          icon: Icons.notifications_none,
-                          text: "Notificações",
-                          onTap: () {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    const NotificacaoPage()),
-                                          );
-                                        },
-                        ),
-                        _buildDivider(),
-
-                        _buildMenuItem(
-                          icon: Icons.settings_outlined,
-                          text: "Ajuste de App",
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const AjustesPage(),
-                              ),
-                            );
-                          },
-                        ),
-                      ],
-                    ),
-
-                    const SizedBox(height: 24),
-
-                    // --- SEÇÃO: SUPORTE & APP ---
-                    _buildSectionTitle("Suporte & App"),
-                    const SizedBox(height: 8),
-                    _buildMenuContainer(
-                      children: [
-                        _buildMenuItem(
-                          icon: Icons.help_outline,
-                          text: "Perguntas frequentes",
-                        ),
-                        _buildDivider(),
-                        _buildMenuItem(
-                          icon: Icons.headset_mic_outlined,
-                          text: "Ajuda / Suporte",
-                        ),
-                        _buildDivider(),
-                        _buildMenuItem(
-                          icon: Icons.info_outline,
-                          text: "Sobre o app",
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const SobreApp(),
-                              ),
-                            );
-                          },
-                        ),
-                      ],
-                    ),
-
-                    const SizedBox(height: 32),
-
-                    // --- BOTÃO DE SAIR ---
-                    Center(
-                      child: TextButton.icon(
-                        onPressed: () => logout(context),
-                        icon: const Icon(
-                          Icons.logout,
-                          color: Color(0xFFD92D20),
-                          size: 20,
-                        ),
-                        label: const Text(
-                          "Sair da conta",
-                          style: TextStyle(
-                            color: Color(0xFFD92D20),
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
+          // 2. CONTEÚDO (Texto "Perfil" + Parte Branca)
+          Column(
+            children: [
+              // Espaço para o título "Perfil" (SafeArea manual)
+              SafeArea(
+                bottom: false,
+                child: SizedBox(
+                  height: 60, 
+                  child: Center(
+                    child: Text(
+                      "Perfil",
+                      style: const TextStyle(
+                        fontFamily: 'Montserrat',
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white,
                       ),
                     ),
-                    const SizedBox(height: 20),
-                  ],
+                  ),
                 ),
               ),
-            ),
+
+              const SizedBox(height: 20), 
+              // 3. CORPO BRANCO ARREDONDADO
+              Expanded(
+                child: Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: bgColor,
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(24),
+                      topRight: Radius.circular(24),
+                    ),
+                  ),
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.all(20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // ... (Seu conteúdo do perfil continua igual aqui) ...
+                        FutureBuilder<UserModel?>(
+                          future: _loadUser(),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return const Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            }
+                            final user = snapshot.data;
+                            return _buildUserCard(
+                              name: user?.name ?? 'Usuário',
+                              email: user?.email ?? 'email@exemplo.com',
+                            );
+                          },
+                        ),
+                        const SizedBox(height: 24),
+
+                        // --- SEÇÃO: INFORMAÇÕES PESSOAIS ---
+                        _buildSectionTitle("Informações pessoais"),
+                        const SizedBox(height: 8),
+                        _buildMenuContainer(
+                          children: [
+                            _buildMenuItem(
+                              icon: Icons.person_outline,
+                              text: "Editar perfil",
+                            ),
+                            _buildDivider(), 
+                            _buildMenuItem(
+                              icon: Icons.lock_outline,
+                              text: "Alterar senha",
+                            ),
+                            _buildDivider(),
+                            _buildMenuItem(
+                              icon: Icons.shopping_bag_outlined,
+                              text: "Histórico de compras",
+                            ),
+                          ],
+                        ),
+
+                        const SizedBox(height: 24),
+
+                        // --- SEÇÃO: CONFIGURAÇÕES ---
+                        _buildSectionTitle("Configurações"),
+                        const SizedBox(height: 8),
+                        _buildMenuContainer(
+                          children: [
+                            _buildMenuItem(
+                              icon: Icons.notifications_none,
+                              text: "Notificações",
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        const NotificacaoPage(),
+                                  ),
+                                );
+                              },
+                            ),
+                            _buildDivider(),
+
+                            _buildMenuItem(
+                              icon: Icons.settings_outlined,
+                              text: "Ajuste de App",
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const AjustesPage(),
+                                  ),
+                                );
+                              },
+                            ),
+                          ],
+                        ),
+
+                        const SizedBox(height: 24),
+
+                        // --- SEÇÃO: SUPORTE & APP ---
+                        _buildSectionTitle("Suporte & App"),
+                        const SizedBox(height: 8),
+                        _buildMenuContainer(
+                          children: [
+                            _buildMenuItem(
+                              icon: Icons.help_outline,
+                              text: "Perguntas frequentes",
+                            ),
+                            _buildDivider(),
+                            _buildMenuItem(
+                              icon: Icons.headset_mic_outlined,
+                              text: "Ajuda / Suporte",
+                            ),
+                            _buildDivider(),
+                            _buildMenuItem(
+                              icon: Icons.info_outline,
+                              text: "Sobre o app",
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const SobreApp(),
+                                  ),
+                                );
+                              },
+                            ),
+                          ],
+                        ),
+
+                        const SizedBox(height: 32),
+
+                        // --- BOTÃO DE SAIR ---
+                        Center(
+                          child: TextButton.icon(
+                            onPressed: () => logout(context),
+                            icon: const Icon(
+                              Icons.logout,
+                              color: Color(0xFFD92D20),
+                              size: 20,
+                            ),
+                            label: const Text(
+                              "Sair da conta",
+                              style: TextStyle(
+                                color: Color(0xFFD92D20),
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
         ],
       ),
     );
   }
 
-  // WIDGETS AUXILIARES 
+  // WIDGETS AUXILIARES
 
   // 1. O Cartão do Usuário (Foto + Nome + Email)
   Widget _buildUserCard({required String name, required String email}) {
@@ -243,7 +261,7 @@ class _PerfilPageState extends State<PerfilPage> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: const Color(0xFFE9EAEB)), 
+        border: Border.all(color: const Color(0xFFE9EAEB)),
       ),
       child: Row(
         children: [
@@ -251,7 +269,7 @@ class _PerfilPageState extends State<PerfilPage> {
           Stack(
             children: [
               const CircleAvatar(
-                radius: 32, 
+                radius: 32,
                 backgroundImage: NetworkImage(
                   'https://i.pravatar.cc/150?img=5',
                 ),
@@ -289,10 +307,10 @@ class _PerfilPageState extends State<PerfilPage> {
                     color: Color(0xFF181D27),
                   ),
                 ),
-                 Text(
+                Text(
                   email,
                   style: TextStyle(color: Color(0xFF414651), fontSize: 13),
-                  overflow: TextOverflow.ellipsis, 
+                  overflow: TextOverflow.ellipsis,
                 ),
               ],
             ),
