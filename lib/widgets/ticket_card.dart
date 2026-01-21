@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:loumar/models/ingresso_models.dart';
-import 'package:intl/intl.dart'; 
+import 'package:intl/intl.dart';
+import 'package:loumar/pages/ingresso_pages/ingresso_detalhado.dart'; 
 
 class TicketSection extends StatelessWidget {
   final EventoModel evento;
@@ -136,6 +137,19 @@ class _TicketCardItem extends StatelessWidget {
 
   const _TicketCardItem({required this.ingresso});
 
+  String _getStatusText(TicketStatus status) {
+    switch (status) {
+      case TicketStatus.notPrinted:
+        return "Retirar em loja";
+      case TicketStatus.printed:
+        return "Já Impresso";
+      case TicketStatus.digital:
+        return "Ingresso digital";
+      default:
+        return "Digital";
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final bool isInstructions = ingresso.status == TicketStatus.instructions;
@@ -217,7 +231,7 @@ class _TicketCardItem extends StatelessWidget {
                         borderRadius: BorderRadius.circular(6),
                       ),
                       child: Text(
-                        isInstructions ? "Retirar em loja" : "Ingresso digital",
+                        _getStatusText(ingresso.status),
                         style: const TextStyle(
                           fontFamily: 'Inter',
                           fontSize: 10,
@@ -237,7 +251,13 @@ class _TicketCardItem extends StatelessWidget {
               width: double.infinity,
               height: 25,
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              IngressoDetalhadoPage(ingresso: ingresso),
+                        ),
+                      );},
                 style: ElevatedButton.styleFrom(
                   backgroundColor: isInstructions ? const Color.fromARGB(0, 255, 255, 255) : const Color.fromARGB(0, 239, 248, 255),
                   elevation: 0,

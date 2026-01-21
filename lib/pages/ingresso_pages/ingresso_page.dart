@@ -1,9 +1,10 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:loumar/models/user_model.dart';
 import 'package:loumar/pages/login/onboarding_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:loumar/widgets/ingresso_list.dart';
+import 'package:loumar/models/ingresso_models.dart';
 
 class IngressoPage extends StatefulWidget {
   const IngressoPage({super.key});
@@ -23,19 +24,20 @@ class _IngressoPageState extends State<IngressoPage> {
     return null;
   }
 
-
   void logout(BuildContext context) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.clear();
 
     Navigator.pushAndRemoveUntil(
-    context,
-    MaterialPageRoute(builder: (context) => const OnboardingPage()),
-    (route) => false,
-  );
+      context,
+      MaterialPageRoute(builder: (context) => const OnboardingPage()),
+      (route) => false,
+    );
   }
 
-   @override
+  final List<IngressoModel> _ingressos = MockData.getIngressos();
+
+  @override
   Widget build(BuildContext context) {
     final Color blueTop = const Color(0xFF1D3B79);
     final Color bgColor = const Color(0xFFFAFAFA);
@@ -43,11 +45,9 @@ class _IngressoPageState extends State<IngressoPage> {
     return Scaffold(
       body: Stack(
         children: [
-          // 1. FUNDO GERAL 
-         Container(
-            height:
-                MediaQuery.of(context).size.height *
-                0.4, 
+          // 1. FUNDO GERAL
+          Container(
+            height: MediaQuery.of(context).size.height * 0.4,
             width: double.infinity,
             color: blueTop,
             child: ClipRect(
@@ -106,14 +106,7 @@ class _IngressoPageState extends State<IngressoPage> {
                     padding: const EdgeInsets.all(20),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const SizedBox(height: 10),
-                        
-                        // SEU CONTEÚDO VAI AQUI
-                        const Text("Você não possui ingressos no momento.        "),
-
-                        const SizedBox(height: 20),
-                      ],
+                      children: [IngressoList(ingressos: _ingressos)],
                     ),
                   ),
                 ),
@@ -123,9 +116,5 @@ class _IngressoPageState extends State<IngressoPage> {
         ],
       ),
     );
-  }
-
-  Widget _buildDivider() {
-    return const Divider(height: 1, thickness: 1, color: Color(0xFFF5F5F5));
   }
 }
