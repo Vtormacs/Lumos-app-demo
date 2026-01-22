@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:loumar/models/ingresso_models.dart';
+import 'package:loumar/widgets/qrcode_modal.dart';
 import 'package:loumar/widgets/que_ingresso_digital.dart';
 import 'package:loumar/widgets/onde_imprimir.dart';
 
@@ -91,6 +92,20 @@ class IngressoDetalhadoPage extends StatelessWidget {
       default:
         _showQueIngressoDigital(context);
     }
+  }
+
+  void _showQrCodeModal(BuildContext context) {
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      barrierColor: Colors.black.withOpacity(0.7),
+      builder: (BuildContext context) {
+        return QrCodeModal(
+          qrCodeImageUrl: ingresso.qrCodeImageUrl,
+          voucherCode: ingresso.voucherCode,
+        );
+      },
+    );
   }
 
   @override
@@ -214,34 +229,31 @@ class IngressoDetalhadoPage extends StatelessWidget {
                   Expanded(
                     child: Align(
                       alignment: Alignment.topLeft,
-                      child: Image.network(
-                        ingresso.qrCodeImageUrl,
-                        width: 124,
-                        height: 124,
-                        fit: BoxFit.contain,
-                        errorBuilder: (context, error, stackTrace) {
-                          return const Text(
-                            "Sem imagem de QR Code",
-                            style: TextStyle(
-                              color: Color(0xFFCD3636),
-                              fontFamily: 'Montserrat',
-                              fontWeight: FontWeight.w400,
-                              fontSize: 14,
-                            ),
-                          );
-                        },
-                        loadingBuilder: (context, child, loadingProgress) {
-                          if (loadingProgress == null) return child;
-                          return const SizedBox(
-                            width: 124,
-                            height: 124,
-                            child: Center(
-                              child: CircularProgressIndicator(
-                                color: Color(0xFF1E3460),
+                      child: GestureDetector(
+                        onTap: () => _showQrCodeModal(context),
+                        child: Image.network(
+                          ingresso.qrCodeImageUrl,
+                          width: 124,
+                          height: 124,
+                          fit: BoxFit.contain,
+                          errorBuilder: (context, error, stackTrace) {
+                            return const Icon(
+                              Icons.qr_code_2,
+                              color: Color(0xFF1E3460),
+                              size: 124,
+                            );
+                          },
+                          loadingBuilder: (context, child, loadingProgress) {
+                            if (loadingProgress == null) return child;
+                            return const SizedBox(
+                              width: 124,
+                              height: 124,
+                              child: Center(
+                                child: CircularProgressIndicator(),
                               ),
-                            ),
-                          );
-                        },
+                            );
+                          },
+                        ),
                       ),
                     ),
                   ),
