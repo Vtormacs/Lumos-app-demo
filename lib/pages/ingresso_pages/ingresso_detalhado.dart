@@ -214,12 +214,34 @@ class IngressoDetalhadoPage extends StatelessWidget {
                   Expanded(
                     child: Align(
                       alignment: Alignment.topLeft,
-                      child: const Icon(
-                        Icons.qr_code_2,
-                        color: Color(0xFF1E3460),
-
-                        size: 124,
-                        weight: 124,
+                      child: Image.network(
+                        ingresso.qrCodeImageUrl,
+                        width: 124,
+                        height: 124,
+                        fit: BoxFit.contain,
+                        errorBuilder: (context, error, stackTrace) {
+                          return const Text(
+                            "Sem imagem de QR Code",
+                            style: TextStyle(
+                              color: Color(0xFFCD3636),
+                              fontFamily: 'Montserrat',
+                              fontWeight: FontWeight.w400,
+                              fontSize: 14,
+                            ),
+                          );
+                        },
+                        loadingBuilder: (context, child, loadingProgress) {
+                          if (loadingProgress == null) return child;
+                          return const SizedBox(
+                            width: 124,
+                            height: 124,
+                            child: Center(
+                              child: CircularProgressIndicator(
+                                color: Color(0xFF1E3460),
+                              ),
+                            ),
+                          );
+                        },
                       ),
                     ),
                   ),

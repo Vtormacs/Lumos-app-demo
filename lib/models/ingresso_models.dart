@@ -38,7 +38,7 @@ class IngressoModel {
   final String rateType;
   final String agentName;
   final String voucherCode;
-  final String qrCodeData;
+  final String qrCodeImageUrl;
 
   IngressoModel({
     required this.id,
@@ -51,7 +51,7 @@ class IngressoModel {
     required this.rateType,
     required this.agentName,
     required this.voucherCode,
-    required this.qrCodeData,
+    required this.qrCodeImageUrl,
   });
 }
 
@@ -104,7 +104,7 @@ class MockData {
         rateType: "Padrão",
         agentName: "Maria Klaus",
         voucherCode: "556516658419614",
-        qrCodeData: "https://loumarturismo.com.br/voucher/556516658419614",
+        qrCodeImageUrl: "https://i.sstatic.net/O6PbK.png",
       ),
             IngressoModel(
         id: "#863132",
@@ -117,7 +117,7 @@ class MockData {
         rateType: "Padrão",
         agentName: "Maria Klaus",
         voucherCode: "556516658419614",
-        qrCodeData: "https://loumarturismo.com.br/voucher/556516658419614",
+        qrCodeImageUrl: "https://i.sstatic.net/O6PbK.png",
       ),
       IngressoModel(
         id: "#863133",
@@ -130,7 +130,7 @@ class MockData {
         rateType: "VIP",
         agentName: "João Silva",
         voucherCode: "556516658419999",
-        qrCodeData: "QRCODE_DATA_EXAMPLE",
+        qrCodeImageUrl: "https://i.sstatic.net/O6PbK.png",
       ),
       IngressoModel(
         id: "#863133",
@@ -143,7 +143,7 @@ class MockData {
         rateType: "Padrão",
         agentName: "Maria Klaus",
         voucherCode: "556516658419000",
-        qrCodeData: "QRCODE_DATA_EXAMPLE",
+        qrCodeImageUrl: "https://i.sstatic.net/O6PbK.png",
       ),
       IngressoModel(
         id: "#863133",
@@ -156,7 +156,7 @@ class MockData {
         rateType: "VIP",
         agentName: "João Silva",
         voucherCode: "556516658419111",
-        qrCodeData: "QRCODE_DATA_EXAMPLE",
+        qrCodeImageUrl: "https://i.sstatic.net/O6PbK.png",
       ),
       IngressoModel(
         id: "#999111",
@@ -169,7 +169,7 @@ class MockData {
         rateType: "Padrão",
         agentName: "Maria Klaus",
         voucherCode: "556516658419222",
-        qrCodeData: "QRCODE_DATA_EXAMPLE",
+        qrCodeImageUrl: "https://i.sstatic.net/O6PbK.png",
       ),
       IngressoModel(
         id: "#999111",
@@ -182,7 +182,7 @@ class MockData {
         rateType: "VIP",
         agentName: "João Silva",
         voucherCode: "556516658419333",
-        qrCodeData: "QRCODE_DATA_EXAMPLE",
+        qrCodeImageUrl: "https://i.sstatic.net/O6PbK.png",
       ),
     ];
   }
