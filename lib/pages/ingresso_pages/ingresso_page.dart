@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:loumar/models/user_model.dart';
 import 'package:loumar/pages/login/onboarding_page.dart';
+import 'package:loumar/widgets/ingresso_vazio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:loumar/widgets/ingresso_list.dart';
 import 'package:loumar/models/ingresso_models.dart';
@@ -102,7 +103,7 @@ class _IngressoPageState extends State<IngressoPage> {
                       topRight: Radius.circular(24),
                     ),
                   ),
-                  child: SingleChildScrollView(
+                  child: _ingressos.isEmpty ? const IngressoVazio() : SingleChildScrollView(
                     padding: const EdgeInsets.all(20),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
