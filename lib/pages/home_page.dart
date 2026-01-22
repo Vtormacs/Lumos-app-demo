@@ -7,6 +7,7 @@ import 'package:loumar/pages/notificacao_page.dart';
 import 'package:loumar/theme/app_colors.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:loumar/widgets/home_banner2.dart';
+import 'package:loumar/widgets/ingresso_vazio.dart';
 import 'package:loumar/widgets/ticket_card.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:loumar/models/user_model.dart';
@@ -431,7 +432,7 @@ class _HomePageState extends State<HomePage> {
     final eventosUnicos = _meusIngressos.map((e) => e.event).toSet().toList();
 
     if (eventosUnicos.isEmpty) {
-      return const Center(child: Text("Nenhum ingresso encontrado."));
+      return const IngressoVazio();
     }
 
     return Column(
