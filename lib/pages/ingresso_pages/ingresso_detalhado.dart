@@ -115,7 +115,20 @@ class IngressoDetalhadoPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Ingresso'),
+        leading: IconButton(
+          onPressed: () => Navigator.of(context).pop(),
+          icon: SvgPicture.asset(
+            "assets/images/ingresso/arrow_left.svg",
+            width: 15,
+            height: 15,
+          ),
+        ),
+        title: const Text('Ingresso', style: TextStyle(
+          fontFamily: 'Montserrat',
+          fontWeight: FontWeight.w600,
+          fontSize: 18,
+          color: Color(0xFF1E3460),
+        ),),
         backgroundColor: const Color(0xFFFFFFFF),
       ),
 
@@ -248,9 +261,7 @@ class IngressoDetalhadoPage extends StatelessWidget {
                             return const SizedBox(
                               width: 124,
                               height: 124,
-                              child: Center(
-                                child: CircularProgressIndicator(),
-                              ),
+                              child: Center(child: CircularProgressIndicator()),
                             );
                           },
                         ),
