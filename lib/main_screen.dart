@@ -12,10 +12,12 @@ class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
 
   @override
-  State<MainScreen> createState() => _MainScreenState();
+  // 1. Mudamos de _MainScreenState para MainScreenState (tiramos o underline)
+  State<MainScreen> createState() => MainScreenState();
 }
 
-class _MainScreenState extends State<MainScreen> {
+// 2. A classe agora é pública (sem o underline no começo)
+class MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
 
   final List<Widget> _pages = [
@@ -27,6 +29,13 @@ class _MainScreenState extends State<MainScreen> {
   ];
 
   void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
+  // 3. Criamos essa função pública para ser chamada pelos filhos
+  void changePage(int index) {
     setState(() {
       _selectedIndex = index;
     });
@@ -134,7 +143,6 @@ class _MainScreenState extends State<MainScreen> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        // A linha azul no topo
         if (isSelected)
           Container(
             width: 50,

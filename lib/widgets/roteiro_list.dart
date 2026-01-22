@@ -1,5 +1,5 @@
-// lib/widgets/roteiro_list.dart
 import 'package:flutter/material.dart';
+import 'package:loumar/main_screen.dart';
 import 'package:loumar/models/roteiro_model.dart';
 
 class RoteiroListWidget extends StatelessWidget {
@@ -21,7 +21,9 @@ class RoteiroListWidget extends StatelessWidget {
           width: double.infinity,
           height: 36,
           child: TextButton(
-            onPressed: () {},
+            onPressed: () {
+              context.findAncestorStateOfType<MainScreenState>()?.changePage(2);
+            },
             style: TextButton.styleFrom(
               foregroundColor: const Color(0xFF007A73),
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
