@@ -154,7 +154,7 @@ class IngressoDetalhadoPage extends StatelessWidget {
                     child: _buildInfoItem("Chave Loumar:", ingresso.loumarKey),
                   ),
                   const SizedBox(width: 16),
-                  Expanded(child: _buildInfoItem("Tarifa:", "Padrão")),
+                  Expanded(child: _buildInfoItem("Tarifa:", ingresso.rateType)),
                 ],
               ),
               const SizedBox(height: 16),
