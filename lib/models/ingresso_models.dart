@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 
 enum TicketStatus {
   digital, // Visualizar ingresso (Azul claro)

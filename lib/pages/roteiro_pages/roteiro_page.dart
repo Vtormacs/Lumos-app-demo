@@ -4,6 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:loumar/models/user_model.dart';
 import 'package:loumar/pages/login/onboarding_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:loumar/controllers/roteiro_controller.dart';
+import 'package:loumar/widgets//roteiro_tab_bar.dart';
+import 'package:loumar/widgets//roteiro_item_card.dart';
+import 'package:loumar/models/roteiro/roteiro_base_model.dart';
+import 'package:loumar/utils/date_utils.dart';
 
 class RoteiroPage extends StatefulWidget {
   const RoteiroPage({super.key});
@@ -13,6 +18,15 @@ class RoteiroPage extends StatefulWidget {
 }
 
 class _RoteiroPageState extends State<RoteiroPage> {
+  final RoteiroController _controller = RoteiroController();
+  bool isMeuRoteiro = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller.carregarRoteiro();
+  }
+
   Future<UserModel?> _loadUser() async {
     final prefs = await SharedPreferences.getInstance();
     final userJson = prefs.getString('userData');
@@ -43,11 +57,9 @@ class _RoteiroPageState extends State<RoteiroPage> {
     return Scaffold(
       body: Stack(
         children: [
-          // 1. FUNDO GERAL 
+          // 1. FUNDO GERAL (Mantido do seu código)
           Container(
-            height:
-                MediaQuery.of(context).size.height *
-                0.4, 
+            height: MediaQuery.of(context).size.height * 0.4,
             width: double.infinity,
             color: blueTop,
             child: ClipRect(
@@ -68,7 +80,7 @@ class _RoteiroPageState extends State<RoteiroPage> {
             ),
           ),
 
-          // 2. CONTEÚDO (Título + Corpo Branco)
+          // 2. CONTEÚDO PRINCIPAL
           Column(
             children: [
               SafeArea(
@@ -89,9 +101,9 @@ class _RoteiroPageState extends State<RoteiroPage> {
                 ),
               ),
 
-              const SizedBox(height: 20),
+              const SizedBox(height: 10),
 
-              // 3. O CORPO BRANCO ARREDONDADO
+              // 3. O CORPO BRANCO COM A LISTA
               Expanded(
                 child: Container(
                   width: double.infinity,
@@ -102,19 +114,96 @@ class _RoteiroPageState extends State<RoteiroPage> {
                       topRight: Radius.circular(24),
                     ),
                   ),
-                  child: SingleChildScrollView(
-                    padding: const EdgeInsets.all(20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const SizedBox(height: 10),
-                        
-                        // SEU CONTEÚDO VAI AQUI
-                        const Text("Conteúdo da página de Roteiros..."),
 
-                        const SizedBox(height: 20),
-                      ],
-                    ),
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 24),
+                      RoteiroTabBar(
+                        isMeuRoteiroSelected: isMeuRoteiro,
+                        onTapMeuRoteiro: () =>
+                            setState(() => isMeuRoteiro = true),
+                        onTapRoteiroDoDia: () =>
+                            setState(() => isMeuRoteiro = false),
+                      ),
+
+                      Expanded(
+                        child: ValueListenableBuilder<Map<DateTime, List<RoteiroItem>>>(
+                          valueListenable: _controller.roteiroAgrupado,
+                          builder: (context, roteiroMap, child) {
+                            // Loading State
+                            if (_controller.isLoading.value) {
+                              return const Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            }
+                        
+                            // Empty State
+                            if (roteiroMap.isEmpty) {
+                              return const Center(
+                                child: Text("Nenhum roteiro encontrado."),
+                              );
+                            }
+                        
+                            // LISTA AGRUPADA (Meu Roteiro)
+                            if (isMeuRoteiro) {
+                              return ListView.builder(
+                                padding: const EdgeInsets.only(
+                                  top: 24,
+                                  bottom: 40,
+                                ),
+                                itemCount: roteiroMap.keys.length,
+                                itemBuilder: (context, index) {
+                                  final DateTime dia = roteiroMap.keys.elementAt(
+                                    index,
+                                  );
+                                  final List<RoteiroItem> itensDoDia =
+                                      roteiroMap[dia]!;
+                        
+                                  return Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.fromLTRB(
+                                          16,
+                                          0,
+                                          16,
+                                          16,
+                                        ),
+                                        child: Text(
+                                          RoteiroDateUtils.formatarCabecalho(dia),
+                                          style: const TextStyle(
+                                            fontFamily: 'Montserrat',
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 16,
+                                            color: Color(0xFF1E3460),
+                                          ),
+                                        ),
+                                      ),
+                        
+                                      // Lista de Cards daquele dia
+                                      ...itensDoDia.map((item) {
+                                        return RoteiroItemCard(
+                                          item: item,
+                                          onTap: () {
+                                            print("Clicou em: ${item.titulo}");
+                                          },
+                                        );
+                                      }).toList(),
+                        
+                                      const SizedBox(height: 24),
+                                    ],
+                                  );
+                                },
+                              );
+                            } else {
+                              return const Center(
+                                child: Text("Visualização do Dia (Em breve)"),
+                              );
+                            }
+                          },
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -123,9 +212,5 @@ class _RoteiroPageState extends State<RoteiroPage> {
         ],
       ),
     );
-  }
-
-  Widget _buildDivider() {
-    return const Divider(height: 1, thickness: 1, color: Color(0xFFF5F5F5));
   }
 }
