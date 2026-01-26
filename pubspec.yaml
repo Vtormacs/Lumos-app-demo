@@ -70,6 +70,7 @@ flutter:
     - assets/images/home/
     - assets/images/notificacao/
     - assets/images/ingresso/
+    - assets/images/icons/
 
   fonts:
     # --- Configuração da INTER ---

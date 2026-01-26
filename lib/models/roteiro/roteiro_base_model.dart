@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:loumar/models/ingresso_models.dart';
 import 'package:loumar/models/roteiro/aereo_roteiro.dart';
 import 'package:loumar/models/roteiro/hospedagem_roteiro.dart';
+import 'package:loumar/models/roteiro/locacao_roteiro.dart';
 import 'package:loumar/models/roteiro/passerio_roteiro.dart';
 import 'package:loumar/models/roteiro/transporte_roteiro.dart';
 
@@ -11,6 +11,7 @@ enum RoteiroTipo{
   hospedagem,
   aereo,
   refeicao,
+  locacao,
   outro,
 }
 
@@ -58,6 +59,27 @@ class MockRoteiroService {
       destino: "Hotel Recanto Cataratas",
       veiculo: "Van Executiva - Placa ABC-1234",
       localizador: "TR-9988",
+      additionalInfo: [
+        "Atrasos podem ocorrer, este transporte é compartilhado;",
+        "Levar documento com foto.",
+      ],
+    ));
+
+    listaGeral.add(RoteiroLocacao(
+      id: "loc_01",
+      dataDoUso: DateTime(2025, 12, 15, 12, 00),
+      titulo: "Locação de Carro - SUV",
+      local: "Localiza Rent a Car",
+      chaveLoumar: "LC-2025SUV",
+      tarifa: "R\$ 250,00 por dia",
+      endereco: "Av. das Cataratas, 1234",
+      categoria: CategoriaLocacao.carro,
+      status: StatusLocacao.aretirar,
+      additionalInfo: [
+        "Combustível não incluso;",
+        "Seguro total incluso no valor;",
+        "Levar CNH válida e cartão de crédito.",
+      ],
     ));
 
     // 3. Adicionando Hospedagem (Check-in)
@@ -75,7 +97,7 @@ class MockRoteiroService {
     if (ingressosExistentes.isNotEmpty) {
       // Ingresso Madero Tango (Jantar)
       listaGeral.add(RoteiroPasseio(
-        ingresso: ingressosExistentes[0], // Assumindo que o [0] é dia 15 a noite
+        ingresso: ingressosExistentes[0],
       ));
     }
 
@@ -90,6 +112,10 @@ class MockRoteiroService {
       veiculo: "Carro Privativo",
       motorista: "Carlos Silva",
       localizador: "TR-7766",
+      additionalInfo: [
+        "Atrasos podem ocorrer, este transporte é compartilhado;",
+        "Levar documento com foto.",
+      ],
     ));
 
     // --- DIA SEGUINTE ---
@@ -103,6 +129,10 @@ class MockRoteiroService {
       destino: "Parque das Aves",
       veiculo: "Van Compartilhada",
       localizador: "TR-5544",
+      additionalInfo: [
+        "Atrasos podem ocorrer, este transporte é compartilhado;",
+        "Levar documento com foto.",
+      ],
     ));
 
     // Adiciona outro ingresso se houver

@@ -7,6 +7,7 @@ class RoteiroTransporte extends RoteiroItem {
   final String veiculo;  
   final String motorista;
   final String localizador;
+  final List<String> additionalInfo;
 
   RoteiroTransporte({
     required String id,
@@ -18,6 +19,7 @@ class RoteiroTransporte extends RoteiroItem {
     required this.veiculo,
     this.motorista = "A definir",
     required this.localizador,
+    required this.additionalInfo,
   }) : super(
           id: id,
           dataHora: dataHora,

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:loumar/models/roteiro/roteiro_base_model.dart';
-import 'package:loumar/utils/date_utils.dart'; // Certifique-se de ter criado o utils sugerido antes
+import 'package:loumar/utils/date_utils.dart'; 
 
 class RoteiroItemCard extends StatelessWidget {
   final RoteiroItem item;
@@ -14,37 +14,38 @@ class RoteiroItemCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Definindo as cores baseadas no tipo (conforme CSS)
     Color barraColor;
     switch (item.tipo) {
       case RoteiroTipo.hospedagem:
-        barraColor = const Color(0xFFE4BC0C); // Amarelo (Checkin)
+        barraColor = const Color(0xFFE4BC0C);
         break;
       case RoteiroTipo.transporte:
-        barraColor = const Color(0xFF00B4AB); // Verde Água (Transfer)
+        barraColor = const Color(0xFF00B4AB); 
         break;
       case RoteiroTipo.aereo:
-        barraColor = const Color(0xFF86DB5A); // Verde Claro (Embarque)
+        barraColor = const Color(0xFF86DB5A);
         break;
       case RoteiroTipo.passeio:
-        barraColor = const Color(0xFF5769E3); // Azul (Ingresso)
+        barraColor = const Color(0xFF5769E3); 
         break;
-      // Caso queira adicionar a cor Rosa para Locação, crie um tipo Locacao ou use o padrao
+      case RoteiroTipo.locacao:
+        barraColor = const Color(0xFFCD309A); 
+        break;
       default: 
-        barraColor = const Color(0xFFCD309A); // Rosa (Locação/Outros)
+        barraColor = const Color(0xFFFF6B00); 
     }
 
     return InkWell(
       onTap: onTap,
       child: Container(
-        height: 55, // Altura fixa conforme Figma
-        color: Colors.white, // Fundo branco
+        height: 55, 
+        color: Colors.white, 
         child: Column(
           children: [
             Expanded(
               child: Row(
                 children: [
-                  // COLUNA DO HORÁRIO (Frame 50611)
+                  // COLUNA DO HORÁRIO 
                   SizedBox(
                     width: 72,
                     child: Center(
@@ -60,14 +61,14 @@ class RoteiroItemCard extends StatelessWidget {
                     ),
                   ),
 
-                  // BARRA COLORIDA VERTICAL (Frame 50604)
+                  // BARRA COLORIDA VERTICAL 
                   Container(
                     width: 4,
-                    height: double.infinity, // Preenche a altura (55px)
+                    height: double.infinity, 
                     color: barraColor,
                   ),
 
-                  // TÍTULO (Frame 50613)
+                  // TÍTULO 
                   Expanded(
                     child: Padding(
                       padding: const EdgeInsets.only(left: 16, right: 16),
@@ -85,13 +86,10 @@ class RoteiroItemCard extends StatelessWidget {
                     ),
                   ),
                   
-                  // Ícone de seta (opcional, comum em listas clicáveis)
-                  const Icon(Icons.chevron_right, color: Colors.grey, size: 18),
-                  const SizedBox(width: 16),
                 ],
               ),
             ),
-            // DIVISOR (Divisor 1)
+            // DIVISOR 
             const Divider(
               height: 1, 
               thickness: 1, 

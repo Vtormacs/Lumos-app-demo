@@ -1,8 +1,15 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:loumar/models/ingresso_models.dart';
+import 'package:loumar/models/roteiro/locacao_roteiro.dart';
+import 'package:loumar/models/roteiro/passerio_roteiro.dart';
+import 'package:loumar/models/roteiro/transporte_roteiro.dart';
 import 'package:loumar/models/user_model.dart';
+import 'package:loumar/pages/ingresso_pages/ingresso_detalhado.dart';
 import 'package:loumar/pages/login/onboarding_page.dart';
+import 'package:loumar/pages/roteiro_pages/locacao_detalhado.dart';
+import 'package:loumar/pages/roteiro_pages/transporte_detalhado.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:loumar/controllers/roteiro_controller.dart';
 import 'package:loumar/widgets//roteiro_tab_bar.dart';
@@ -47,6 +54,55 @@ class _RoteiroPageState extends State<RoteiroPage> {
       MaterialPageRoute(builder: (context) => const OnboardingPage()),
       (route) => false,
     );
+  }
+
+  void _abrirDetalhes(RoteiroItem item) {
+    switch (item.tipo) {
+      case RoteiroTipo.hospedagem:
+        break;
+      case RoteiroTipo.transporte:
+        final itemRoteiro = item as RoteiroTransporte;
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => TransporteDetalhado(transporte: itemRoteiro),
+          ),
+        );
+        break;
+      case RoteiroTipo.aereo:
+        break;
+      case RoteiroTipo.passeio:
+        final itemRoteiro = item as RoteiroPasseio;
+        final ingressoReal = itemRoteiro.ingresso;
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => IngressoDetalhadoPage(ingresso: ingressoReal),
+          ),
+        );
+        break;
+      case RoteiroTipo.locacao:
+        final itemRoteiro = item as RoteiroLocacao;
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => LocacaoDetalhado(locacao: itemRoteiro),
+          ),
+        );
+        break;
+      case RoteiroTipo.passeio:
+        final itemRoteiro = item as RoteiroPasseio;
+        final ingressoReal = itemRoteiro.ingresso;
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => IngressoDetalhadoPage(ingresso: ingressoReal),
+          ),
+        );
+        break;
+      default:
+        break;
+    }
   }
 
   @override
@@ -127,81 +183,88 @@ class _RoteiroPageState extends State<RoteiroPage> {
                       ),
 
                       Expanded(
-                        child: ValueListenableBuilder<Map<DateTime, List<RoteiroItem>>>(
-                          valueListenable: _controller.roteiroAgrupado,
-                          builder: (context, roteiroMap, child) {
-                            // Loading State
-                            if (_controller.isLoading.value) {
-                              return const Center(
-                                child: CircularProgressIndicator(),
-                              );
-                            }
-                        
-                            // Empty State
-                            if (roteiroMap.isEmpty) {
-                              return const Center(
-                                child: Text("Nenhum roteiro encontrado."),
-                              );
-                            }
-                        
-                            // LISTA AGRUPADA (Meu Roteiro)
-                            if (isMeuRoteiro) {
-                              return ListView.builder(
-                                padding: const EdgeInsets.only(
-                                  top: 24,
-                                  bottom: 40,
-                                ),
-                                itemCount: roteiroMap.keys.length,
-                                itemBuilder: (context, index) {
-                                  final DateTime dia = roteiroMap.keys.elementAt(
-                                    index,
+                        child:
+                            ValueListenableBuilder<
+                              Map<DateTime, List<RoteiroItem>>
+                            >(
+                              valueListenable: _controller.roteiroAgrupado,
+                              builder: (context, roteiroMap, child) {
+                                // Loading State
+                                if (_controller.isLoading.value) {
+                                  return const Center(
+                                    child: CircularProgressIndicator(),
                                   );
-                                  final List<RoteiroItem> itensDoDia =
-                                      roteiroMap[dia]!;
-                        
-                                  return Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.fromLTRB(
-                                          16,
-                                          0,
-                                          16,
-                                          16,
-                                        ),
-                                        child: Text(
-                                          RoteiroDateUtils.formatarCabecalho(dia),
-                                          style: const TextStyle(
-                                            fontFamily: 'Montserrat',
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 16,
-                                            color: Color(0xFF1E3460),
+                                }
+
+                                // Empty State
+                                if (roteiroMap.isEmpty) {
+                                  return const Center(
+                                    child: Text("Nenhum roteiro encontrado."),
+                                  );
+                                }
+
+                                // LISTA AGRUPADA (Meu Roteiro)
+                                if (isMeuRoteiro) {
+                                  return ListView.builder(
+                                    padding: const EdgeInsets.only(
+                                      top: 24,
+                                      bottom: 40,
+                                    ),
+                                    itemCount: roteiroMap.keys.length,
+                                    itemBuilder: (context, index) {
+                                      final DateTime dia = roteiroMap.keys
+                                          .elementAt(index);
+                                      final List<RoteiroItem> itensDoDia =
+                                          roteiroMap[dia]!;
+
+                                      return Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.fromLTRB(
+                                              16,
+                                              0,
+                                              16,
+                                              16,
+                                            ),
+                                            child: Text(
+                                              RoteiroDateUtils.formatarCabecalho(
+                                                dia,
+                                              ),
+                                              style: const TextStyle(
+                                                fontFamily: 'Montserrat',
+                                                fontWeight: FontWeight.w600,
+                                                fontSize: 16,
+                                                color: Color(0xFF1E3460),
+                                              ),
+                                            ),
                                           ),
-                                        ),
-                                      ),
-                        
-                                      // Lista de Cards daquele dia
-                                      ...itensDoDia.map((item) {
-                                        return RoteiroItemCard(
-                                          item: item,
-                                          onTap: () {
-                                            print("Clicou em: ${item.titulo}");
-                                          },
-                                        );
-                                      }).toList(),
-                        
-                                      const SizedBox(height: 24),
-                                    ],
+
+                                          // Lista de Cards daquele dia
+                                          ...itensDoDia.map((item) {
+                                            return RoteiroItemCard(
+                                              item: item,
+                                              onTap: () {
+                                                _abrirDetalhes(item);
+                                              },
+                                            );
+                                          }).toList(),
+
+                                          const SizedBox(height: 24),
+                                        ],
+                                      );
+                                    },
                                   );
-                                },
-                              );
-                            } else {
-                              return const Center(
-                                child: Text("Visualização do Dia (Em breve)"),
-                              );
-                            }
-                          },
-                        ),
+                                } else {
+                                  return const Center(
+                                    child: Text(
+                                      "Visualização do Dia (Em breve)",
+                                    ),
+                                  );
+                                }
+                              },
+                            ),
                       ),
                     ],
                   ),
