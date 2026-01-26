@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:intl/intl.dart';
 import 'package:loumar/models/roteiro/passagem_roteiro.dart';
 
 class PassagemDetalhado extends StatelessWidget {
@@ -10,8 +9,6 @@ class PassagemDetalhado extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final dateFormatted = DateFormat('dd/MM/yyyy').format(passagem.dataHora);
-    final timeFormatted = DateFormat('HH:mm').format(passagem.dataHora);
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(

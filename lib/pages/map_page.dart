@@ -1,7 +1,4 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:loumar/models/user_model.dart';
 import 'package:loumar/pages/login/onboarding_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -13,17 +10,7 @@ class MapPage extends StatefulWidget {
 }
 
 class _MapPageState extends State<MapPage> {
-  Future<UserModel?> _loadUser() async {
-    final prefs = await SharedPreferences.getInstance();
-    final userJson = prefs.getString('userData');
-    if (userJson != null) {
-      final userMap = jsonDecode(userJson);
-      return UserModel.fromJson(userMap);
-    }
-    return null;
-  }
-
-
+ 
   void logout(BuildContext context) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.clear();
@@ -122,9 +109,5 @@ class _MapPageState extends State<MapPage> {
         ],
       ),
     );
-  }
-
-  Widget _buildDivider() {
-    return const Divider(height: 1, thickness: 1, color: Color(0xFFF5F5F5));
   }
 }

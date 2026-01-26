@@ -1,13 +1,9 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:loumar/models/ingresso_models.dart';
 import 'package:loumar/models/roteiro/hospedagem_roteiro.dart';
 import 'package:loumar/models/roteiro/locacao_roteiro.dart';
 import 'package:loumar/models/roteiro/passagem_roteiro.dart';
 import 'package:loumar/models/roteiro/passerio_roteiro.dart';
 import 'package:loumar/models/roteiro/transporte_roteiro.dart';
-import 'package:loumar/models/user_model.dart';
 import 'package:loumar/pages/ingresso_pages/ingresso_detalhado.dart';
 import 'package:loumar/pages/login/onboarding_page.dart';
 import 'package:loumar/pages/roteiro_pages/hospedagem_detalhado.dart';
@@ -38,15 +34,7 @@ class _RoteiroPageState extends State<RoteiroPage> {
     _controller.carregarRoteiro();
   }
 
-  Future<UserModel?> _loadUser() async {
-    final prefs = await SharedPreferences.getInstance();
-    final userJson = prefs.getString('userData');
-    if (userJson != null) {
-      final userMap = jsonDecode(userJson);
-      return UserModel.fromJson(userMap);
-    }
-    return null;
-  }
+
 
   void logout(BuildContext context) async {
     final prefs = await SharedPreferences.getInstance();

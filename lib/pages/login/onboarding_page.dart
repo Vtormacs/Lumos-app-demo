@@ -186,16 +186,5 @@ class OnboardingPage extends StatelessWidget {
     );
   }
 
-  Widget _buildDot({required bool isActive}) {
-    return Container(
-      width: isActive ? 24 : 8,
-      height: 4,
-      decoration: BoxDecoration(
-        color: isActive
-            ? const Color(0xFF00A2AE)
-            : const Color(0xFF00A2AE).withOpacity(0.5),
-        borderRadius: BorderRadius.circular(100),
-      ),
-    );
-  }
+
 }

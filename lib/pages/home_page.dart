@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:loumar/controllers/app_controller.dart';
 import 'package:loumar/models/ingresso_models.dart';
