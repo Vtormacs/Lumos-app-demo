@@ -22,7 +22,7 @@ class RoteiroItemCard extends StatelessWidget {
       case RoteiroTipo.transporte:
         barraColor = const Color(0xFF00B4AB); 
         break;
-      case RoteiroTipo.aereo:
+      case RoteiroTipo.passagem:
         barraColor = const Color(0xFF86DB5A);
         break;
       case RoteiroTipo.passeio:

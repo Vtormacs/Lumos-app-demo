@@ -1,5 +1,5 @@
 import 'package:loumar/models/ingresso_models.dart';
-import 'package:loumar/models/roteiro/aereo_roteiro.dart';
+import 'package:loumar/models/roteiro/passagem_roteiro.dart';
 import 'package:loumar/models/roteiro/hospedagem_roteiro.dart';
 import 'package:loumar/models/roteiro/locacao_roteiro.dart';
 import 'package:loumar/models/roteiro/passerio_roteiro.dart';
@@ -9,7 +9,7 @@ enum RoteiroTipo{
   passeio,
   transporte,
   hospedagem,
-  aereo,
+  passagem,
   refeicao,
   locacao,
   outro,
@@ -31,7 +31,6 @@ abstract class RoteiroItem {
 
 class MockRoteiroService {
   
-  // Função principal que a sua Tela vai chamar
   static Future<List<RoteiroItem>> getRoteiroCompleto() async {
     
     // Simulando delay de API
@@ -39,20 +38,23 @@ class MockRoteiroService {
 
     List<RoteiroItem> listaGeral = [];
 
-    // 1. Adicionando Voos
-    listaGeral.add(RoteiroAereo(
+    listaGeral.add(RoteiroPassagem(
+      titulo: "Voo LM1234 (IGU > GRU)",
       id: "voo_01",
-      dataHora: DateTime(2025, 12, 15, 09, 30), // Dia 15, manhã
-      ciaAerea: "Latam",
-      codigoVoo: "LA3042",
-      aeroportoOrigem: "GRU",
-      aeroportoDestino: "IGU",
+      dataHora: DateTime(2025, 12, 15, 09, 30), 
+      localizador: "LM1234",
+      passageiro: "João da Silva",
+      ida: ["2025-12-15T09:30", "2025-12-15T11:30"],
+      volta: ["2025-12-20T18:00", "2025-12-20T20:00"],
+      additionalInfo: [
+        "Bagagem despachada incluída;",
+        "Check-in online disponível 24h antes do voo.",
+      ],
     ));
 
-    // 2. Adicionando Transporte (Aeroporto -> Hotel)
     listaGeral.add(RoteiroTransporte(
       id: "trans_01",
-      dataHora: DateTime(2025, 12, 15, 11, 00), // Dia 15, logo após voo
+      dataHora: DateTime(2025, 12, 15, 11, 00),
       titulo: "Receptivo Aeroporto",
       subtitulo: "Aeroporto x Hotel",
       origem: "Aeroporto IGU",
@@ -82,29 +84,38 @@ class MockRoteiroService {
       ],
     ));
 
-    // 3. Adicionando Hospedagem (Check-in)
     listaGeral.add(RoteiroHospedagem(
       id: "hotel_01",
-      dataHora: DateTime(2025, 12, 15, 14, 00), // Dia 15, tarde
+      dataHora: DateTime(2025, 12, 15, 14, 00),
       nomeHotel: "Recanto Cataratas Thermas Resort",
       endereco: "Av. Costa e Silva, 3500",
-      isCheckIn: true,
+      checkin: DateTime(2025, 12, 15, 14, 00),
+      checkiout: DateTime(2025, 12, 20, 12, 00),
+      titulo: "Recanto Cataratas Thermas Resort",
+      titular: "João da Silva",
+      tipoQuarto: "Suíte Luxo Familiar",
+      hospedes: [
+        "João da Silva",
+        "Maria Silva",
+        "Pedro Silva",
+      ],
+      obrservacoes: [
+        "Café da manhã incluso;",
+        "Acesso ao parque aquático do hotel;",
+        "Check-in antecipado solicitado.",
+      ],
     ));
 
-    // 4. Adicionando um Ingresso (Pegando do seu MockData existente)
-    // Vamos pegar o primeiro ingresso da sua lista mockada
     var ingressosExistentes = MockData.getIngressos();
     if (ingressosExistentes.isNotEmpty) {
-      // Ingresso Madero Tango (Jantar)
       listaGeral.add(RoteiroPasseio(
         ingresso: ingressosExistentes[0],
       ));
     }
 
-    // 5. Adicionando Transporte para o Passeio
     listaGeral.add(RoteiroTransporte(
       id: "trans_02",
-      dataHora: DateTime(2025, 12, 15, 19, 00), // Antes do jantar
+      dataHora: DateTime(2025, 12, 15, 19, 00), 
       titulo: "Transfer para Jantar",
       subtitulo: "Hotel x Madero Tango",
       origem: "Hotel Recanto Cataratas",
@@ -117,8 +128,6 @@ class MockRoteiroService {
         "Levar documento com foto.",
       ],
     ));
-
-    // --- DIA SEGUINTE ---
 
     listaGeral.add(RoteiroTransporte(
       id: "trans_03",
@@ -135,14 +144,12 @@ class MockRoteiroService {
       ],
     ));
 
-    // Adiciona outro ingresso se houver
     if (ingressosExistentes.length > 1) {
       listaGeral.add(RoteiroPasseio(
-        ingresso: ingressosExistentes[1], // Parque das aves
+        ingresso: ingressosExistentes[1], 
       ));
     }
 
-    // --- ORDENAÇÃO ---
     // Passo crucial: Ordenar tudo por dataHora para aparecer certo na timeline
     listaGeral.sort((a, b) => a.dataHora.compareTo(b.dataHora));
 

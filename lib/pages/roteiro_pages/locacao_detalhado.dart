@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:loumar/models/roteiro/locacao_roteiro.dart';
+import 'package:loumar/widgets/onde_retirar_carro.dart';
 
 class LocacaoDetalhado extends StatelessWidget {
   const LocacaoDetalhado({super.key, required this.locacao});
@@ -47,6 +48,21 @@ class LocacaoDetalhado extends StatelessWidget {
       case CategoriaLocacao.outros:
         return "Outros";
     }
+  }
+  
+  void _showLoumarKeyBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isDismissible: true,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      backgroundColor: Colors.white,
+      builder: (BuildContext context) {
+        return const OndeRetirarCarro();
+      },
+    );
   }
 
   @override
@@ -282,7 +298,7 @@ class LocacaoDetalhado extends StatelessWidget {
                       ],
                     ),
                   );
-                }).toList(),
+                }).toList(),      
               ),
 
               const SizedBox(height: 16),
@@ -290,9 +306,7 @@ class LocacaoDetalhado extends StatelessWidget {
               Align(
                 alignment: Alignment.center,
                 child: TextButton(
-                  onPressed: () {
-                    // Ação ao clicar no botão
-                  },
+                  onPressed: () => _showLoumarKeyBottomSheet(context), 
                   child: Text(
                     "Onde retirar o carro ?",
                     style: TextStyle(

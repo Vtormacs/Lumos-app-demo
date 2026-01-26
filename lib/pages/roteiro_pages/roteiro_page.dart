@@ -2,13 +2,17 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:loumar/models/ingresso_models.dart';
+import 'package:loumar/models/roteiro/hospedagem_roteiro.dart';
 import 'package:loumar/models/roteiro/locacao_roteiro.dart';
+import 'package:loumar/models/roteiro/passagem_roteiro.dart';
 import 'package:loumar/models/roteiro/passerio_roteiro.dart';
 import 'package:loumar/models/roteiro/transporte_roteiro.dart';
 import 'package:loumar/models/user_model.dart';
 import 'package:loumar/pages/ingresso_pages/ingresso_detalhado.dart';
 import 'package:loumar/pages/login/onboarding_page.dart';
+import 'package:loumar/pages/roteiro_pages/hospedagem_detalhado.dart';
 import 'package:loumar/pages/roteiro_pages/locacao_detalhado.dart';
+import 'package:loumar/pages/roteiro_pages/passagem_detalhado.dart';
 import 'package:loumar/pages/roteiro_pages/transporte_detalhado.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:loumar/controllers/roteiro_controller.dart';
@@ -59,6 +63,13 @@ class _RoteiroPageState extends State<RoteiroPage> {
   void _abrirDetalhes(RoteiroItem item) {
     switch (item.tipo) {
       case RoteiroTipo.hospedagem:
+      final itemRoteiro = item as RoteiroHospedagem;
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => HospedagemDetalhado(hospedagem: itemRoteiro),
+          ),
+        );
         break;
       case RoteiroTipo.transporte:
         final itemRoteiro = item as RoteiroTransporte;
@@ -69,7 +80,14 @@ class _RoteiroPageState extends State<RoteiroPage> {
           ),
         );
         break;
-      case RoteiroTipo.aereo:
+      case RoteiroTipo.passagem:
+        final itemRoteiro = item as RoteiroPassagem;
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => PassagemDetalhado(passagem: itemRoteiro),
+          ),
+        );
         break;
       case RoteiroTipo.passeio:
         final itemRoteiro = item as RoteiroPasseio;
