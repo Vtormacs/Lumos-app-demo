@@ -14,7 +14,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/services.dart';
 import 'package:loumar/widgets/home_banner.dart';
 import 'package:loumar/models/roteiro_model.dart';
-import 'package:loumar/widgets/roteiro_list_home.dart';
+import 'package:loumar/widgets/roteiro/roteiro_list_home.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});

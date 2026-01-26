@@ -12,8 +12,8 @@ import 'package:loumar/pages/roteiro_pages/passagem_detalhado.dart';
 import 'package:loumar/pages/roteiro_pages/transporte_detalhado.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:loumar/controllers/roteiro_controller.dart';
-import 'package:loumar/widgets//roteiro_tab_bar.dart';
-import 'package:loumar/widgets//roteiro_item_card.dart';
+import 'package:loumar/widgets/roteiro/roteiro_tab_bar.dart';
+import 'package:loumar/widgets/roteiro/roteiro_item_card.dart';
 import 'package:loumar/models/roteiro/roteiro_base_model.dart';
 import 'package:loumar/utils/date_utils.dart';
 
