@@ -16,6 +16,7 @@ import 'package:loumar/widgets/roteiro/roteiro_tab_bar.dart';
 import 'package:loumar/widgets/roteiro/roteiro_item_card.dart';
 import 'package:loumar/models/roteiro/roteiro_base_model.dart';
 import 'package:loumar/utils/date_utils.dart';
+import 'package:loumar/widgets/roteiro/roteiro_dia_selector.dart';
 
 class RoteiroPage extends StatefulWidget {
   const RoteiroPage({super.key});
@@ -34,8 +35,6 @@ class _RoteiroPageState extends State<RoteiroPage> {
     _controller.carregarRoteiro();
   }
 
-
-
   void logout(BuildContext context) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.clear();
@@ -51,7 +50,7 @@ class _RoteiroPageState extends State<RoteiroPage> {
   void _abrirDetalhes(RoteiroItem item) {
     switch (item.tipo) {
       case RoteiroTipo.hospedagem:
-      final itemRoteiro = item as RoteiroHospedagem;
+        final itemRoteiro = item as RoteiroHospedagem;
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -108,6 +107,63 @@ class _RoteiroPageState extends State<RoteiroPage> {
         break;
       default:
         break;
+    }
+  }
+
+  Map<String, List<RoteiroItem>> _agruparPorCategoria(List<RoteiroItem> itens) {
+    final Map<String, List<RoteiroItem>> agrupado = {};
+
+    for (var item in itens) {
+      String chave = "Outros";
+      switch (item.tipo) {
+        case RoteiroTipo.transporte:
+          chave = "Transportes";
+          break;
+        case RoteiroTipo.passagem:
+          chave = "Passagens";
+          break;
+        case RoteiroTipo.hospedagem:
+          chave = "Hospedagens";
+          break;
+        case RoteiroTipo.passeio:
+          chave = "Passeios";
+          break;
+        case RoteiroTipo.locacao:
+          chave = "Locação";
+          break;
+        default:
+          chave = "Outros";
+      }
+
+      if (!agrupado.containsKey(chave)) {
+        agrupado[chave] = [];
+      }
+      agrupado[chave]!.add(item);
+    }
+    return agrupado;
+  }
+
+  void _mudarDia(int dias) {
+    if (_controller.diaSelecionado.value == null) return;
+
+    // Garante que a lista de dias está ordenada
+    final diasDisponiveis = _controller.roteiroAgrupado.value.keys.toList();
+    diasDisponiveis.sort();
+
+    final atual = _controller.diaSelecionado.value!;
+    final indexAtual = diasDisponiveis.indexOf(atual);
+
+    // Se por algum motivo o dia atual sumiu da lista, aborta
+    if (indexAtual == -1) return;
+
+    int novoIndex = indexAtual + dias;
+
+    // --- CORREÇÃO AQUI: Use && (E), não || (OU) ---
+    // Só acessa se estiver DENTRO dos limites (0 até tamanho-1)
+    if (novoIndex >= 0 && novoIndex < diasDisponiveis.length) {
+      _controller.selecionarDia(diasDisponiveis[novoIndex]);
+    } else {
+      debugPrint("Fim da lista alcançado.");
     }
   }
 
@@ -189,88 +245,157 @@ class _RoteiroPageState extends State<RoteiroPage> {
                       ),
 
                       Expanded(
-                        child:
-                            ValueListenableBuilder<
-                              Map<DateTime, List<RoteiroItem>>
-                            >(
-                              valueListenable: _controller.roteiroAgrupado,
-                              builder: (context, roteiroMap, child) {
-                                // Loading State
-                                if (_controller.isLoading.value) {
-                                  return const Center(
-                                    child: CircularProgressIndicator(),
-                                  );
-                                }
+                        child: ValueListenableBuilder<Map<DateTime, List<RoteiroItem>>>(
+                          valueListenable: _controller.roteiroAgrupado,
+                          builder: (context, roteiroMap, child) {
+                            // Loading State
+                            if (_controller.isLoading.value) {
+                              return const Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            }
 
-                                // Empty State
-                                if (roteiroMap.isEmpty) {
-                                  return const Center(
-                                    child: Text("Nenhum roteiro encontrado."),
-                                  );
-                                }
+                            // Empty State
+                            if (roteiroMap.isEmpty) {
+                              return const Center(
+                                child: Text("Nenhum roteiro encontrado."),
+                              );
+                            }
 
-                                // LISTA AGRUPADA (Meu Roteiro)
-                                if (isMeuRoteiro) {
-                                  return ListView.builder(
-                                    padding: const EdgeInsets.only(
-                                      top: 24,
-                                      bottom: 40,
-                                    ),
-                                    itemCount: roteiroMap.keys.length,
-                                    itemBuilder: (context, index) {
-                                      final DateTime dia = roteiroMap.keys
-                                          .elementAt(index);
-                                      final List<RoteiroItem> itensDoDia =
-                                          roteiroMap[dia]!;
+                            // LISTA AGRUPADA (Meu Roteiro)
+                            if (isMeuRoteiro) {
+                              return ListView.builder(
+                                padding: const EdgeInsets.only(
+                                  top: 24,
+                                  bottom: 40,
+                                ),
+                                itemCount: roteiroMap.keys.length,
+                                itemBuilder: (context, index) {
+                                  final DateTime dia = roteiroMap.keys
+                                      .elementAt(index);
+                                  final List<RoteiroItem> itensDoDia =
+                                      roteiroMap[dia]!;
 
-                                      return Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.fromLTRB(
-                                              16,
-                                              0,
-                                              16,
-                                              16,
-                                            ),
-                                            child: Text(
-                                              RoteiroDateUtils.formatarCabecalho(
-                                                dia,
-                                              ),
-                                              style: const TextStyle(
-                                                fontFamily: 'Montserrat',
-                                                fontWeight: FontWeight.w600,
-                                                fontSize: 16,
-                                                color: Color(0xFF1E3460),
-                                              ),
-                                            ),
+                                  return Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.fromLTRB(
+                                          16,
+                                          0,
+                                          16,
+                                          16,
+                                        ),
+                                        child: Text(
+                                          RoteiroDateUtils.formatarCabecalho(
+                                            dia,
                                           ),
+                                          style: const TextStyle(
+                                            fontFamily: 'Montserrat',
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 16,
+                                            color: Color(0xFF1E3460),
+                                          ),
+                                        ),
+                                      ),
 
-                                          // Lista de Cards daquele dia
-                                          ...itensDoDia.map((item) {
-                                            return RoteiroItemCard(
-                                              item: item,
-                                              onTap: () {
-                                                _abrirDetalhes(item);
-                                              },
+                                      // Lista de Cards daquele dia
+                                      ...itensDoDia.map((item) {
+                                        return RoteiroItemCard(
+                                          item: item,
+                                          onTap: () {
+                                            _abrirDetalhes(item);
+                                          },
+                                        );
+                                      }).toList(),
+
+                                      const SizedBox(height: 24),
+                                    ],
+                                  );
+                                },
+                              );
+                            }  else {
+                              // VISUALIZAÇÃO "ROTEIRO DO DIA"
+                              return ValueListenableBuilder<DateTime?>(
+                                valueListenable: _controller.diaSelecionado,
+                                builder: (context, diaSelecionado, _) {
+                                  if (diaSelecionado == null) return const SizedBox();
+
+                                  // 1. Pegamos a lista JÁ ORDENADA por horário (a controller já faz isso)
+                                  final itensDoDia = roteiroMap[diaSelecionado] ?? [];
+
+                                  if (itensDoDia.isEmpty) {
+                                    return const Center(child: Text("Dia livre :)"));
+                                  }
+
+                                  return Column(
+                                    children: [
+                                      // SELETOR DE DIA
+                                      RoteiroDiaSelector(
+                                        diaSelecionado: diaSelecionado,
+                                        onPrevious: () => _mudarDia(-1),
+                                        onNext: () => _mudarDia(1),
+                                      ),
+
+                                      // LISTA INTELIGENTE (Cabeçalhos dinâmicos)
+                                      Expanded(
+                                        child: ListView.builder(
+                                          padding: const EdgeInsets.only(bottom: 40),
+                                          itemCount: itensDoDia.length,
+                                          itemBuilder: (context, index) {
+                                            final itemAtual = itensDoDia[index];
+                                            
+                                            // Verifica se precisa mostrar o cabeçalho
+                                            // Mostra se for o primeiro item (index 0) 
+                                            // OU se o tipo mudou em relação ao item anterior
+                                            bool mostrarCabecalho = false;
+                                            if (index == 0) {
+                                              mostrarCabecalho = true;
+                                            } else {
+                                              final itemAnterior = itensDoDia[index - 1];
+                                              if (itemAnterior.tipo != itemAtual.tipo) {
+                                                mostrarCabecalho = true;
+                                              }
+                                            }
+
+                                            return Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                // Se mudou a categoria, desenha o Título
+                                                if (mostrarCabecalho) ...[
+                                                  const SizedBox(height: 24),
+                                                  Padding(
+                                                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                                    child: Text(
+                                                      _getTituloCategoria(itemAtual.tipo),
+                                                      style: const TextStyle(
+                                                        fontFamily: 'Montserrat',
+                                                        fontWeight: FontWeight.w600,
+                                                        fontSize: 16,
+                                                        color: Color(0xFF1E3460),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+
+                                                // Desenha o Card do Item
+                                                RoteiroItemCard(
+                                                  item: itemAtual,
+                                                  onTap: () => _abrirDetalhes(itemAtual),
+                                                ),
+                                              ],
                                             );
-                                          }).toList(),
-
-                                          const SizedBox(height: 24),
-                                        ],
-                                      );
-                                    },
+                                          },
+                                        ),
+                                      ),
+                                    ],
                                   );
-                                } else {
-                                  return const Center(
-                                    child: Text(
-                                      "Visualização do Dia (Em breve)",
-                                    ),
-                                  );
-                                }
-                              },
-                            ),
+                                },
+                              );
+                            }
+                          },
+                        ),
                       ),
                     ],
                   ),
@@ -281,5 +406,24 @@ class _RoteiroPageState extends State<RoteiroPage> {
         ],
       ),
     );
+  }
+
+  String _getTituloCategoria(RoteiroTipo tipo) {
+    switch (tipo) {
+      case RoteiroTipo.transporte:
+        return "Transportes";
+      case RoteiroTipo.passagem:
+        return "Passagens"; // Ou "Aéreo"
+      case RoteiroTipo.hospedagem:
+        return "Hospedagens";
+      case RoteiroTipo.passeio:
+        return "Passeios";
+      case RoteiroTipo.locacao:
+        return "Locação";
+      case RoteiroTipo.refeicao:
+        return "Alimentação";
+      default:
+        return "Outros";
+    }
   }
 }
