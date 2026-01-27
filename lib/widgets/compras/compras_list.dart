@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:loumar/models/compra_model.dart';
-import 'package:loumar/models/ingresso_models.dart';
 import 'package:loumar/pages/compras/compra_detalhada.dart';
 
 class ComprasList extends StatelessWidget {
@@ -30,7 +28,12 @@ class _CompraListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final dateFormatted = DateFormat('dd/MM/yyyy').format(compra.dataDoUso);
+    // 1. Correção: Usar 'dataCompra'
+    final dateFormatted = DateFormat('dd/MM/yyyy').format(compra.dataCompra);
+    
+    // 2. Formatar o valor numérico para Moeda (R$)
+    final currencyFormat = NumberFormat.currency(locale: 'pt_BR', symbol: 'R\$');
+    final valorFormatado = currencyFormat.format(compra.valorTotal);
 
     return Container(
       margin: const EdgeInsets.only(bottom: 24),
@@ -53,77 +56,71 @@ class _CompraListItem extends StatelessWidget {
           Container(
             height: 63,
             width: double.infinity,
-            decoration: BoxDecoration(
-              borderRadius: const BorderRadius.only(
+            decoration: const BoxDecoration(
+              borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(8),
                 topRight: Radius.circular(8),
               ),
+              color: Color(0xFF1E3460),
             ),
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(8),
-                  topRight: Radius.circular(8),
-                ),
-                color: const Color(0xFF1E3460),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Row(
-                  children: [
-                    Center(
-                      child: Text(
-                        "Compra Cód. #${compra.codCompra}",
-                        style: const TextStyle(
-                          fontFamily: 'Montserrat',
-                          fontWeight: FontWeight.w600,
-                          fontSize: 16,
-                          color: Colors.white,
-                        ),
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Row(
+                children: [
+                  Center(
+                    child: Text(
+                      // 3. Correção: Usar 'id' (#861323) ou 'codCompra' dependendo do que quer mostrar
+                      "Compra Cód. ${compra.id}", 
+                      style: const TextStyle(
+                        fontFamily: 'Montserrat',
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16,
+                        color: Colors.white,
                       ),
                     ),
-                            
-                    const Spacer(),
-                            
-                    Container(
-                      width: 57,
-                      height: 31,
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFFFFFFF),
-                        border: Border.all(color: const Color(0xFFEAECF5)),
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      child: Center(
-                        child: Padding(
-                          padding: const EdgeInsets.all(6.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                "0",
-                                style: TextStyle(
-                                  fontFamily: 'Montserrat',
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 12,
-                                ),
+                  ),
+                  
+                  const Spacer(),
+                  
+                  Container(
+                    width: 57,
+                    height: 31,
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFFFFFFF),
+                      border: Border.all(color: const Color(0xFFEAECF5)),
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    child: Center(
+                      child: Padding(
+                        padding: const EdgeInsets.all(6.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              // 4. Correção: Pegar o tamanho da lista de itens
+                              "${compra.itens.length}", 
+                              style: const TextStyle(
+                                fontFamily: 'Montserrat',
+                                fontWeight: FontWeight.w500,
+                                fontSize: 12,
                               ),
+                            ),
                           
-                              const Spacer(),
-                              Text(
-                                "itens",
-                                style: TextStyle(
-                                  fontFamily: 'Montserrat',
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 12,
-                                ),
+                            const Spacer(),
+                            const Text(
+                              "itens",
+                              style: TextStyle(
+                                fontFamily: 'Montserrat',
+                                fontWeight: FontWeight.w500,
+                                fontSize: 12,
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),
@@ -139,9 +136,11 @@ class _CompraListItem extends StatelessWidget {
                   children: [
                     _buildInfoColumn("Data:", dateFormatted),
 
-                    _buildInfoColumn("Pagamento:", compra.pagamento),
+                    // 5. Correção: Usar 'formaPagamentoResumo'
+                    _buildInfoColumn("Pagamento:", compra.formaPagamentoResumo),
 
-                    _buildInfoColumn("Valor:", compra.pagamento),
+                    // 6. Correção: Usar variável formatada
+                    _buildInfoColumn("Valor:", valorFormatado),
                     
                   ],
                 ),
@@ -188,29 +187,34 @@ class _CompraListItem extends StatelessWidget {
   }
 
   Widget _buildInfoColumn(String label, String value) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: const TextStyle(
-            fontFamily: 'Montserrat',
-            fontWeight: FontWeight.w600,
-            fontSize: 12,
-            color: Color(0xFF1E3460),
+    // Adicionei um Expanded ou Flexible aqui para evitar que textos longos quebrem o layout
+    return Expanded( 
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            label,
+            style: const TextStyle(
+              fontFamily: 'Montserrat',
+              fontWeight: FontWeight.w600,
+              fontSize: 12,
+              color: Color(0xFF1E3460),
+            ),
           ),
-        ),
-        const SizedBox(height: 4),
-        Text(
-          value,
-          style: const TextStyle(
-            fontFamily: 'Montserrat',
-            fontWeight: FontWeight.w400,
-            fontSize: 12,
-            color: Color(0xFF575467),
+          const SizedBox(height: 4),
+          Text(
+            value,
+            maxLines: 2, // Limite para não estourar
+            overflow: TextOverflow.ellipsis,
+            style: const TextStyle(
+              fontFamily: 'Montserrat',
+              fontWeight: FontWeight.w400,
+              fontSize: 12,
+              color: Color(0xFF575467),
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

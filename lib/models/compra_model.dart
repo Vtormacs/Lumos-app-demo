@@ -1,111 +1,124 @@
 
-
-class CompraModel {
-  final String codCompra;
-  final String pagamento;
-  final String valor;
+// 1. MODELO DO PAGAMENTO (Para a aba Dados de Pagamento)
+class PagamentoModel {
   final String id;
-  final String nomeTitular;
-  final String type;
-  final DateTime dataDoUso;
-  final String loumarKey;
-  final String rateType;
-  final String agentName;
-  final String voucherCode;
-  final String qrCodeImageUrl;
+  final DateTime data;
+  final String metodo; // Ex: "PIX PAGARME-DESTINO" ou "Link de Pagamento..."
+  final double valor;
 
-  CompraModel({
-    required this.codCompra,
-    required this.pagamento,
-    required this.valor,
+  PagamentoModel({
     required this.id,
-    required this.nomeTitular,
-    required this.type,
-    required this.dataDoUso,
-    required this.loumarKey,
-    required this.rateType,
-    required this.agentName,
-    required this.voucherCode,
-    required this.qrCodeImageUrl,
+    required this.data,
+    required this.metodo,
+    required this.valor,
   });
 }
 
-// --- DADOS MOCK
-class MockData {
-  static List<CompraModel> getCompras() {
-    
+// 2. MODELO DO ITEM DA COMPRA (Para a aba Detalhes de Compra)
+enum TipoItem { hotel, transporte, aviao, ingresso, generico }
 
-    return [
-      CompraModel(
-        codCompra: "C123456",
-        pagamento: "Cartão de Crédito",
-        valor: "R\$ 120,00",
-        id: "#863132",
-        nomeTitular: "Michelle Duarte de Almeida",
-        type: "Inteira (Adulto)",
-        dataDoUso: DateTime(2025, 12, 15, 13, 45),
-        loumarKey: "862939",
-        rateType: "Padrão",
-        agentName: "Maria Klaus",
-        voucherCode: "556516658419614",
-        qrCodeImageUrl: "https://i.sstatic.net/O6PbK.png",
-      ),
-            CompraModel(
-        codCompra: "C123457",
-        pagamento: "Boleto Bancário",
-        valor: "R\$ 60,00",
-        id: "#863132",
-        nomeTitular: "Michelle Duarte de Almeida",
-        type: "Inteira (Adulto)",
-        dataDoUso: DateTime(2025, 12, 15, 13, 45),
-        loumarKey: "862939",
-        rateType: "Padrão",
-        agentName: "Maria Klaus",
-        voucherCode: "556516658419614",
-        qrCodeImageUrl: "https://i.sstatic.net/O6PbK.png",
-      ),
-      CompraModel(
-        codCompra: "C123458",
-        pagamento: "Pix",
-        valor: "R\$ 60,00",
-        id: "#863133",
-        nomeTitular: "Alberto Duarte oijfekf niojsoifjs",
-        type: "Meia",
-        dataDoUso: DateTime(2025, 12, 15, 13, 45),
-        loumarKey: "862940",
-        rateType: "VIP",
-        agentName: "João Silva",
-        voucherCode: "556516658419999",
-        qrCodeImageUrl: "https://i.sstatic.net/O6PbK.png",
-      ),
-      CompraModel(
-        codCompra: "C123459",
-        pagamento: "Cartão de Crédito",
-          valor: "R\$ 120,00",
-        id: "#863133",
-        nomeTitular: "Alberto Duarte",
-        type: "Inteira (Adulto)",
-        dataDoUso: DateTime(2025, 12, 16, 20, 00),
-        loumarKey: "862941",
-        rateType: "Padrão",
-        agentName: "Maria Klaus",
-        voucherCode: "556516658419000",
-        qrCodeImageUrl: "https://i.sstatic.net/O6PbK.png",
-      ),
-      CompraModel(
-        codCompra: "C123460",
-        pagamento: "Boleto Bancário",
-        valor: "R\$ 80,00",
-        id: "#863133",
-        nomeTitular: "Alberto Duarte",
-        type: "Inteira (Adulto)",
-        dataDoUso: DateTime(2025, 12, 16, 20, 00),
-        loumarKey: "862942",
-        rateType: "VIP",
-        agentName: "João Silva",
-        voucherCode: "556516658419111",
-        qrCodeImageUrl: "https://i.sstatic.net/O6PbK.png",
-      ),
-    ];
+class ItemCompraModel {
+  final String titulo;
+  final TipoItem tipo; // Para decidir qual ícone mostrar (Cama, Avião, Van)
+  final String status; // Ex: "Ativo"
+  final double valor;
+
+  ItemCompraModel({
+    required this.titulo,
+    required this.tipo,
+    required this.status,
+    required this.valor,
+  });
+}
+
+// 3. MODELO DA COMPRA (O Pai)
+class CompraModel {
+  final String codCompra;
+  final String id; // Ex: #861323
+  final String nomeTitular;
+  final DateTime dataCompra;
+  
+  // Totais e Resumos (Header)
+  final double valorTotal;
+  final String formaPagamentoResumo; // Ex: "Múltiplos" ou "Cartão..."
+  
+  // Listas (O segredo está aqui)
+  final List<ItemCompraModel> itens;
+  final List<PagamentoModel> pagamentos;
+
+  // Campos extras que sobraram (se forem gerais da compra)
+  final String loumarKey;
+  final String tarifaTipo;
+
+  CompraModel({
+    required this.codCompra,
+    required this.id,
+    required this.nomeTitular,
+    required this.dataCompra,
+    required this.valorTotal,
+    required this.formaPagamentoResumo,
+    required this.itens,
+    required this.pagamentos,
+    required this.loumarKey,
+    required this.tarifaTipo,
+  });
+}
+
+class MockData {
+  static CompraModel getCompraDetalhada() {
+    return CompraModel(
+      codCompra: "C123456",
+      id: "#861323",
+      nomeTitular: "Michelle Duarte de Almeida",
+      dataCompra: DateTime(2023, 05, 02),
+      valorTotal: 45000.00, // Soma dos itens
+      formaPagamentoResumo: "Cartão de Crédito **** 26952",
+      loumarKey: "862939",
+      tarifaTipo: "Padrão",
+      
+      // Lista de Itens (Aba 1)
+      itens: [
+        ItemCompraModel(
+          titulo: "Check-in Hotel Bella Itália Solteiro",
+          tipo: TipoItem.hotel,
+          status: "Ativo",
+          valor: 15000.00,
+        ),
+        ItemCompraModel(
+          titulo: "Embarque - CNF -> IGU voo 403...",
+          tipo: TipoItem.aviao,
+          status: "Ativo",
+          valor: 15000.00,
+        ),
+        ItemCompraModel(
+          titulo: "Transfer Diurno Hotel x Cataratas",
+          tipo: TipoItem.transporte,
+          status: "Ativo",
+          valor: 15000.00,
+        ),
+      ],
+
+      // Lista de Pagamentos (Aba 2)
+      pagamentos: [
+        PagamentoModel(
+          id: "1",
+          data: DateTime(2023, 05, 02),
+          metodo: "Link de Pagamento (URL) MASTERCARD - 10 Parcelas",
+          valor: 15000.00,
+        ),
+        PagamentoModel(
+          id: "2",
+          data: DateTime(2023, 05, 02),
+          metodo: "PIX PAGARME-DESTINO",
+          valor: 15000.00,
+        ),
+        PagamentoModel(
+          id: "3",
+          data: DateTime(2023, 05, 02),
+          metodo: "PIX PAGARME-DESTINO",
+          valor: 15000.00,
+        ),
+      ],
+    );
   }
 }

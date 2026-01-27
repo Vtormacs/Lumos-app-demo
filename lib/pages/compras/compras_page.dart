@@ -29,7 +29,9 @@ class _ComprasPageState extends State<ComprasPage> {
     );
   }
 
-  final List<CompraModel> _compras = MockData.getCompras();
+  final List<CompraModel> _compras = [
+    MockData.getCompraDetalhada(), 
+  ];
 
   @override
   Widget build(BuildContext context) {
