@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:loumar/controllers/app_controller.dart';
 import 'package:loumar/models/ingresso_models.dart';
+import 'package:loumar/pages/compras/compras_page.dart';
 import 'package:loumar/pages/notificacao_page.dart';
 import 'package:loumar/theme/app_colors.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -28,12 +29,12 @@ class _HomePageState extends State<HomePage> {
 
   int _selectedTab = 0;
 
-  bool _temNotificacao = false; 
+  bool _temNotificacao = false;
 
   @override
   void initState() {
     super.initState();
-    _verificarNotificacoes(); 
+    _verificarNotificacoes();
   }
 
   Future<void> _verificarNotificacoes() async {
@@ -94,7 +95,7 @@ class _HomePageState extends State<HomePage> {
           child: LayoutBuilder(
             builder: (context, constraints) {
               return SingleChildScrollView(
-                controller: _scrollController, 
+                controller: _scrollController,
                 child: ConstrainedBox(
                   constraints: BoxConstraints(minHeight: constraints.maxHeight),
                   child: IntrinsicHeight(
@@ -105,22 +106,30 @@ class _HomePageState extends State<HomePage> {
                           width: double.infinity,
                           decoration: const BoxDecoration(
                             image: DecorationImage(
-                              image: AssetImage('assets/images/home/fundohome.jpg'),
+                              image: AssetImage(
+                                'assets/images/home/fundohome.jpg',
+                              ),
                               fit: BoxFit.cover,
                               opacity: 0.1,
-                              filterQuality: FilterQuality.high
+                              filterQuality: FilterQuality.high,
                             ),
                           ),
                           child: SafeArea(
                             bottom: false,
                             child: Padding(
-                              padding: const EdgeInsets.fromLTRB(20, 10, 20, 20),
+                              padding: const EdgeInsets.fromLTRB(
+                                20,
+                                10,
+                                20,
+                                20,
+                              ),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   // CABEÇALHO
                                   Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       FutureBuilder<UserModel?>(
                                         future: _loadUser(),
@@ -135,7 +144,8 @@ class _HomePageState extends State<HomePage> {
                                               const CircleAvatar(
                                                 radius: 25,
                                                 backgroundImage: NetworkImage(
-                                                    'https://i.pravatar.cc/150?img=5'),
+                                                  'https://i.pravatar.cc/150?img=5',
+                                                ),
                                               ),
                                               const SizedBox(width: 10),
                                               Column(
@@ -148,7 +158,8 @@ class _HomePageState extends State<HomePage> {
                                                       color: Colors.white,
                                                       fontSize: 12,
                                                       fontFamily: 'Montserrat',
-                                                      fontWeight: FontWeight.w500,
+                                                      fontWeight:
+                                                          FontWeight.w500,
                                                     ),
                                                   ),
                                                   Text(
@@ -157,7 +168,8 @@ class _HomePageState extends State<HomePage> {
                                                       color: Colors.white,
                                                       fontSize: 16,
                                                       fontFamily: 'Montserrat',
-                                                      fontWeight: FontWeight.w600,
+                                                      fontWeight:
+                                                          FontWeight.w600,
                                                     ),
                                                   ),
                                                 ],
@@ -166,14 +178,15 @@ class _HomePageState extends State<HomePage> {
                                           );
                                         },
                                       ),
-                                     // --- BOTÃO DE NOTIFICAÇÃO ---
+                                      // --- BOTÃO DE NOTIFICAÇÃO ---
                                       GestureDetector(
                                         onTap: () {
                                           Navigator.push(
                                             context,
                                             MaterialPageRoute(
-                                                builder: (context) =>
-                                                    const NotificacaoPage()),
+                                              builder: (context) =>
+                                                  const NotificacaoPage(),
+                                            ),
                                           ).then((_) {
                                             _verificarNotificacoes();
                                           });
@@ -183,12 +196,18 @@ class _HomePageState extends State<HomePage> {
                                           height: 44,
                                           decoration: BoxDecoration(
                                             color: const Color.fromRGBO(
-                                                107, 122, 164, 0.47),
-                                            borderRadius: BorderRadius.circular(12),
+                                              107,
+                                              122,
+                                              164,
+                                              0.47,
+                                            ),
+                                            borderRadius: BorderRadius.circular(
+                                              12,
+                                            ),
                                           ),
                                           child: SvgPicture.asset(
-                                            _temNotificacao 
-                                                ? 'assets/images/home/notificacao.svg'      // Com bolinha
+                                            _temNotificacao
+                                                ? 'assets/images/home/notificacao.svg' // Com bolinha
                                                 : 'assets/images/home/notificacaoVazia.svg', // Sem bolinha
                                             fit: BoxFit.contain,
                                           ),
@@ -198,7 +217,8 @@ class _HomePageState extends State<HomePage> {
                                   ),
 
                                   SizedBox(
-                                      height: constraints.maxHeight * 0.04),
+                                    height: constraints.maxHeight * 0.04,
+                                  ),
 
                                   const Text(
                                     "Ações Rápidas",
@@ -216,17 +236,25 @@ class _HomePageState extends State<HomePage> {
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       _botaoRapido(
-                                          icon: "🗺️", label: "Guia do\nViajante"),
+                                        icon: "🗺️",
+                                        label: "Guia do\nViajante",
+                                      ),
                                       _botaoRapido(
-                                          icon: "🌎", label: "Lorem\nIpsum"),
+                                        icon: "🌎",
+                                        label: "Lorem\nIpsum",
+                                      ),
                                       _botaoRapidoBusca(
                                         context: context,
                                         icon: "🇵🇾",
                                         label: "Busca\nParaguai",
-                                        link: "https://www.buscaparaguai.com.br/",
+                                        link:
+                                            "https://www.buscaparaguai.com.br/",
                                       ),
-                                      _botaoRapido(
-                                          icon: "🛍️", label: "Minhas\nCompras"),
+                                      _botaoRapidoMinhasCompras(
+                                        context: context,
+                                        icon: "🛍️",
+                                        label: "Minhas\nComprasi",
+                                      ),
                                     ],
                                   ),
                                 ],
@@ -262,10 +290,11 @@ class _HomePageState extends State<HomePage> {
                                       decoration: BoxDecoration(
                                         color: const Color(0xFFFAFAFA),
                                         border: Border.all(
-                                            color: const Color(0xFFE9EAEB)),
+                                          color: const Color(0xFFE9EAEB),
+                                        ),
                                         borderRadius: BorderRadius.circular(8),
                                       ),
-                                     child: Row(
+                                      child: Row(
                                         children: [
                                           // --- ABA 1: INGRESSOS ---
                                           Expanded(
@@ -277,18 +306,28 @@ class _HomePageState extends State<HomePage> {
                                               },
                                               child: Container(
                                                 decoration: BoxDecoration(
-                                                  color: _selectedTab == 0 
-                                                      ? const Color(0xFFEFF8FF) 
+                                                  color: _selectedTab == 0
+                                                      ? const Color(0xFFEFF8FF)
                                                       : Colors.transparent,
-                                                  borderRadius: BorderRadius.circular(6),
-                                                  boxShadow: _selectedTab == 0 
+                                                  borderRadius:
+                                                      BorderRadius.circular(6),
+                                                  boxShadow: _selectedTab == 0
                                                       ? const [
                                                           BoxShadow(
-                                                            color: Color.fromRGBO(10, 13, 18, 0.1),
-                                                            offset: Offset(0, 1),
+                                                            color:
+                                                                Color.fromRGBO(
+                                                                  10,
+                                                                  13,
+                                                                  18,
+                                                                  0.1,
+                                                                ),
+                                                            offset: Offset(
+                                                              0,
+                                                              1,
+                                                            ),
                                                             blurRadius: 2,
-                                                          )
-                                                        ] 
+                                                          ),
+                                                        ]
                                                       : null,
                                                 ),
                                                 child: Center(
@@ -296,16 +335,25 @@ class _HomePageState extends State<HomePage> {
                                                     "Meus Ingressos (${_meusIngressos.length})",
                                                     style: TextStyle(
                                                       fontFamily: 'Inter',
-                                                      fontWeight: _selectedTab == 0 ? FontWeight.w500 : FontWeight.w400,
+                                                      fontWeight:
+                                                          _selectedTab == 0
+                                                          ? FontWeight.w500
+                                                          : FontWeight.w400,
                                                       fontSize: 14,
-                                                      color: _selectedTab == 0 ? const Color(0xFF175CD3) : const Color(0xFF717680),
+                                                      color: _selectedTab == 0
+                                                          ? const Color(
+                                                              0xFF175CD3,
+                                                            )
+                                                          : const Color(
+                                                              0xFF717680,
+                                                            ),
                                                     ),
                                                   ),
                                                 ),
                                               ),
                                             ),
                                           ),
-                                          
+
                                           // --- ABA 2: ROTEIROS ---
                                           Expanded(
                                             child: GestureDetector(
@@ -316,18 +364,28 @@ class _HomePageState extends State<HomePage> {
                                               },
                                               child: Container(
                                                 decoration: BoxDecoration(
-                                                  color: _selectedTab == 1 
-                                                      ? const Color(0xFFEFF8FF) 
+                                                  color: _selectedTab == 1
+                                                      ? const Color(0xFFEFF8FF)
                                                       : Colors.transparent,
-                                                  borderRadius: BorderRadius.circular(6),
-                                                  boxShadow: _selectedTab == 1 
+                                                  borderRadius:
+                                                      BorderRadius.circular(6),
+                                                  boxShadow: _selectedTab == 1
                                                       ? const [
                                                           BoxShadow(
-                                                            color: Color.fromRGBO(10, 13, 18, 0.1),
-                                                            offset: Offset(0, 1),
+                                                            color:
+                                                                Color.fromRGBO(
+                                                                  10,
+                                                                  13,
+                                                                  18,
+                                                                  0.1,
+                                                                ),
+                                                            offset: Offset(
+                                                              0,
+                                                              1,
+                                                            ),
                                                             blurRadius: 2,
-                                                          )
-                                                        ] 
+                                                          ),
+                                                        ]
                                                       : null,
                                                 ),
                                                 child: Center(
@@ -335,9 +393,18 @@ class _HomePageState extends State<HomePage> {
                                                     "Meus Roteiros",
                                                     style: TextStyle(
                                                       fontFamily: 'Inter',
-                                                      fontWeight: _selectedTab == 1 ? FontWeight.w500 : FontWeight.w400,
+                                                      fontWeight:
+                                                          _selectedTab == 1
+                                                          ? FontWeight.w500
+                                                          : FontWeight.w400,
                                                       fontSize: 14,
-                                                      color: _selectedTab == 1 ? const Color(0xFF175CD3) : const Color(0xFF717680),
+                                                      color: _selectedTab == 1
+                                                          ? const Color(
+                                                              0xFF175CD3,
+                                                            )
+                                                          : const Color(
+                                                              0xFF717680,
+                                                            ),
                                                     ),
                                                   ),
                                                 ),
@@ -353,7 +420,7 @@ class _HomePageState extends State<HomePage> {
 
                                   // --- CONTEÚDO CONDICIONAL ---
                                   if (_selectedTab == 0)
-                                    _buildTicketList() 
+                                    _buildTicketList()
                                   else
                                     _buildRoteirosContent(),
 
@@ -367,38 +434,53 @@ class _HomePageState extends State<HomePage> {
 
                                   const SizedBox(height: 32),
 
-                                  // BOTÃO VOLTAR AO TOPO 
+                                  // BOTÃO VOLTAR AO TOPO
                                   Padding(
-                                    padding: const EdgeInsets.only(right: 20.0), 
+                                    padding: const EdgeInsets.only(right: 20.0),
                                     child: SizedBox(
-                                      height: 36, 
-                                      width: double.infinity, 
+                                      height: 36,
+                                      width: double.infinity,
                                       child: OutlinedButton(
                                         onPressed: _scrollToTop,
                                         style: OutlinedButton.styleFrom(
-                                          side: BorderSide.none, 
-                                          
-                                          backgroundColor: Colors.transparent, 
-                                          
+                                          side: BorderSide.none,
+
+                                          backgroundColor: Colors.transparent,
+
                                           shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(8),
+                                            borderRadius: BorderRadius.circular(
+                                              8,
+                                            ),
                                           ),
-                                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                                          overlayColor: Colors.grey.shade100, 
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 12,
+                                            vertical: 8,
+                                          ),
+                                          overlayColor: Colors.grey.shade100,
                                         ),
                                         child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
                                           children: [
-                                           SvgPicture.asset('assets/images/home/top.svg', width: 16, height: 16, colorFilter: const ColorFilter.mode(Color(0xFF414651), BlendMode.srcIn)),
-                                            const SizedBox(width: 10), 
+                                            SvgPicture.asset(
+                                              'assets/images/home/top.svg',
+                                              width: 16,
+                                              height: 16,
+                                              colorFilter:
+                                                  const ColorFilter.mode(
+                                                    Color(0xFF414651),
+                                                    BlendMode.srcIn,
+                                                  ),
+                                            ),
+                                            const SizedBox(width: 10),
                                             // Text
                                             const Text(
                                               "Voltar para o topo",
                                               style: TextStyle(
                                                 fontFamily: 'Montserrat',
-                                                fontWeight: FontWeight.w600, 
+                                                fontWeight: FontWeight.w600,
                                                 fontSize: 14,
-                                                color: Color(0xFF252B37), 
+                                                color: Color(0xFF252B37),
                                               ),
                                             ),
                                           ],
@@ -435,23 +517,21 @@ class _HomePageState extends State<HomePage> {
 
     return Column(
       children: eventosUnicos.map((evento) {
-        final ingressosDoEvento =
-            _meusIngressos.where((i) => i.event == evento).toList();
+        final ingressosDoEvento = _meusIngressos
+            .where((i) => i.event == evento)
+            .toList();
 
-        return TicketSection(
-          evento: evento,
-          ingressos: ingressosDoEvento,
-        );
+        return TicketSection(evento: evento, ingressos: ingressosDoEvento);
       }).toList(),
     );
   }
 
- //  WIDGET ROTEIROS 
+  //  WIDGET ROTEIROS
   Widget _buildRoteirosContent() {
     final List<RoteiroItemModel> roteiroItens = MockRoteiroData.getRoteiro();
 
     return Padding(
-      padding: const EdgeInsets.only(right: 20.0), 
+      padding: const EdgeInsets.only(right: 20.0),
       child: RoteiroListWidget(itens: roteiroItens),
     );
   }
@@ -506,6 +586,48 @@ class _HomePageState extends State<HomePage> {
             }
           }
         }
+      },
+      child: Column(
+        children: [
+          Container(
+            width: 69,
+            height: 63,
+            margin: const EdgeInsets.only(bottom: 6),
+            decoration: BoxDecoration(
+              color: const Color(0xFFF5F0EF),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Center(
+              child: Text(icon, style: const TextStyle(fontSize: 24)),
+            ),
+          ),
+          Text(
+            label,
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 12,
+              height: 1.2,
+              fontFamily: 'Montserrat',
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _botaoRapidoMinhasCompras({
+    required BuildContext context,
+    required String icon,
+    required String label,
+  }) {
+    return GestureDetector(
+      onTap: () async {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const ComprasPage()),
+        );
       },
       child: Column(
         children: [
