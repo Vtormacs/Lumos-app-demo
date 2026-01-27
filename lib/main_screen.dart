@@ -4,7 +4,7 @@ import 'package:loumar/controllers/app_controller.dart';
 import 'package:loumar/pages/home_page.dart';
 import 'package:loumar/pages/ingresso_pages/ingresso_page.dart';
 import 'package:loumar/pages/map_page.dart';
-import 'package:loumar/pages/perfil_page.dart';
+import 'package:loumar/pages/perfil/perfil_page.dart';
 import 'package:loumar/pages/roteiro_pages/roteiro_page.dart';
 import 'package:loumar/theme/app_colors.dart';
 

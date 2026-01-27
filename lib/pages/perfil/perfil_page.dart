@@ -3,9 +3,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:loumar/models/user_model.dart';
 import 'package:loumar/pages/notificacao_page.dart';
-import 'package:loumar/pages/perfil_subpaginas/ajustes_page.dart';
+import 'package:loumar/pages/perfil/ajustes_page.dart';
 import 'package:loumar/pages/login/onboarding_page.dart';
-import 'package:loumar/pages/perfil_subpaginas/sobre_app.dart';
+import 'package:loumar/pages/perfil/sobre_app.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class PerfilPage extends StatefulWidget {
