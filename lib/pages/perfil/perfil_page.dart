@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:loumar/models/user_model.dart';
+import 'package:loumar/pages/compras/compras_page.dart';
 import 'package:loumar/pages/notificacao_page.dart';
 import 'package:loumar/pages/perfil/ajustes_page.dart';
 import 'package:loumar/pages/login/onboarding_page.dart';
@@ -108,7 +109,6 @@ class _PerfilPageState extends State<PerfilPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // ... (Seu conteúdo do perfil continua igual aqui) ...
                         FutureBuilder<UserModel?>(
                           future: _loadUser(),
                           builder: (context, snapshot) {
@@ -145,6 +145,12 @@ class _PerfilPageState extends State<PerfilPage> {
                             _buildMenuItem(
                               icon: Icons.shopping_bag_outlined,
                               text: "Histórico de compras",
+                              onTap: () {
+                                Navigator.push(context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const ComprasPage()));
+                              },
                             ),
                           ],
                         ),
