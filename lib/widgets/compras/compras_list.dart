@@ -79,39 +79,38 @@ class _CompraListItem extends StatelessWidget {
                   const Spacer(),
                   
                   Container(
-                    width: 57,
+                    constraints: const BoxConstraints(minWidth: 57),
                     height: 31,
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
                     decoration: BoxDecoration(
                       color: const Color(0xFFFFFFFF),
                       border: Border.all(color: const Color(0xFFEAECF5)),
                       borderRadius: BorderRadius.circular(5),
                     ),
                     child: Center(
-                      child: Padding(
-                        padding: const EdgeInsets.all(6.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              "${compra.itens.length}", 
-                              style: const TextStyle(
-                                fontFamily: 'Montserrat',
-                                fontWeight: FontWeight.w500,
-                                fontSize: 12,
-                              ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "${compra.itens.length}", 
+                            style: const TextStyle(
+                              fontFamily: 'Montserrat',
+                              fontWeight: FontWeight.w500,
+                              fontSize: 12,
                             ),
-                          
-                            const Spacer(),
-                            const Text(
-                              "itens",
-                              style: TextStyle(
-                                fontFamily: 'Montserrat',
-                                fontWeight: FontWeight.w500,
-                                fontSize: 12,
-                              ),
+                          ),
+                        
+                          const SizedBox(width: 4),
+                          const Text(
+                            "itens",
+                            style: TextStyle(
+                              fontFamily: 'Montserrat',
+                              fontWeight: FontWeight.w500,
+                              fontSize: 12,
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
                   ),

@@ -11,7 +11,10 @@ class CompraDetalhadaPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final dateFormatted = DateFormat('dd/MM/yyyy').format(compra.dataCompra);
-    final currencyFormat = NumberFormat.currency(locale: 'pt_BR', symbol: 'R\$');
+    final currencyFormat = NumberFormat.currency(
+      locale: 'pt_BR',
+      symbol: 'R\$',
+    );
     final valorTotalFormatted = currencyFormat.format(compra.valorTotal);
 
     return DefaultTabController(
@@ -39,35 +42,6 @@ class CompraDetalhadaPage extends StatelessWidget {
           backgroundColor: const Color(0xFFFFFFFF),
           elevation: 0,
         ),
-        
-        // --- BOTÃO DE BAIXAR COMPROVANTE
-        bottomNavigationBar: Container(
-          padding: const EdgeInsets.all(16),
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            border: Border(top: BorderSide(color: Color(0xFFEAECF5))),
-          ),
-          child: ElevatedButton.icon(
-            onPressed: () {},
-            icon: const Icon(Icons.download, size: 20),
-            label: const Text(
-              "Baixar Comprovante",
-              style: TextStyle(
-                fontFamily: 'Montserrat',
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF1E3460),
-              foregroundColor: Colors.white,
-              minimumSize: const Size(double.infinity, 50),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-              elevation: 0,
-            ),
-          ),
-        ),
 
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -81,12 +55,18 @@ class CompraDetalhadaPage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Expanded(
-                          child: _buildInfoItem(
-                              "Nome do Titular", compra.nomeTitular)),
+                        child: _buildInfoItem(
+                          "Nome do Titular",
+                          compra.nomeTitular,
+                        ),
+                      ),
                       const SizedBox(width: 16),
                       Expanded(
-                          child: _buildInfoItem(
-                              "Forma de Pgto:", compra.formaPagamentoResumo)),
+                        child: _buildInfoItem(
+                          "Forma de Pgto:",
+                          compra.formaPagamentoResumo,
+                        ),
+                      ),
                     ],
                   ),
                   const SizedBox(height: 16),
@@ -94,10 +74,10 @@ class CompraDetalhadaPage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Expanded(
-                          child: _buildInfoItem("Valor:", valorTotalFormatted)),
+                        child: _buildInfoItem("Valor:", valorTotalFormatted),
+                      ),
                       const SizedBox(width: 16),
-                      Expanded(
-                          child: _buildInfoItem("Data:", dateFormatted)),
+                      Expanded(child: _buildInfoItem("Data:", dateFormatted)),
                     ],
                   ),
                   const SizedBox(height: 16),
@@ -105,11 +85,12 @@ class CompraDetalhadaPage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Expanded(
-                          child:
-                              _buildInfoItem("Cód. Loumar:", compra.loumarKey)),
+                        child: _buildInfoItem("Cód. Loumar:", compra.loumarKey),
+                      ),
                       const SizedBox(width: 16),
                       Expanded(
-                          child: _buildInfoItem("Tarifa:", compra.tarifaTipo)),
+                        child: _buildInfoItem("Tarifa:", compra.tarifaTipo),
+                      ),
                     ],
                   ),
                   const SizedBox(height: 24),
@@ -122,10 +103,7 @@ class CompraDetalhadaPage extends StatelessWidget {
               width: double.infinity,
               decoration: const BoxDecoration(
                 border: Border(
-                  bottom: BorderSide(
-                    color: Color(0xFFD5D5D9),
-                    width: 1.0,
-                  ),
+                  bottom: BorderSide(color: Color(0xFFD5D5D9), width: 1.0),
                 ),
               ),
               child: const TabBar(
@@ -145,8 +123,18 @@ class CompraDetalhadaPage extends StatelessWidget {
                   fontSize: 14,
                 ),
                 tabs: [
-                  Tab(text: "Detalhes de Compra"),
-                  Tab(text: "Dados de Pagamento"),
+                  Tab(
+                    child: Text(
+                      "Detalhes de Compra",
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  Tab(
+                    child: Text(
+                      "Dados de Pagamento",
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -167,27 +155,74 @@ class CompraDetalhadaPage extends StatelessWidget {
     );
   }
 
-  // --- WIDGET DA ABA 1: ITENS ---
-  Widget _buildItensTab(NumberFormat currencyFormat) {
-    return Column(
-      children: [
-        // Header da Tabela
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-          child: Row(
-            children: const [
-              Expanded(flex: 3, child: Text("Item", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: Color(0xFF1E3460)))),
-              Expanded(flex: 1, child: Text("Status", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: Color(0xFF1E3460)))),
-              Expanded(flex: 1, child: Text("Valor", textAlign: TextAlign.end, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: Color(0xFF1E3460)))),
-            ],
+  Widget _buildDownloadButton() {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
+      child: ElevatedButton.icon(
+        onPressed: () {},
+        icon: const Icon(Icons.download, size: 20),
+        label: const Text(
+          "Baixar Comprovante",
+          style: TextStyle(
+            fontFamily: 'Montserrat',
+            fontWeight: FontWeight.w600,
           ),
         ),
-        const Divider(height: 1, color: Color(0xFFEAECF5)),
-        
-        // Lista
-        Expanded(
-          child: ListView.separated(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: const Color(0xFF1E3460),
+          foregroundColor: Colors.white,
+          minimumSize: const Size(double.infinity, 50),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+          elevation: 0,
+        ),
+      ),
+    );
+  }
+
+ // --- WIDGET DA ABA 1:
+  Widget _buildItensTab(NumberFormat currencyFormat) {
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          // Header da Tabela
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            child: Row(
+              children: const [
+                Expanded(
+                  flex: 3,
+                  child: Text(
+                    "Item",
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: Color(0xFF1E3460)),
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Text(
+                    "Status",
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: Color(0xFF1E3460)),
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Text(
+                    "Valor",
+                    textAlign: TextAlign.end,
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: Color(0xFF1E3460)),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          
+          const Divider(height: 1, color: Color(0xFFEAECF5)),
+
+          ListView.separated(
             padding: const EdgeInsets.all(16),
+            shrinkWrap: true, 
+            physics: const NeverScrollableScrollPhysics(), 
             itemCount: compra.itens.length,
             separatorBuilder: (context, index) => const SizedBox(height: 16),
             itemBuilder: (context, index) {
@@ -195,7 +230,6 @@ class CompraDetalhadaPage extends StatelessWidget {
               return Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  // Coluna 1: Ícone + Título
                   Expanded(
                     flex: 3,
                     child: Row(
@@ -205,82 +239,67 @@ class CompraDetalhadaPage extends StatelessWidget {
                         Flexible(
                           child: Text(
                             item.titulo,
-                            style: const TextStyle(
-                              fontFamily: 'Montserrat',
-                              fontWeight: FontWeight.w500,
-                              fontSize: 12,
-                              color: Color(0xFF1E3460),
-                            ),
+                            style: const TextStyle(fontFamily: 'Montserrat', fontWeight: FontWeight.w500, fontSize: 12, color: Color(0xFF1E3460)),
                           ),
                         ),
                       ],
                     ),
                   ),
                   const SizedBox(width: 8),
-                  
-                  // Coluna 2: Status
                   Expanded(
                     flex: 1,
                     child: Row(
                       children: [
-                        const Icon(Icons.circle, size: 8, color: Color(0xFF2563EB)), 
+                        const Icon(Icons.circle, size: 8, color: Color(0xFF2563EB)),
                         const SizedBox(width: 4),
                         Text(
                           item.status,
-                          style: const TextStyle(
-                            fontFamily: 'Montserrat',
-                            fontWeight: FontWeight.w600,
-                            fontSize: 12,
-                            color: Color(0xFF2563EB), 
-                          ),
+                          style: const TextStyle(fontFamily: 'Montserrat', fontWeight: FontWeight.w600, fontSize: 12, color: Color(0xFF2563EB)),
                         ),
                       ],
                     ),
                   ),
-                  
-                  // Coluna 3: Valor
                   Expanded(
                     flex: 1,
                     child: Text(
                       currencyFormat.format(item.valor),
                       textAlign: TextAlign.end,
-                      style: const TextStyle(
-                        fontFamily: 'Montserrat',
-                        fontWeight: FontWeight.w600,
-                        fontSize: 12,
-                        color: Color(0xFF575467),
-                      ),
+                      style: const TextStyle(fontFamily: 'Montserrat', fontWeight: FontWeight.w600, fontSize: 12, color: Color(0xFF575467)),
                     ),
                   ),
                 ],
               );
             },
           ),
-        ),
-      ],
+
+          _buildDownloadButton(),
+        ],
+      ),
     );
   }
 
-  // --- WIDGET DA ABA 2: PAGAMENTOS ---
+  // --- WIDGET DA ABA 2:
   Widget _buildPagamentosTab(NumberFormat currencyFormat) {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-          child: Row(
-            children: const [
-              Expanded(flex: 1, child: Text("Data", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: Color(0xFF1E3460)))),
-              Expanded(flex: 2, child: Center(child: Text("Método Pgto.", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: Color(0xFF1E3460))))),
-              Expanded(flex: 1, child: Text("Valor", textAlign: TextAlign.end, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: Color(0xFF1E3460)))),
-            ],
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            child: Row(
+              children: const [
+                Expanded(flex: 1, child: Text("Data", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: Color(0xFF1E3460)))),
+                Expanded(flex: 2, child: Center(child: Text("Método Pgto.", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: Color(0xFF1E3460))))),
+                Expanded(flex: 1, child: Text("Valor", textAlign: TextAlign.end, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: Color(0xFF1E3460)))),
+              ],
+            ),
           ),
-        ),
-        const Divider(height: 1, color: Color(0xFFEAECF5)),
+          
+          const Divider(height: 1, color: Color(0xFFEAECF5)),
 
-        // Lista
-        Expanded(
-          child: ListView.separated(
+          ListView.separated(
             padding: const EdgeInsets.all(16),
+            shrinkWrap: true, 
+            physics: const NeverScrollableScrollPhysics(), 
             itemCount: compra.pagamentos.length,
             separatorBuilder: (context, index) => const SizedBox(height: 16),
             itemBuilder: (context, index) {
@@ -291,12 +310,7 @@ class CompraDetalhadaPage extends StatelessWidget {
                     flex: 1,
                     child: Text(
                       DateFormat('dd/MM/yyyy').format(pgto.data),
-                      style: const TextStyle(
-                        fontFamily: 'Montserrat',
-                        fontWeight: FontWeight.w500,
-                        fontSize: 12,
-                        color: Color(0xFF575467),
-                      ),
+                      style: const TextStyle(fontFamily: 'Montserrat', fontWeight: FontWeight.w500, fontSize: 12, color: Color(0xFF575467)),
                     ),
                   ),
                   Expanded(
@@ -304,12 +318,7 @@ class CompraDetalhadaPage extends StatelessWidget {
                     child: Text(
                       pgto.metodo,
                       textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        fontFamily: 'Montserrat',
-                        fontWeight: FontWeight.w600,
-                        fontSize: 12,
-                        color: Color(0xFF2563EB), 
-                      ),
+                      style: const TextStyle(fontFamily: 'Montserrat', fontWeight: FontWeight.w600, fontSize: 12, color: Color(0xFF2563EB)),
                     ),
                   ),
                   Expanded(
@@ -317,63 +326,42 @@ class CompraDetalhadaPage extends StatelessWidget {
                     child: Text(
                       currencyFormat.format(pgto.valor),
                       textAlign: TextAlign.end,
-                      style: const TextStyle(
-                        fontFamily: 'Montserrat',
-                        fontWeight: FontWeight.w600,
-                        fontSize: 12,
-                        color: Color(0xFF575467),
-                      ),
+                      style: const TextStyle(fontFamily: 'Montserrat', fontWeight: FontWeight.w600, fontSize: 12, color: Color(0xFF575467)),
                     ),
                   ),
                 ],
               );
             },
           ),
-        ),
-      ],
+
+          _buildDownloadButton(),
+        ],
+      ),
     );
   }
 
   Widget _buildInfoItem(String label, String value) {
-    return Column(
+     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          label,
-          style: const TextStyle(
-            color: Color(0xFF1E3460),
-            fontWeight: FontWeight.w600,
-            fontFamily: 'Montserrat',
-            fontSize: 14,
-          ),
-        ),
+        Text(label, style: const TextStyle(color: Color(0xFF1E3460), fontWeight: FontWeight.w600, fontFamily: 'Montserrat', fontSize: 14)),
         const SizedBox(height: 4),
-        Text(
-          value,
-          maxLines: 2,
-          overflow: TextOverflow.ellipsis,
-          style: const TextStyle(
-            color: Color(0xFF575467),
-            fontWeight: FontWeight.w400,
-            fontFamily: 'Montserrat',
-            fontSize: 14,
-          ),
-        ),
+        Text(value, maxLines: 2, overflow: TextOverflow.ellipsis, style: const TextStyle(color: Color(0xFF575467), fontWeight: FontWeight.w400, fontFamily: 'Montserrat', fontSize: 14)),
       ],
     );
   }
 
   Widget _buildItemIcon(TipoItem tipo) {
-    Color bgColor;
+     Color bgColor;
     IconData iconData;
 
     switch (tipo) {
       case TipoItem.hotel:
         bgColor = const Color(0xFFE4BC0C);
-        iconData = Icons.bed; 
+        iconData = Icons.bed;
         break;
       case TipoItem.aviao:
-        bgColor = const Color(0xFF86DB5A); 
+        bgColor = const Color(0xFF86DB5A);
         iconData = Icons.flight;
         break;
       case TipoItem.transporte:
