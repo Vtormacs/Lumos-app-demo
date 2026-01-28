@@ -1,9 +1,7 @@
-
-// 1. MODELO DO PAGAMENTO (Para a aba Dados de Pagamento)
 class PagamentoModel {
   final String id;
   final DateTime data;
-  final String metodo; // Ex: "PIX PAGARME-DESTINO" ou "Link de Pagamento..."
+  final String metodo; 
   final double valor;
 
   PagamentoModel({
@@ -14,13 +12,12 @@ class PagamentoModel {
   });
 }
 
-// 2. MODELO DO ITEM DA COMPRA (Para a aba Detalhes de Compra)
 enum TipoItem { hotel, transporte, aviao, ingresso, generico }
 
 class ItemCompraModel {
   final String titulo;
-  final TipoItem tipo; // Para decidir qual ícone mostrar (Cama, Avião, Van)
-  final String status; // Ex: "Ativo"
+  final TipoItem tipo; 
+  final String status; 
   final double valor;
 
   ItemCompraModel({
@@ -31,22 +28,15 @@ class ItemCompraModel {
   });
 }
 
-// 3. MODELO DA COMPRA (O Pai)
 class CompraModel {
   final String codCompra;
-  final String id; // Ex: #861323
+  final String id;
   final String nomeTitular;
   final DateTime dataCompra;
-  
-  // Totais e Resumos (Header)
   final double valorTotal;
-  final String formaPagamentoResumo; // Ex: "Múltiplos" ou "Cartão..."
-  
-  // Listas (O segredo está aqui)
+  final String formaPagamentoResumo; 
   final List<ItemCompraModel> itens;
   final List<PagamentoModel> pagamentos;
-
-  // Campos extras que sobraram (se forem gerais da compra)
   final String loumarKey;
   final String tarifaTipo;
 
@@ -71,12 +61,11 @@ class MockData {
       id: "#861323",
       nomeTitular: "Michelle Duarte de Almeida",
       dataCompra: DateTime(2023, 05, 02),
-      valorTotal: 45000.00, // Soma dos itens
+      valorTotal: 45000.00, 
       formaPagamentoResumo: "Cartão de Crédito **** 26952",
       loumarKey: "862939",
       tarifaTipo: "Padrão",
       
-      // Lista de Itens (Aba 1)
       itens: [
         ItemCompraModel(
           titulo: "Check-in Hotel Bella Itália Solteiro",
@@ -98,7 +87,6 @@ class MockData {
         ),
       ],
 
-      // Lista de Pagamentos (Aba 2)
       pagamentos: [
         PagamentoModel(
           id: "1",

@@ -10,7 +10,6 @@ class CompraDetalhadaPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Formatadores
     final dateFormatted = DateFormat('dd/MM/yyyy').format(compra.dataCompra);
     final currencyFormat = NumberFormat.currency(locale: 'pt_BR', symbol: 'R\$');
     final valorTotalFormatted = currencyFormat.format(compra.valorTotal);
@@ -156,10 +155,8 @@ class CompraDetalhadaPage extends StatelessWidget {
             Expanded(
               child: TabBarView(
                 children: [
-                  // ABA 1: ITENS
                   _buildItensTab(currencyFormat),
 
-                  // ABA 2: PAGAMENTOS
                   _buildPagamentosTab(currencyFormat),
                 ],
               ),
@@ -226,7 +223,7 @@ class CompraDetalhadaPage extends StatelessWidget {
                     flex: 1,
                     child: Row(
                       children: [
-                        const Icon(Icons.circle, size: 8, color: Color(0xFF2563EB)), // Azul
+                        const Icon(Icons.circle, size: 8, color: Color(0xFF2563EB)), 
                         const SizedBox(width: 4),
                         Text(
                           item.status,
@@ -234,7 +231,7 @@ class CompraDetalhadaPage extends StatelessWidget {
                             fontFamily: 'Montserrat',
                             fontWeight: FontWeight.w600,
                             fontSize: 12,
-                            color: Color(0xFF2563EB), // Azul
+                            color: Color(0xFF2563EB), 
                           ),
                         ),
                       ],
@@ -268,7 +265,6 @@ class CompraDetalhadaPage extends StatelessWidget {
   Widget _buildPagamentosTab(NumberFormat currencyFormat) {
     return Column(
       children: [
-        // Header da Tabela
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           child: Row(
@@ -312,7 +308,7 @@ class CompraDetalhadaPage extends StatelessWidget {
                         fontFamily: 'Montserrat',
                         fontWeight: FontWeight.w600,
                         fontSize: 12,
-                        color: Color(0xFF2563EB), // Azul Link
+                        color: Color(0xFF2563EB), 
                       ),
                     ),
                   ),
@@ -338,7 +334,6 @@ class CompraDetalhadaPage extends StatelessWidget {
     );
   }
 
-  // Helper para o texto do Header (Label/Value)
   Widget _buildInfoItem(String label, String value) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -368,22 +363,21 @@ class CompraDetalhadaPage extends StatelessWidget {
     );
   }
 
-  // Helper para ícones coloridos
   Widget _buildItemIcon(TipoItem tipo) {
     Color bgColor;
     IconData iconData;
 
     switch (tipo) {
       case TipoItem.hotel:
-        bgColor = const Color(0xFFE4BC0C); // Amarelo
+        bgColor = const Color(0xFFE4BC0C);
         iconData = Icons.bed; 
         break;
       case TipoItem.aviao:
-        bgColor = const Color(0xFF86DB5A); // Verde
+        bgColor = const Color(0xFF86DB5A); 
         iconData = Icons.flight;
         break;
       case TipoItem.transporte:
-        bgColor = const Color(0xFF00B4AB); // Ciano
+        bgColor = const Color(0xFF00B4AB);
         iconData = Icons.directions_bus;
         break;
       default:

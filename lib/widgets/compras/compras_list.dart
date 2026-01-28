@@ -28,10 +28,7 @@ class _CompraListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // 1. Correção: Usar 'dataCompra'
     final dateFormatted = DateFormat('dd/MM/yyyy').format(compra.dataCompra);
-    
-    // 2. Formatar o valor numérico para Moeda (R$)
     final currencyFormat = NumberFormat.currency(locale: 'pt_BR', symbol: 'R\$');
     final valorFormatado = currencyFormat.format(compra.valorTotal);
 
@@ -69,7 +66,6 @@ class _CompraListItem extends StatelessWidget {
                 children: [
                   Center(
                     child: Text(
-                      // 3. Correção: Usar 'id' (#861323) ou 'codCompra' dependendo do que quer mostrar
                       "Compra Cód. ${compra.id}", 
                       style: const TextStyle(
                         fontFamily: 'Montserrat',
@@ -97,7 +93,6 @@ class _CompraListItem extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              // 4. Correção: Pegar o tamanho da lista de itens
                               "${compra.itens.length}", 
                               style: const TextStyle(
                                 fontFamily: 'Montserrat',
@@ -136,10 +131,8 @@ class _CompraListItem extends StatelessWidget {
                   children: [
                     _buildInfoColumn("Data:", dateFormatted),
 
-                    // 5. Correção: Usar 'formaPagamentoResumo'
                     _buildInfoColumn("Pagamento:", compra.formaPagamentoResumo),
 
-                    // 6. Correção: Usar variável formatada
                     _buildInfoColumn("Valor:", valorFormatado),
                     
                   ],
@@ -187,7 +180,6 @@ class _CompraListItem extends StatelessWidget {
   }
 
   Widget _buildInfoColumn(String label, String value) {
-    // Adicionei um Expanded ou Flexible aqui para evitar que textos longos quebrem o layout
     return Expanded( 
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
