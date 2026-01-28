@@ -40,7 +40,7 @@ class CompraDetalhadaPage extends StatelessWidget {
           elevation: 0,
         ),
         
-        // --- BOTÃO DE BAIXAR COMPROVANTE (FIXO EMBAIXO) ---
+        // --- BOTÃO DE BAIXAR COMPROVANTE
         bottomNavigationBar: Container(
           padding: const EdgeInsets.all(16),
           decoration: const BoxDecoration(
