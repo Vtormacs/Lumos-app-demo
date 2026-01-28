@@ -42,4 +42,19 @@ class AppLocalizationsPt extends AppLocalizations {
   String linkError(Object link) {
     return 'Não foi possível abrir o link: $link';
   }
+
+  @override
+  String get navHome => 'Início';
+
+  @override
+  String get navTickets => 'Ingressos';
+
+  @override
+  String get navItineraries => 'Roteiros';
+
+  @override
+  String get navMap => 'Mapa';
+
+  @override
+  String get navProfile => 'Perfil';
 }

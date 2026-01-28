@@ -163,6 +163,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Could not open link: {link}'**
   String linkError(Object link);
+
+  /// No description provided for @navHome.
+  ///
+  /// In en, this message translates to:
+  /// **'Home'**
+  String get navHome;
+
+  /// No description provided for @navTickets.
+  ///
+  /// In en, this message translates to:
+  /// **'Tickets'**
+  String get navTickets;
+
+  /// No description provided for @navItineraries.
+  ///
+  /// In en, this message translates to:
+  /// **'Itineraries'**
+  String get navItineraries;
+
+  /// No description provided for @navMap.
+  ///
+  /// In en, this message translates to:
+  /// **'Map'**
+  String get navMap;
+
+  /// No description provided for @navProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile'**
+  String get navProfile;
 }
 
 class _AppLocalizationsDelegate

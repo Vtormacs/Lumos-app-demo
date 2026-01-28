@@ -42,4 +42,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String linkError(Object link) {
     return 'Could not open link: $link';
   }
+
+  @override
+  String get navHome => 'Home';
+
+  @override
+  String get navTickets => 'Tickets';
+
+  @override
+  String get navItineraries => 'Itineraries';
+
+  @override
+  String get navMap => 'Map';
+
+  @override
+  String get navProfile => 'Profile';
 }

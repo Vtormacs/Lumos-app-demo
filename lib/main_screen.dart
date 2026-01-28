@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:loumar/controllers/app_controller.dart';
+import 'package:loumar/l10n/app_localizations.dart';
 import 'package:loumar/pages/home_page.dart';
 import 'package:loumar/pages/ingresso_pages/ingresso_page.dart';
 import 'package:loumar/pages/map_page.dart';
@@ -12,11 +13,9 @@ class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
 
   @override
-  // 1. Mudamos de _MainScreenState para MainScreenState (tiramos o underline)
   State<MainScreen> createState() => MainScreenState();
 }
 
-// 2. A classe agora é pública (sem o underline no começo)
 class MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
 
@@ -34,7 +33,6 @@ class MainScreenState extends State<MainScreen> {
     });
   }
 
-  // 3. Criamos essa função pública para ser chamada pelos filhos
   void changePage(int index) {
     setState(() {
       _selectedIndex = index;
@@ -45,14 +43,17 @@ class MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     bool isDark = AppController.instance.isDarkTheme;
 
+    final tr = AppLocalizations.of(context)!;
+
     final Color selectedColor = isDark ? Colors.white : const Color(0xFF1E3460);
     final Color unselectedColor = isDark
         ? Colors.grey
         : const Color(0xFF414651);
 
     return Scaffold(
-      backgroundColor: isDark  ? AppColors.darkBackground
-                                  : const Color(0xFFFFFFFF),
+      backgroundColor: isDark
+          ? AppColors.darkBackground
+          : const Color(0xFFFFFFFF),
       body: _pages[_selectedIndex],
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
@@ -100,7 +101,7 @@ class MainScreenState extends State<MainScreen> {
             items: [
               BottomNavigationBarItem(
                 icon: _buildSvgIcon('assets/images/menu/home.svg', 0, isDark),
-                label: 'Início',
+                label: tr.navHome,
               ),
               BottomNavigationBarItem(
                 icon: _buildSvgIcon(
@@ -108,7 +109,7 @@ class MainScreenState extends State<MainScreen> {
                   1,
                   isDark,
                 ),
-                label: 'Ingressos',
+                label: tr.navTickets,
               ),
               BottomNavigationBarItem(
                 icon: _buildSvgIcon(
@@ -116,15 +117,15 @@ class MainScreenState extends State<MainScreen> {
                   2,
                   isDark,
                 ),
-                label: 'Roteiros',
+                label: tr.navItineraries,
               ),
               BottomNavigationBarItem(
                 icon: _buildSvgIcon('assets/images/menu/mapa.svg', 3, isDark),
-                label: 'Mapa',
+                label: tr.navMap,
               ),
               BottomNavigationBarItem(
                 icon: _buildSvgIcon('assets/images/menu/perfil.svg', 4, isDark),
-                label: 'Perfil',
+                label: tr.navProfile,
               ),
             ],
           ),

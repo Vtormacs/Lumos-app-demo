@@ -9,5 +9,10 @@
   "myTickets": "My Tickets",
   "myItineraries": "My Itineraries",
   "backToTop": "Back to top",
-  "linkError": "Could not open link: {link}"
+  "linkError": "Could not open link: {link}",
+  "navHome": "Home",
+  "navTickets": "Tickets",
+  "navItineraries": "Itineraries",
+  "navMap": "Map",
+  "navProfile": "Profile"
 }

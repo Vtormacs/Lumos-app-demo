@@ -9,5 +9,10 @@
   "myTickets": "Meus Ingressos",
   "myItineraries": "Meus Roteiros",
   "backToTop": "Voltar para o topo",
-  "linkError": "Não foi possível abrir o link: {link}"
+  "linkError": "Não foi possível abrir o link: {link}",
+  "navHome": "Início",
+  "navTickets": "Ingressos",
+  "navItineraries": "Roteiros",
+  "navMap": "Mapa",
+  "navProfile": "Perfil"
 }

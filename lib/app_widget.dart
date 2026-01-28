@@ -16,12 +16,10 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // 1. O AnimatedBuilder escuta o tema (AppController)
     return AnimatedBuilder(
       animation: AppController.instance, 
       builder: (context, child) {
         
-        // 2. O Consumer escuta o idioma (LanguageProvider)
         return Consumer<LanguageProvider>(
           builder: (context, languageProvider, child) {
             
@@ -29,32 +27,26 @@ class MyApp extends StatelessWidget {
               debugShowCheckedModeBanner: false,
               title: titulo,
 
-              // --- CONFIGURAÇÃO DE IDIOMA ---
-              // Define o idioma atual baseado no Provider
               locale: languageProvider.currentLocale, 
               
-              // Define os tradutores (Delegates)
               localizationsDelegates: const [
-                AppLocalizations.delegate, // O arquivo gerado pelo Flutter
+                AppLocalizations.delegate, 
                 GlobalMaterialLocalizations.delegate,
                 GlobalWidgetsLocalizations.delegate,
                 GlobalCupertinoLocalizations.delegate,
               ],
               
-              // Define quais idiomas o app suporta
               supportedLocales: const [
                 Locale('pt'), // Português
                 Locale('en'), // Inglês
                 Locale('es'), // Espanhol (adicione se tiver o arquivo .arb)
               ],
-              // ------------------------------
 
-              // Sua configuração de tema existente
               theme: AppController.instance.isDarkTheme 
                   ? ThemeData.dark() 
                   : ThemeData.light(),
               
-              home: isLogged ? const MainScreen() : const OnboardingPage(),
+              home: isLogged ?  MainScreen() : const OnboardingPage(),
             );
           },
         );
