@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:loumar/controllers/app_controller.dart';
+import 'package:loumar/l10n/app_localizations.dart';
 import 'package:loumar/models/ingresso_models.dart';
 import 'package:loumar/pages/compras/compras_page.dart';
 import 'package:loumar/pages/notificacao_page.dart';
@@ -74,6 +75,9 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     bool isDarkTheme = AppController.instance.isDarkTheme;
 
+    // tradução
+    final tr = AppLocalizations.of(context)!;
+
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
@@ -134,7 +138,7 @@ class _HomePageState extends State<HomePage> {
                                       FutureBuilder<UserModel?>(
                                         future: _loadUser(),
                                         builder: (context, asyncSnapshot) {
-                                          String nome = "Usuário";
+                                          String nome = tr.defaultUser;
                                           if (asyncSnapshot.hasData &&
                                               asyncSnapshot.data != null) {
                                             nome = asyncSnapshot.data!.name;
@@ -152,9 +156,9 @@ class _HomePageState extends State<HomePage> {
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
                                                 children: [
-                                                  const Text(
-                                                    "Boas vindas,",
-                                                    style: TextStyle(
+                                                  Text(
+                                                    tr.welcome,
+                                                    style: const TextStyle(
                                                       color: Colors.white,
                                                       fontSize: 12,
                                                       fontFamily: 'Montserrat',
@@ -220,8 +224,8 @@ class _HomePageState extends State<HomePage> {
                                     height: constraints.maxHeight * 0.04,
                                   ),
 
-                                  const Text(
-                                    "Ações Rápidas",
+                                   Text(
+                                    tr.quickActions,
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontSize: 14,
@@ -237,23 +241,23 @@ class _HomePageState extends State<HomePage> {
                                     children: [
                                       _botaoRapido(
                                         icon: "🗺️",
-                                        label: "Guia do\nViajante",
+                                        label: tr.travelerGuide,
                                       ),
                                       _botaoRapido(
                                         icon: "🌎",
-                                        label: "Lorem\nIpsum",
+                                        label: tr.loremIpsum,
                                       ),
                                       _botaoRapidoBusca(
                                         context: context,
                                         icon: "🇵🇾",
-                                        label: "Busca\nParaguai",
+                                        label: tr.searchParaguay,
                                         link:
                                             "https://www.buscaparaguai.com.br/",
                                       ),
                                       _botaoRapidoMinhasCompras(
                                         context: context,
                                         icon: "🛍️",
-                                        label: "Minhas\nComprasi",
+                                        label: tr.myPurchases,
                                       ),
                                     ],
                                   ),
@@ -332,7 +336,7 @@ class _HomePageState extends State<HomePage> {
                                                 ),
                                                 child: Center(
                                                   child: Text(
-                                                    "Meus Ingressos (${_meusIngressos.length})",
+                                                    "${tr.myTickets} (${_meusIngressos.length})",
                                                     style: TextStyle(
                                                       fontFamily: 'Inter',
                                                       fontWeight:
@@ -390,7 +394,7 @@ class _HomePageState extends State<HomePage> {
                                                 ),
                                                 child: Center(
                                                   child: Text(
-                                                    "Meus Roteiros",
+                                                    tr.myItineraries,
                                                     style: TextStyle(
                                                       fontFamily: 'Inter',
                                                       fontWeight:
@@ -474,8 +478,8 @@ class _HomePageState extends State<HomePage> {
                                             ),
                                             const SizedBox(width: 10),
                                             // Text
-                                            const Text(
-                                              "Voltar para o topo",
+                                             Text(
+                                              tr.backToTop,
                                               style: TextStyle(
                                                 fontFamily: 'Montserrat',
                                                 fontWeight: FontWeight.w600,

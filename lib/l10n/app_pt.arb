@@ -1,0 +1,13 @@
+{
+  "welcome": "Boas vindas,",
+  "defaultUser": "Usuário",
+  "quickActions": "Ações Rápidas",
+  "travelerGuide": "Guia do\nViajante",
+  "loremIpsum": "Lorem\nIpsum",
+  "searchParaguay": "Busca\nParaguai",
+  "myPurchases": "Minhas\nCompras",
+  "myTickets": "Meus Ingressos",
+  "myItineraries": "Meus Roteiros",
+  "backToTop": "Voltar para o topo",
+  "linkError": "Não foi possível abrir o link: {link}"
+}

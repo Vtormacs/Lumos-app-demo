@@ -1,0 +1,13 @@
+{
+  "welcome": "Welcome,",
+  "defaultUser": "User",
+  "quickActions": "Quick Actions",
+  "travelerGuide": "Traveler's\nGuide",
+  "loremIpsum": "Lorem\nIpsum",
+  "searchParaguay": "Search\nParaguay",
+  "myPurchases": "My\nPurchases",
+  "myTickets": "My Tickets",
+  "myItineraries": "My Itineraries",
+  "backToTop": "Back to top",
+  "linkError": "Could not open link: {link}"
+}
